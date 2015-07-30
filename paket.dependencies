@@ -1,0 +1,39 @@
+source https://www.nuget.org/api/v2
+
+// Server side, F# .NET:
+nuget FAKE
+nuget FSharp.Formatting
+nuget FSharp.Data
+nuget Microsoft.AspNet.SignalR.Core
+nuget Microsoft.AspNet.WebApi.OwinSelfHost
+nuget Microsoft.AspNet.Identity.Owin
+nuget Microsoft.Owin.Cors
+nuget Microsoft.Owin.StaticFiles
+nuget Microsoft.Owin.Diagnostics
+nuget Microsoft.Owin.Security.Facebook
+nuget Microsoft.Owin.Security.Google
+nuget Owin.Security.AesDataProtectorProvider
+nuget MySql.Data
+nuget Rx-Main
+nuget SQLProvider
+nuget SourceLink.Fake
+
+// Client side, Javascript: (Please use minified, save some build time)
+github zurb/bower-foundation css/foundation.css
+github zurb/bower-foundation css/normalize.css
+github zurb/bower-foundation js/foundation.min.js
+github SignalR/bower-signalr jquery.signalR.js
+github aFarkas/html5shiv dist/html5shiv.min.js
+// Use react.js to debug, react.min.js in production.
+github reactjs/react-bower react.min.js
+github FortAwesome/Font-Awesome css/font-awesome.min.css
+github FortAwesome/Font-Awesome fonts/fontawesome-webfont.eot
+github FortAwesome/Font-Awesome fonts/fontawesome-webfont.svg
+github FortAwesome/Font-Awesome fonts/fontawesome-webfont.ttf
+github FortAwesome/Font-Awesome fonts/fontawesome-webfont.woff
+github FortAwesome/Font-Awesome fonts/fontawesome-webfont.woff2
+
+http http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.4.min.js jquery.min.js
+http https://code.jquery.com/ui/1.10.4/jquery-ui.min.js
+http https://code.jquery.com/ui/1.10.4/themes/sunny/jquery-ui.min.css
+http http://underscorejs.org/underscore-min.js

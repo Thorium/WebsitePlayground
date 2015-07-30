@@ -1,0 +1,17 @@
+FAKE
+FSharp.Formatting
+FSharp.Data
+Microsoft.AspNet.SignalR.Core
+Microsoft.AspNet.WebApi.OwinSelfHost
+Microsoft.Owin.Cors
+Microsoft.Owin.StaticFiles
+Microsoft.Owin.Diagnostics
+Microsoft.Owin.Security.Cookies
+Microsoft.Owin.Security.Facebook
+Microsoft.Owin.Security.Google
+MySql.Data
+Newtonsoft.Json
+Owin.Security.AesDataProtectorProvider
+Rx-Main
+SQLProvider
+SourceLink.Fake

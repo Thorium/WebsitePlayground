@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8" />
+    <title>WebsitePlayground - Company Web</title>
+    <link rel='stylesheet' type='text/css' href='css/libs.min.css' /> 
+    <link rel='stylesheet' type='text/css' href='css/app.min.css' /> 
+	<script type='text/javascript' src='js/libs.min.js'></script>
+    <script type='text/javascript' src='/signalr/hubs'></script> <!-- Generated SignalR Hub! -->
+	<script type='text/javascript' src='js/app.min.js'></script>
+    <script type='text/javascript' src="js/templates.min.js"></script>
+
+	<script type='text/javascript'>
+	$(document).ready(function () {
+	
+		//UrlParameters: /company.html#/item/1
+	
+		var parsed = parseUrlPathParameters(window.location.href);
+	
+		companyHub = $.connection.CompanyHub; //Hub class
+		hubConnector.done(function () {
+			function setValuesToForm(data) {
+				_.each(data, function(c){ $('#'+c.Item1).val(c.Item2); });
+			}
+			
+			function parseFieldFromForm(){
+			   var nonbuttons = _.filter($(":input"), function(i) { return i.type !== "button";});
+			   var ids = _.map(nonbuttons, function(i) { return i.id;});
+			   var values = getFormValues(ids);
+			   var keys = Object.keys(values);
+			   var tupleArray = _.map(keys, function(k) { return { Item1: k, Item2: values[k]};});
+			   //debugger;
+			   return tupleArray;
+            }
+			
+			var loginId = parsed.item;
+			
+			if(loginId===undefined){
+
+				$("#profileInfo").text("Create a new company");
+				$("#updatebtn").css({ display: "none", visibility: "hidden" });
+				$("#deletebtn").css({ display: "none", visibility: "hidden" });
+
+				$("#createbtn").click(function () {
+					companyHub.server.create(parseFieldFromForm()).done(
+						function(data){ 
+							var id = _.filter(data, function(i){return i.Item1==="Id";});
+							var idval = _.map(id, function(i){return i.Item2;});
+							document.location.href = "company.html#/item/" + idval[0];
+						});
+					return false;
+				});
+				
+			}else {
+				$("#profileInfo").text("Update company");
+				$("#createbtn").css({ display: "none", visibility: "hidden" });
+
+				companyHub.server.read(loginId).done(setValuesToForm);
+
+				$("#updatebtn").click(function () {
+					companyHub.server.update(loginId, parseFieldFromForm()).done(function(d){ alert("Company updated!"); setValuesToForm(d);});
+					return false;
+				});
+				$("#deletebtn").click(function () {
+					if(confirm("Are you sure?")){
+						companyHub.server.delete(loginId).done(function(d){ alert("Deleted!"); document.location.href="company.html"; });
+					}
+					return false;
+				});	
+				
+			}
+		});
+	});
+	</script>
+</head>
+<body>
+    <span id="navbar"></span> 
+
+    <span id="profileInfo" class="desktop-bold-medium"></span>
+
+    <div class="panel formScreen">
+        <form method="post" data-abide>
+			<div class="row">
+				<div class="large-3 columns">
+					<label><span class="fa fa-arrow-circle-o-right"></span>Company Name</label>
+				</div>
+				<div class="large-9 columns">
+					<input type="text" id="Name" placeholder="" required />
+					<small class="error">Name is required.</small>
+				</div>
+			</div>
+			<div class="row">
+				<div class="large-3 columns">
+						<label><span class="fa fa-user"></span> CEO</label>
+				</div>
+				<div class="large-3 columns">
+					<input type="text" id="CEO" placeholder="Name" />
+					<small class="error">CEO is required.</small>
+				</div>
+				<div class="large-3 columns">
+					<label><span class="fa fa-calendar"></span> Founded</label>
+				</div>
+				<div class="large-3 columns">
+					<input type="text" id="Founded" placeholder="dd.mm.yyyy" required pattern="[0-9]{1,2}.[0-9]{1,2}.[0-9]{4}" />
+					<small class="error">Type date in format dd.mm.yyyy.</small>
+				</div>
+			</div>
+			<div class="row">
+				<div class="large-3 columns">
+						<label><span class="fa fa-users"></span> Founder(s)</label>
+				</div>
+				<div class="large-9 columns">
+					<input type="text" id="Founder" placeholder="Name(s)" required />
+					<small class="error">Founder is required.</small>
+				</div>
+			</div>
+			<div class="row">
+				<div class="large-3 columns">
+						<label><span class="fa fa-link"></span> WebSite</label>
+				</div>
+				<div class="large-9 columns">
+					<input type="text" id="WebSite" placeholder="http://..." pattern="url" />
+					<small class="error">WebSite has to be url.</small>
+				</div>
+			</div>
+			<div class="row">
+				<div class="large-3 columns">
+						<label><span class="fa fa-star"></span> Logo</label>
+				</div>
+				<div class="large-9 columns">
+					<input type="text" id="LogoUrl" placeholder="http://..." pattern="url" />
+					<small class="error">Input logo url.</small>
+				</div>
+			</div>
+			<div class="row">
+				<div class="large-12 columns">
+					<input type="button" class = "button" id="createbtn" value="Create" />
+					<input type="button" class = "button" id="updatebtn" value="Update" />
+					<input type="button" class = "button" id="deletebtn" value="Delete" />
+	            	<input type="button" class = "secondary button" id="back" value="Back" />
+				</div>
+			</div>
+        </form>
+        <p>
+            Just for technical info, the URL for companies will be: <br/>
+            <a href="company.html#/item/1">company.html#/item/1</a><br/>
+            <a href="company.html#/item/2">company.html#/item/2</a><br/>
+            ...
+        </p>
+    </div>
+	</body>
+</html>

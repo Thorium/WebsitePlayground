@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8" />
+    <title>WebsitePlayground: CompanyWeb - Frontpage</title>
+    <link rel='stylesheet' type='text/css' href='css/libs.min.css' /> 
+    <link rel='stylesheet' type='text/css' href='css/app.min.css' /> 
+	<script type='text/javascript' src='js/libs.min.js'></script>
+    <script type='text/javascript' src='/signalr/hubs'></script> <!-- Generated SignalR Hub! -->
+	<script type='text/javascript' src='js/app.min.js'></script>
+    <script type='text/javascript' src="js/templates.min.js"></script>
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $("#search").click(function () {
+			//Do search			
+			var options = ["companyname", "foundedafter", "foundedbefore", "ceoname"];
+			var qry2 = emitUrlPathParameters(getFormValues(options));
+			document.location = "results.html#" + qry2;
+            return false;
+        });        
+		
+		$("#foundedafter").datepicker({ dateFormat: 'dd.mm.yy' });
+		$("#foundedbefore").datepicker({ dateFormat: 'dd.mm.yy' });
+				
+		function doToggleMore(speed) {
+			$( "#toggleMoreIcon" ).toggleClass( "fa fa-angle-double-up", speed );
+			$( "#moreOptions" ).toggle( "blind", {}, speed );
+        }
+		
+        $("#toggleMore").click(function () {
+			doToggleMore(100);
+        });
+    });
+    </script>
+   
+</head>
+<body>
+
+    <span id="navbar"></span>
+	<div class="bgImg"></div>
+    <div class="panel mainSearch">
+	<form method="get">
+		<div class="row">
+			<div class="large-3 columns">
+				<label><span class="fa fa-arrow-circle-o-right"></span> Name</label>
+			</div>
+			<div class="large-9 columns">
+				<input type="text" id="companyname" placeholder="..." />
+			</div>
+		</div>
+		<div class="row">
+			<div class="large-3 columns">
+				<label><span class="fa fa-calendar"></span> Founded after</label>
+			</div>
+			<div class="large-3 columns">
+				<input type="text" id="foundedafter" placeholder="dd.mm.yyyy" />
+			</div>
+			<div class="large-3 columns">
+				<label><span class="fa fa-calendar"></span> Founded before</label>
+			</div>
+			<div class="large-3 columns">
+				<input type="text" id="foundedbefore" placeholder="dd.mm.yyyy" />
+			</div>
+		</div>
+		<div class="row">
+			<div class="large-12 columns">
+				<a id="toggleMore" href="#" class="btn btn-default btn-sm radius"><span id="toggleMoreIcon" class="fa fa-angle-double-down"></span>More conditions</a>
+			</div>
+		</div>
+		<div id="moreOptions" style="display:none; margin-top: 10px;margin-bottom: 20px;">
+            <div class="row">
+                <div class="large-3 columns">
+                    <label><span class="fa fa-user"></span> CEO Name</label>
+                </div>
+                <div class="large-9 columns">
+                    <input type="text" id="ceoname" placeholder="..." />
+                </div>
+            </div>
+		</div>
+		<div class="row">
+			<div class="large-4 columns">&nbsp;</div>
+			<div class="large-5 columns centered">
+				<a href="#" class = "btn button primary radius" id="search"><span class="fa fa-search"></span> Search company!</a><br>
+			</div>
+			<div class="large-3 columns">&nbsp;</div>
+		</div>    
+        </form>
+		</div>
+</body>
+</html>
