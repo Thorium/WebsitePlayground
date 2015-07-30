@@ -68,7 +68,8 @@ Target "demodata" (fun _ ->
 Target "start" DoNothing
 
 "start"
-  =?> ("npm",hasBuildParam "npmrestore")
+//  =?> ("npm",hasBuildParam "npmrestore")
+  ==> "npm"
   ==> "gulp"
   ==> "all"
 

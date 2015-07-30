@@ -189,7 +189,7 @@ jQuery-UI is used for some themed components like the [datepicker](https://jquer
 
 ## Possible some more technologies if needed ##
 
-We should use a reactive programming library like:
+You should use a reactive programming library like:
 
 - [RX.js](http://reactivex.io/)
 - [Bacon.js](https://baconjs.github.io/)
@@ -199,7 +199,7 @@ These will make it easy to write event-based code. Use events as infinite lists 
 Some kind of Javascript-side router may be taken into use for single-page-app:
 e.g. [Crossroads.js](https://millermedeiros.github.io/crossroads.js/)
 
-If we want to avoid pure JavaScript (or ES6) coding, then we should probably use is one of these:
+If you want to avoid pure JavaScript (or ES6) coding, then you should probably use one of these:
 
 - [FunScript](http://funscript.info/)
 - [ClojureScript + React.JS](http://reagent-project.github.io/)

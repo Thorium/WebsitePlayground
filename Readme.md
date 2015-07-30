@@ -16,7 +16,7 @@ Technology-stack:
 - General: Git, Markdown
 - Backend: MariaDB (MySQL), Paket, F# (FSharp), TypeProviders, OWIN, SignalR (WebSockets/Long-Polling)
 - Frontend: Gulp, React.js, Less, Foundation.css, FontAwesome, Underscore, jQuery / jQuery-UI
-- Not yet: Crossroads.js, Rx/Rx.Js, 
+- Maybe in the future: Crossroads.js, Rx/Rx.Js 
 
 Documentation:
 

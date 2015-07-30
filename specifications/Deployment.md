@@ -20,7 +20,7 @@
 1. Install [Git](https://git-scm.com/) version control tool. If you want, you may install also a graphical user interface. There are a lot of different ones, e.g. [Git Extensions](http://sourceforge.net/projects/gitextensions/) for Windows or [GitX](http://gitx.frim.nl/) for Mac. 
 2. Clone this repository, e.g.:
 
-        git clone https://github.org/Thorium/WebsitePlayground.git
+        git clone http://github.org/Thorium/WebsitePlayground.git
 
     This will make a new folder under your current folder called WebsitePlayground.
 
