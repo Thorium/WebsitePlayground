@@ -10,23 +10,7 @@
 	<script type='text/javascript' src='js/libs.min.js'></script>
     <script type='text/javascript' src='/signalr/hubs'></script> <!-- Generated SignalR Hub! -->
 	<script type='text/javascript' src='js/app.min.js'></script>
-    <script type='text/javascript' src="js/templates.min.js"></script>
 
-	    <script type='text/javascript'>
-        $(function() {
-			setFormValues(parseUrlPathParameters(window.location.href));
-
-            $("#foundedafter").datepicker({ dateFormat: 'dd.mm.yy' });
-            $("#foundedbefore").datepicker({ dateFormat: 'dd.mm.yy' });
-
-			hubConnector.done(function () {
-				refreshResultList();				
-				onChangeInputs(["companyname", "foundedafter", "foundedbefore", "ceoname"],refreshResultList);
-			});	
-		
-			
-        });
-    </script>
 </head>
 <body>
     <span id="navbar"></span> 

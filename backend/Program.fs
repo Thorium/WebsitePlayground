@@ -11,6 +11,7 @@ let mutable server = Unchecked.defaultof<IDisposable>
 [<EntryPoint>]
 #endif
 let main args = 
+    //Scheduler.doStuff()
     let url = System.Configuration.ConfigurationManager.AppSettings.["WebServer"]
     server <- Microsoft.Owin.Hosting.WebApp.Start<MyWebStartup> url
 

@@ -6,11 +6,16 @@ open System.Linq
 open FSharp.Data
 open FSharp.Data.Sql
 
+open System.Data.SqlClient
+open System.Threading.Tasks
+
+open MySql.Data.MySqlClient
+
 // --- SQL-Server connection ------------------------------------
 
 [<Literal>]
 let mysqldatapath = __SOURCE_DIRECTORY__ + @"/../packages/MySql.Data/lib/net45/"
-type SqlConnection = 
+type TypeProviderConnection = 
     SqlDataProvider< // Supports: MS SQL Server, SQLite, PostgreSQL, Oracle, MySQL (MariaDB), ODBC and MS Access
         ConnectionString = @"server = localhost; database = companyweb; uid = webuser;pwd = p4ssw0rd",
         DatabaseVendor = Common.DatabaseProviderTypes.MYSQL,
@@ -22,7 +27,16 @@ type SqlConnection =
         ResolutionPath=mysqldatapath>
 
 let cstr = System.Configuration.ConfigurationManager.AppSettings.["RuntimeDBConnectionString"]
-let dbContext = SqlConnection.GetDataContext cstr
+let dbContext = 
+    if cstr = null then TypeProviderConnection.GetDataContext()
+    else TypeProviderConnection.GetDataContext cstr
+
+let ExecuteSql (query : string) parameters =
+    use RawSqlConnection = new MySqlConnection(cstr)
+    RawSqlConnection.Open()
+    use command = new MySqlCommand(query, RawSqlConnection)
+    parameters |> List.iter(fun (par:string*string) -> command.Parameters.AddWithValue(par) |> ignore)
+    command.ExecuteNonQuery();
 
 // --- Domain model, system actions -----------------------------
 

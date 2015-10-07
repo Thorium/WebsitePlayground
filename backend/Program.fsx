@@ -4,6 +4,7 @@
 #if INTERACTIVE
 #r @"./../packages/FSharp.Data/lib/net40/FSharp.Data.dll"
 #r @"./../packages/SQLProvider/lib/net40/FSharp.Data.SqlProvider.dll"
+#r @"./../packages/MySql.Data/lib/net40/MySql.Data.dll"
 
 // OWIN and SignalR-packages:
 #I @"./../packages/Microsoft.AspNet.SignalR.Core/lib/net45"

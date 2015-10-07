@@ -3,7 +3,7 @@
 
 ### Database ###
 
-- First install [MariaDB](https://downloads.mariadb.org/).
+- First install [MariaDB](https://downloads.mariadb.org/). Version 10.0.20 or later.
 - Ensure that the server is in the path: mysql -command should work. 
 - (Ensure that the server is running. To start server e.g. on Mac, run: `mysql.server start`.) 
 - Create a user and a database. To login to server: `mysql -u root -p`
@@ -14,6 +14,7 @@
         FLUSH PRIVILEGES;
 
 (This will also available as a script file: backend/sql/createuser.sql)
+- If you want graphical user interface for DB management, you may use MySQL Workbench: http://dev.mysql.com/downloads/workbench/
 
 ### Version control ###
 
@@ -26,13 +27,19 @@
 
 ### Runtime environment ###
 
-1. Install npm and Gulp. Npm should be in the path. 
+1. Install Node.js to get npm-package manager. 
+   Install npm and Gulp. Npm should be in the path. 
    [Here are short instructions how!](https://gist.github.com/Thorium/b74c7e3a70e6d20bf705)
+   (Install Visual Studio Code (https://code.visualstudio.com/) TypeScript editor, for *.ts and *.tsx files)
 
-2. If you Mac/Linux, install F# (and Mono). Here are the instructions:
-   - [Windows](http://fsharp.org/use/windows/)
+2. If you install to Mac/Linux, install F# (and Mono). Here are the instructions:
    - [Linux](http://fsharp.org/use/linux/)
    - [Mac](http://fsharp.org/use/mac/)
+   
+2. If you install to Windows, install Visual Studio 2015 (Community-edition is ok and it's free).
+   - [Visual Studio 2015](https://www.visualstudio.com/downloads/download-visual-studio-vs) From installer options select F# to be installed also.
+   - If on-line installer is not working, the page has also downloads-section for the full image.
+   - [F# on Windows](http://fsharp.org/use/windows/)
 
 3. Then you should run FAKE script to do various environment setups like fetch used 3rd party components, setup database tables, add demo data. This is easy, just run from the root folder:
 
@@ -63,3 +70,16 @@ You can also run code from the F#-interactive (or debug the program with Visual 
 
   - On Windows machine: `fsi backend\Program.fsx`
   - On Mac/Linux (SignalR won't work): `fsharpi backend/Program.fsx`
+
+##### Some Troubleshooting #####
+
+If you have problems, you may miss somethig from the path. Try running the following commands from the shell (with admin rights):
+
+- `mysql` to see that database is installed
+- `npm` to see that Node.js and its package manager is working. Also `build npm` should do.
+- `gulp` to see that Gulp is working. If not, try installing with or without -g parameter. Also `build gulp` should do.
+- `git` to see that Git is installed
+- `fsc` on Windows, `fsharpc` on Mac/Linux, to check that F#-compiler is ok.
+
+Installers should add paths. But if not, In Windows the path is modified from:
+Control Panel -> System -> Advanced System Settings -> Advanced -> Environment Variables -> PATH. Do not replace the existing one, just add with semicolon separated the new ones.

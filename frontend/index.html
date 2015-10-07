@@ -9,31 +9,6 @@
 	<script type='text/javascript' src='js/libs.min.js'></script>
     <script type='text/javascript' src='/signalr/hubs'></script> <!-- Generated SignalR Hub! -->
 	<script type='text/javascript' src='js/app.min.js'></script>
-    <script type='text/javascript' src="js/templates.min.js"></script>
-
-    <script type="text/javascript">
-    $(document).ready(function () {
-        $("#search").click(function () {
-			//Do search			
-			var options = ["companyname", "foundedafter", "foundedbefore", "ceoname"];
-			var qry2 = emitUrlPathParameters(getFormValues(options));
-			document.location = "results.html#" + qry2;
-            return false;
-        });        
-		
-		$("#foundedafter").datepicker({ dateFormat: 'dd.mm.yy' });
-		$("#foundedbefore").datepicker({ dateFormat: 'dd.mm.yy' });
-				
-		function doToggleMore(speed) {
-			$( "#toggleMoreIcon" ).toggleClass( "fa fa-angle-double-up", speed );
-			$( "#moreOptions" ).toggle( "blind", {}, speed );
-        }
-		
-        $("#toggleMore").click(function () {
-			doToggleMore(100);
-        });
-    });
-    </script>
    
 </head>
 <body>

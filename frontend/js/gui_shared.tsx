@@ -1,13 +1,5 @@
-/// <reference path="../../paket-files/aFarkas/html5shiv/dist/html5shiv.min.js" /> 
-/// <reference path="../../paket-files/ajax.aspnetcdn.com/jquery.min.js" /> 
-/// <reference path="../../paket-files/cdnjs.cloudflare.com/knockout-min.js" /> 
-/// <reference path="../../paket-files/code.jquery.com/jquery-ui.min.js" /> 
-/// <reference path="../../paket-files/reactjs/react-bower/react.js" /> 
-/// <reference path="../../paket-files/SignalR/bower-signalr/jquery.signalR.js" /> 
-/// <reference path="../../paket-files/underscorejs.org/underscore-min.js" /> 
-/// <reference path="../../paket-files/zurb/bower-foundation/js/foundation.min.js" /> 
-
-var CompanyWebNavBar = React.createClass({
+interface NavbarProps { companyId: string; }
+var CompanyWebNavBar = React.createClass<NavbarProps, any>({
   getInitialState: function() {
     return {menuOn: false};
   },
@@ -15,9 +7,8 @@ var CompanyWebNavBar = React.createClass({
     this.setState({menuOn: !this.state.menuOn});
   },
   render: function() {
-    profileInfo = [];
-    menutoggle = [];	
-    menubar = [];
+    var menutoggle = [];	
+    var menubar = [];
 
     var companyUrl = "company.html" + (this.props.companyId!==""? "#/item/"+this.props.companyId : "");
     if(this.state.menuOn){
@@ -38,7 +29,9 @@ var CompanyWebNavBar = React.createClass({
         </div>
         );
     }
-    menutoggle.push(<section className="left-small"><a id="hamburger" className="left-off-canvas-toggle menu-icon" href="#" onClick={this.handleClick}><span></span></a></section>);
+    menutoggle.push(<section className="left-small">
+    <a id="hamburger" className="left-off-canvas-toggle menu-icon" href="#" onClick={this.handleClick}><span></span></a>
+    </section>);
     return (
       <div>
 		<nav className="tab-bar desktop-navbar">
@@ -55,9 +48,10 @@ var CompanyWebNavBar = React.createClass({
   }
 });
 
-var AvailableCompany = React.createClass({
+interface CompanyProps { company: any; buyStocks: any; }
+var AvailableCompany = React.createClass<CompanyProps, any>({
     handleClick: function(event) {
-        signalHub.server.buyStocks(this.props.company.CompanyName, 50);
+        this.props.buyStocks(this.props.company.CompanyName, 50);
     },
     render: function() {
         var logoImage = [];
@@ -84,11 +78,15 @@ var AvailableCompany = React.createClass({
   }
 });
 
-var AvailableCompaniesList = React.createClass({
+interface CompaniesProps { companies: Array<any>; buyStocks: any; }
+var AvailableCompaniesList = React.createClass<CompaniesProps, any>({
   render: function() {
+      var buyTheseStocks = this.props.buyStocks;
       var companies = {};
-      if(this.props.companies !== null){
-          companies = _.map(this.props.companies, function(company) { return (<AvailableCompany company={company} />); });
+      if(this.props.companies !== null && this.props.companies.length !== 0){
+          companies = _.map(this.props.companies, function(company) { 
+              return (<AvailableCompany company={company} buyStocks={buyTheseStocks} />);
+          });
       } else {
           companies = "No companies found.";
       }
@@ -96,14 +94,14 @@ var AvailableCompaniesList = React.createClass({
   }
 });
 
-function renderAvailableCompanies(theCompanies) {
+export function renderAvailableCompanies(theCompanies, buyStocks) {
   React.render(
-    <AvailableCompaniesList companies={theCompanies}/>,
+    <AvailableCompaniesList companies={theCompanies} buyStocks={buyStocks} />,
     document.getElementById('companies')
   );
 }
 
-function renderNavBar(companyId) {
+export function renderNavBar(companyId) {
   React.render(
     <CompanyWebNavBar companyId={companyId} />,
     document.getElementById('navbar')

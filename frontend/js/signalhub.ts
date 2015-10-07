@@ -1,27 +1,23 @@
-/// <reference path="../../paket-files/aFarkas/html5shiv/dist/html5shiv.min.js" /> 
-/// <reference path="../../paket-files/ajax.aspnetcdn.com/jquery.min.js" /> 
-/// <reference path="../../paket-files/cdnjs.cloudflare.com/knockout-min.js" /> 
-/// <reference path="../../paket-files/code.jquery.com/jquery-ui.min.js" /> 
-/// <reference path="../../paket-files/reactjs/react-bower/react.js" /> 
-/// <reference path="../../paket-files/SignalR/bower-signalr/jquery.signalR.js" /> 
-/// <reference path="../../paket-files/underscorejs.org/underscore-min.js" /> 
-/// <reference path="../../paket-files/zurb/bower-foundation/js/foundation.min.js" /> 
+import gui_shared = require("./gui_shared");
+export var signalHub : any = {};
+export var hubConnector : any = {};
 
-var signalHub = {};
-var hubConnector = {};
+interface ISignalHub extends SignalR { SignalHub : any; }
+
 $(document).ready(function () {
 
-	//SignalR Hub:
-//	var signalHub;
+	// SignalR Hub:
 	$.connection.hub.url = "/signalr";
-	signalHub = $.connection.SignalHub; //Hub class
+    var con = <ISignalHub>$.connection;
+	signalHub = con.SignalHub; // Hub class
 	var connection = !signalHub?$.hubConnection():$.connection.hub;
 	if (!signalHub) {
 	   console.log("hub not found");
 	}
 	
 	signalHub.client.listCompanies = function (data) {
-		renderAvailableCompanies(data);
+        var act = signalHub.server.buyStocks;
+		gui_shared.renderAvailableCompanies(data, act);
 	};
 
 	signalHub.client.notifyDeal = function (data) {
@@ -40,9 +36,9 @@ $(document).ready(function () {
     }).fail(function(){ console.log('Could not Connect!'); });
 
     $(document).foundation();
-    renderNavBar("");
+    gui_shared.renderNavBar("");
 });
-function mapOptionType(p) {
+export function mapOptionType(p) {
 	var fieldValue = $('#'+p.toLowerCase()).val();
 	if(p==="CompanyName") { return fieldValue; }
 	if(p==="FoundedAfter" || p==="FoundedBefore") {
@@ -54,7 +50,7 @@ function mapOptionType(p) {
 	// Option Union-types would be: {Case: "Some", Fields: [{Case: fieldValue}]};
 }
 
-function refreshResultList() {
+export function refreshResultList() {
 	var ms = new Date().getTime() + 86400000;
 	var tomorrow = new Date(ms);
 	var searchObject = { 

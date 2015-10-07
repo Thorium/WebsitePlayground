@@ -2,6 +2,8 @@
  'use strict';
 
 //npm install --save-dev gulp gulp-jshint gulp-concat gulp-uglify gulp-plato gulp-rename gulp-sourcemaps gulp-less gulp-minify-css gulp-react gulp-autoprefixer gulp-flatten
+// Set to true for production build.
+var isRelease = false;
 
 var gulp = require('gulp'),
     jshint = require('gulp-jshint'),
@@ -13,15 +15,21 @@ var gulp = require('gulp'),
     sourcemaps = require('gulp-sourcemaps'),
     less = require('gulp-less'),
     mincss = require('gulp-minify-css'),
-    react = require('gulp-react'),
     flatten = require('gulp-flatten'),
-    reactlint = require('jshint-jsx')
+    gulpif = require('gulp-if'),
+    gutil = require('gulp-util'),
+    browserify = require('browserify'),
+    tsify = require('tsify'),
+    source = require('vinyl-source-stream'),
+    streamify = require('gulp-streamify'),
+    reactify = require('reactify'),
+    tslint = require('gulp-tslint'),
+    stylishts = require('gulp-tslint-stylish')
 	;
 
 var files = {
     targetPath: 'frontend/dist',
-    javascripts: ['frontend/js/*.js'],
-    templates: ['frontend/js/*.jsx'],
+    typescripts: ['frontend/js/*.ts', 'frontend/js/*.tsx'],
     jslibs: ['paket-files/ajax.aspnetcdn.com/jquery.min.js','paket-files/**/*.js'],  //TODO check if jquery included twice
     styles: ['frontend/styles/*.less'],
     csslibs: ['paket-files/**/*.css'],
@@ -34,30 +42,33 @@ var files = {
         'paket-files/**/*.ttf',
         'paket-files/**/*.woff',
         'paket-files/**/*.woff2'],
-    images: 'frontend/img/**/*.*'
+    images: 'frontend/img/**/*.*',
+    jqueryImages: 'frontend/jqueryImages/**/*.*'
 };
 
-// Concatenate & Minify JS
-function scripts(items, target) {
-    return gulp.src(items)
-        .pipe(flatten())
-        .pipe(sourcemaps.init())
-        .pipe(concat(target))
-        .pipe(uglify())
-        .pipe(sourcemaps.write('/.'))
-        .pipe(gulp.dest(files.targetPath + '/js'));
-}
+var errorHandler = function(title) {
+  return function(err) {
+    gutil.log(gutil.colors.red('[' + title + ']'), err.toString());
+    this.emit('end');
+  };
+};
 
-function compilereact(items, target) {
-    return gulp.src(items)
-        .pipe(flatten())
-        .pipe(sourcemaps.init())
-        .pipe(react())
-        .pipe(concat(target))
-        .pipe(uglify())
-        .pipe(sourcemaps.write('/.'))
+gulp.task('typeScripts', function () {
+    return browserify({
+            entries: ['./frontend/js/_references.d.ts','frontend/js/app.ts'],
+            transform: [reactify],
+            debug: !isRelease})
+        .plugin('tsify', { 
+            /* noImplicitAny: true, */
+            jsx: 'react',
+            target: 'ES5' })
+        .bundle()
+        .on('error', function (error) { console.error(error.toString()); })
+        //.pipe(process.stdout)
+        .pipe(source('app.min.js'))
+        .pipe(gulpif(isRelease, streamify(uglify())))
         .pipe(gulp.dest(files.targetPath + '/js'));
-}
+});
 
 function concatJavaScripts(items, target) {
     return gulp.src(items)
@@ -66,8 +77,6 @@ function concatJavaScripts(items, target) {
 }
 
 gulp.task('concatLibs', function () { concatJavaScripts(files.jslibs, '/libs.min.js');});
-gulp.task('minifyApp', function () { scripts(files.javascripts, '/app.min.js');});
-gulp.task('compileReact', function () { compilereact(files.templates, '/templates.min.js');});
 
 // concatenate & minify css
 function minifycss(items, target) {
@@ -83,7 +92,7 @@ function minifycss(items, target) {
 function minifyless(items, target) {
     return gulp.src(items)
 	  .pipe(sourcemaps.init())
-	  .pipe(less())
+	  .pipe(less()).on('error', errorHandler('Less'))
       .pipe(autoprefixer('last 2 version'))
       .pipe(concat(target+'.css'))
       .pipe(rename({suffix: '.min'}))
@@ -93,8 +102,7 @@ function minifyless(items, target) {
 }
 
 // Lint Task, JavaScript
-gulp.task('lintjs', function () {
-    var lintfiles = files.javascripts; //.concat(files.somemore);
+function lintjs(lintfiles) {
     return gulp.src(lintfiles)
         .pipe(jshint())
         .pipe(jshint.reporter('default'))
@@ -104,18 +112,23 @@ gulp.task('lintjs', function () {
 //            complexity: { trycatch: true }
 //        }))
         ;
-});
+}
 
-gulp.task('lintjsx', function () {
-    return gulp.src(files.templates)
-        .pipe(jshint({ linter: reactlint.JSXHINT }))
-        .pipe(jshint.reporter('default'));
+gulp.task('tslint', function(){
+      return gulp.src(files.typescripts)
+        .pipe(tslint())
+        .pipe(tslint.report(stylishts, {
+            emitError: false,
+            sort: true,
+            bell: true
+        }));
 });
 
 gulp.task('styles', function () { minifyless(files.styles, 'app');});
 gulp.task('styleslib', function () { minifycss(files.csslibs, 'libs');});
 
 gulp.task('images', function () { return gulp.src(files.images).pipe(gulp.dest(files.targetPath + '/img/'));});
+gulp.task('jqueryImages', function () { return gulp.src(files.jqueryImages).pipe(gulp.dest(files.targetPath + '/css/images/'));});
 gulp.task('fonts', function () { return gulp.src(files.fonts).pipe(flatten()).pipe(gulp.dest(files.targetPath + '/fonts'));});
 gulp.task('statics', function () { return gulp.src(files.statics).pipe(gulp.dest(files.targetPath));});
 gulp.task('htmls', function () { 
@@ -126,20 +139,19 @@ gulp.task('htmls', function () {
 //               .pipe(jshint.reporter('default'))
                .pipe(gulp.dest(files.targetPath));
 });
-gulp.task('deployStatic', ['htmls', 'fonts', 'images', 'statics']);
+gulp.task('deployStatic', ['htmls', 'fonts', 'jqueryImages', 'images', 'statics']);
 
 
 // Watch Files For Changes
 gulp.task('watch', function () {
-    gulp.watch(files.templates, ['lintjsx', 'compileReact']);
-    gulp.watch(files.javascripts, ['lintjs', 'minifyApp']);
     gulp.watch(files.styles, ['styles']);
     gulp.watch(files.fonts, ['fonts']);
     gulp.watch(files.images, ['images']);
     gulp.watch(files.htmls, ['htmls']);
     gulp.watch(files.statics, ['statics']);
+    gulp.watch(files.typescripts, ['tslint', 'typeScripts']);
 });
 
 // Default Task
-gulp.task('deploy', ['deployStatic', 'lintjs', 'lintjsx', 'compileReact', 'styles', 'styleslib', 'concatLibs', 'minifyApp']);
+gulp.task('deploy', ['deployStatic', 'tslint', 'typeScripts', 'styles', 'styleslib', 'concatLibs']);
 gulp.task('default', ['deploy', 'watch']);

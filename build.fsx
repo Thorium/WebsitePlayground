@@ -58,12 +58,12 @@ Target "database" (fun _ ->
     let path = Path.Combine("backend", "sql", "createtables.sql")
     let info = @"MySQL have to be in PATH. e.g in Windows: set path=%path%;""c:\Program Files\MariaDB 10.0\bin\"""
     printfn "%s" info
-    runShell("mysql","-u webuser -pp4ssw0rd -e \"source " + path + "\""))
+    runShell("mysql","-u webuser -pp4ssw0rd -e \"source " + path + "\" --abort-source-on-error"))
  
 /// Refresh the demo data for the database 
 Target "demodata" (fun _ ->
     let path = Path.Combine("backend", "sql", "createdemodata.sql")
-    runShell("mysql","-u webuser -pp4ssw0rd companyweb -e \"source " + path + "\""))
+    runShell("mysql","-u webuser -pp4ssw0rd companyweb -e \"source " + path + "\" --abort-source-on-error"))
 
 Target "start" DoNothing
 

@@ -32,8 +32,19 @@ github FortAwesome/Font-Awesome fonts/fontawesome-webfont.svg
 github FortAwesome/Font-Awesome fonts/fontawesome-webfont.ttf
 github FortAwesome/Font-Awesome fonts/fontawesome-webfont.woff
 github FortAwesome/Font-Awesome fonts/fontawesome-webfont.woff2
+github lodash/lodash lodash.min.js
+// other possible: danielm/uploader booncon/slippry 
+
+//Typescript definitions
+github borisyankov/DefinitelyTyped foundation/foundation.d.ts
+github borisyankov/DefinitelyTyped react/react.d.ts
+github borisyankov/DefinitelyTyped react/react-global.d.ts
+github borisyankov/DefinitelyTyped lodash/lodash.d.ts
+github borisyankov/DefinitelyTyped jquery/jquery.d.ts 
+github borisyankov/DefinitelyTyped jqueryui/jqueryui.d.ts
+github borisyankov/DefinitelyTyped signalr/signalr.d.ts
+github borisyankov/DefinitelyTyped google.analytics/ga.d.ts 
 
 http http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.4.min.js jquery.min.js
 http https://code.jquery.com/ui/1.10.4/jquery-ui.min.js
 http https://code.jquery.com/ui/1.10.4/themes/sunny/jquery-ui.min.css
-http http://underscorejs.org/underscore-min.js

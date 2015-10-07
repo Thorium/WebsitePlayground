@@ -14,7 +14,7 @@ Here are some technology based guidance.
 		|   +-*-dist   // Minified release-package
 		|   +---fonts
 		|   +---img
-		|   +---js     // Development Javascripts and React.js components
+		|   +---js     // Development TypeScript and React.js components
 		+-*-node_modules    // Development time Javascript components.
 		+-*-packages        // Refereces to 3rd party server side packages.
 		+-*-paket-files     // Refereces to 3rd party client side packages.
@@ -186,6 +186,11 @@ jQuery is an old library to manipulate HTML-objects via JavaScript: `$("#myId").
 You should know this already. 
 
 jQuery-UI is used for some themed components like the [datepicker](https://jqueryui.com/datepicker/)-calendar.
+
+### TypeScript ###
+
+Typescript is statically typed transpiler for JavaScript. It supports ES6. 
+http://www.typescriptlang.org/
 
 ## Possible some more technologies if needed ##
 
