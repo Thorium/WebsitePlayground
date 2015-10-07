@@ -1,7 +1,7 @@
 //Gulp tutorial: http://travismaynard.com/writing/getting-started-with-gulp
  'use strict';
 
-//npm install --save-dev gulp gulp-jshint gulp-concat gulp-uglify gulp-plato gulp-rename gulp-sourcemaps gulp-less gulp-minify-css gulp-react gulp-autoprefixer gulp-flatten
+//npm install
 // Set to true for production build.
 var isRelease = false;
 
@@ -63,7 +63,7 @@ gulp.task('typeScripts', function () {
             jsx: 'react',
             target: 'ES5' })
         .bundle()
-        .on('error', function (error) { console.error(error.toString()); })
+        .on('error', function (error) { gutil.log(gutil.colors.red('[TypeScript]'), error.toString()); this.emit('end'); })
         //.pipe(process.stdout)
         .pipe(source('app.min.js'))
         .pipe(gulpif(isRelease, streamify(uglify())))
