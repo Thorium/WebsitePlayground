@@ -189,8 +189,10 @@ jQuery-UI is used for some themed components like the [datepicker](https://jquer
 
 ### TypeScript ###
 
-Typescript is statically typed transpiler for JavaScript. It supports ES6. 
+TypeScript is statically typed transpiler for JavaScript. It supports ES6. 
 http://www.typescriptlang.org/
+
+Browserify (in gulpfile.js) compiles TypeScript files starting from frontend/js/_references.d.ts (references to external modules) and frontend/js/app.ts (references to compiled *.ts files as modules). If you have errors, the JavaScript files under www-server folder (dist) may not update.
 
 ## Possible some more technologies if needed ##
 

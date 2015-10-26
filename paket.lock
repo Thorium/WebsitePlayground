@@ -106,9 +106,9 @@ NUGET
 GITHUB
   remote: zurb/bower-foundation
   specs:
-    css/foundation.css (b879716aa268e1f88fe43de98db2db4487af00ca)
-    css/normalize.css (b879716aa268e1f88fe43de98db2db4487af00ca)
-    js/foundation.min.js (b879716aa268e1f88fe43de98db2db4487af00ca)
+    css/foundation.css (bc752e670c42c695f9f706ed20dda9c57eaa62c5)
+    css/normalize.css (bc752e670c42c695f9f706ed20dda9c57eaa62c5)
+    js/foundation.min.js (bc752e670c42c695f9f706ed20dda9c57eaa62c5)
   remote: SignalR/bower-signalr
   specs:
     jquery.signalR.js (26092205231972de4b3db966e5689ddbee971ef9)
@@ -117,28 +117,28 @@ GITHUB
     dist/html5shiv.min.js (ed28c56c071bddfe7d635ad88995674957a016be)
   remote: reactjs/react-bower
   specs:
-    react.min.js (25f94116b00cc6e53701707bffc504023404a21c)
+    react.min.js (c2b707387cf34d96e84c64069eddbc7d74729789)
   remote: FortAwesome/Font-Awesome
   specs:
-    css/font-awesome.min.css (153c0e063e59881a375aa310de93551056a03b51)
-    fonts/fontawesome-webfont.eot (153c0e063e59881a375aa310de93551056a03b51)
-    fonts/fontawesome-webfont.svg (153c0e063e59881a375aa310de93551056a03b51)
-    fonts/fontawesome-webfont.ttf (153c0e063e59881a375aa310de93551056a03b51)
-    fonts/fontawesome-webfont.woff (153c0e063e59881a375aa310de93551056a03b51)
-    fonts/fontawesome-webfont.woff2 (153c0e063e59881a375aa310de93551056a03b51)
+    css/font-awesome.min.css (b56d50f461065d548371dfa87730216d1e81e301)
+    fonts/fontawesome-webfont.eot (b56d50f461065d548371dfa87730216d1e81e301)
+    fonts/fontawesome-webfont.svg (b56d50f461065d548371dfa87730216d1e81e301)
+    fonts/fontawesome-webfont.ttf (b56d50f461065d548371dfa87730216d1e81e301)
+    fonts/fontawesome-webfont.woff (b56d50f461065d548371dfa87730216d1e81e301)
+    fonts/fontawesome-webfont.woff2 (b56d50f461065d548371dfa87730216d1e81e301)
   remote: lodash/lodash
   specs:
-    lodash.min.js (2d3e64b51a75cb32ad82bafbbff81ec0f31a0e8d)
+    dist/lodash.min.js (e331ea5d82920f48dfe31fa71b6647484873afb4)
   remote: borisyankov/DefinitelyTyped
   specs:
-    foundation/foundation.d.ts (e9be3cecf8a326d3e220c52b42d218169a7bb9f2)
-    google.analytics/ga.d.ts (e9be3cecf8a326d3e220c52b42d218169a7bb9f2)
-    jquery/jquery.d.ts (e9be3cecf8a326d3e220c52b42d218169a7bb9f2)
-    jqueryui/jqueryui.d.ts (e9be3cecf8a326d3e220c52b42d218169a7bb9f2)
-    lodash/lodash.d.ts (e9be3cecf8a326d3e220c52b42d218169a7bb9f2)
-    react/react-global.d.ts (e9be3cecf8a326d3e220c52b42d218169a7bb9f2)
-    react/react.d.ts (e9be3cecf8a326d3e220c52b42d218169a7bb9f2)
-    signalr/signalr.d.ts (e9be3cecf8a326d3e220c52b42d218169a7bb9f2)
+    foundation/foundation.d.ts (f236e7d5dd2ec994799e746e27621193b9429c4b)
+    google.analytics/ga.d.ts (f236e7d5dd2ec994799e746e27621193b9429c4b)
+    jquery/jquery.d.ts (f236e7d5dd2ec994799e746e27621193b9429c4b)
+    jqueryui/jqueryui.d.ts (f236e7d5dd2ec994799e746e27621193b9429c4b)
+    lodash/lodash.d.ts (f236e7d5dd2ec994799e746e27621193b9429c4b)
+    react/react-global.d.ts (f236e7d5dd2ec994799e746e27621193b9429c4b)
+    react/react.d.ts (f236e7d5dd2ec994799e746e27621193b9429c4b)
+    signalr/signalr.d.ts (f236e7d5dd2ec994799e746e27621193b9429c4b)
 HTTP
   remote: http://ajax.aspnetcdn.com
   specs:

@@ -32,7 +32,7 @@ github FortAwesome/Font-Awesome fonts/fontawesome-webfont.svg
 github FortAwesome/Font-Awesome fonts/fontawesome-webfont.ttf
 github FortAwesome/Font-Awesome fonts/fontawesome-webfont.woff
 github FortAwesome/Font-Awesome fonts/fontawesome-webfont.woff2
-github lodash/lodash lodash.min.js
+github lodash/lodash dist/lodash.min.js
 // other possible: danielm/uploader booncon/slippry 
 
 //Typescript definitions

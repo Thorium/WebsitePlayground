@@ -8,7 +8,7 @@ open Microsoft.AspNet.SignalR
 open Microsoft.AspNet.SignalR.Hubs 
 open System.Threading.Tasks
 
-type MessageToClient =  // Server can push data to single or all clients
+type IMessageToClient =  // Server can push data to single or all clients
     abstract ListCompanies : seq<CompanySearchResult> -> Task
     abstract NotifyDeal : string -> Task
 
@@ -18,7 +18,7 @@ open System.Security.Claims
 // Example of queries and real-time communtication
 [<HubName("SignalHub")>]
 type SignalHub() as this = 
-    inherit Hub<MessageToClient>()
+    inherit Hub<IMessageToClient>()
 
     override __.OnConnected() =
         let t = base.OnConnected()
@@ -60,7 +60,7 @@ type SignalHub() as this =
 // Example of basic CRUD
 [<HubName("CompanyHub")>]
 type CompanyHub() = 
-    inherit Hub<MessageToClient>()
+    inherit Hub<IMessageToClient>()
 
     let executeCrud itemId actionToEntity =
         let entity =
@@ -70,7 +70,7 @@ type CompanyHub() =
                 head
             }
         entity |> actionToEntity
-        dbContext.SubmitUpdates ()
+        dbContext.SubmitUpdates2 ()
         entity.ColumnValues
 
     let ``map data from form to database format`` (formData: seq<string*obj>) =
@@ -91,7 +91,7 @@ type CompanyHub() =
         let entity = data
                      |> ``map data from form to database format``
                      |> dbContext.``[companyweb].[company]``.Create
-        dbContext.SubmitUpdates()
+        dbContext.SubmitUpdates2()
         entity.ColumnValues
 
     member __.Read itemId = 

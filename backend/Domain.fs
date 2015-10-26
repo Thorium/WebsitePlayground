@@ -14,7 +14,7 @@ open MySql.Data.MySqlClient
 // --- SQL-Server connection ------------------------------------
 
 [<Literal>]
-let mysqldatapath = __SOURCE_DIRECTORY__ + @"/../packages/MySql.Data/lib/net45/"
+let Mysqldatapath = __SOURCE_DIRECTORY__ + @"/../packages/MySql.Data/lib/net45/"
 type TypeProviderConnection = 
     SqlDataProvider< // Supports: MS SQL Server, SQLite, PostgreSQL, Oracle, MySQL (MariaDB), ODBC and MS Access
         ConnectionString = @"server = localhost; database = companyweb; uid = webuser;pwd = p4ssw0rd",
@@ -24,7 +24,7 @@ type TypeProviderConnection =
         Owner="companyweb",
 // Values for new version of SQLProvider:
 //        CaseSensitivityChange = Common.CaseSensitivityChange.ORIGINAL,
-        ResolutionPath=mysqldatapath>
+        ResolutionPath=Mysqldatapath>
 
 let cstr = System.Configuration.ConfigurationManager.AppSettings.["RuntimeDBConnectionString"]
 let dbContext = 
@@ -32,11 +32,19 @@ let dbContext =
     else TypeProviderConnection.GetDataContext cstr
 
 let ExecuteSql (query : string) parameters =
-    use RawSqlConnection = new MySqlConnection(cstr)
-    RawSqlConnection.Open()
-    use command = new MySqlCommand(query, RawSqlConnection)
+    use rawSqlConnection = new MySqlConnection(cstr)
+    rawSqlConnection.Open()
+    use command = new MySqlCommand(query, rawSqlConnection)
     parameters |> List.iter(fun (par:string*string) -> command.Parameters.AddWithValue(par) |> ignore)
     command.ExecuteNonQuery();
+
+type TypeProviderConnection.dataContext with
+  /// SubmitUpdates() but on error ClearUpdates()
+  member x.SubmitUpdates2() = 
+    try x.SubmitUpdates()
+    with
+    | e -> x.ClearUpdates() |> ignore
+           reraise()
 
 // --- Domain model, system actions -----------------------------
 
