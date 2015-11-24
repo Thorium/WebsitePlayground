@@ -14,7 +14,7 @@ Here are some technology based guidance.
 		|   +-*-dist   // Minified release-package
 		|   +---fonts
 		|   +---img
-		|   +---js     // Development TypeScript and React.js components
+		|   +---scripts     // Development TypeScript and React.js components
 		+-*-node_modules    // Development time Javascript components.
 		+-*-packages        // Refereces to 3rd party server side packages.
 		+-*-paket-files     // Refereces to 3rd party client side packages.
@@ -169,9 +169,9 @@ Zurb [Foundation](http://foundation.zurb.com/) CSS is responsive stylesheet. It 
 
 To have icons in the user interface, we use [FontAwesome](http://fortawesome.github.io/Font-Awesome/) icon font. It has a [large collection](http://fortawesome.github.io/Font-Awesome/icons/) of vector graphic icons for user interface. They are used inside buttons, menus, etc. You use them like this: `<span class="fa fa-book"></span>`
 
-### Underscore ###
+### Lodash ###
 
-[Underscore](http://underscorejs.org/) is a Javascript library to avoid writing loop-structures in Javascript. You shouldn't use for, while, or any other loop as they are not easy to undestand by just looking 3 sec to the source code. Instead you should use collection operators like `map`, `filter`, `reduce` and `each`.
+[Lodash](https://lodash.com/) is a Javascript library to avoid writing loop-structures in Javascript. You shouldn't use for, while, or any other loop as they are not easy to undestand by just looking 3 sec to the source code. Instead you should use collection operators like `map`, `filter`, `reduce` and `each`.
 
     var filtered = _.filter(myCollection, function(i){ return i % 2 == 0; });
     var plusOnes = _.map(filtered, function(i){ return i + 1; });
@@ -192,7 +192,7 @@ jQuery-UI is used for some themed components like the [datepicker](https://jquer
 TypeScript is statically typed transpiler for JavaScript. It supports ES6. 
 http://www.typescriptlang.org/
 
-Browserify (in gulpfile.js) compiles TypeScript files starting from frontend/js/_references.d.ts (references to external modules) and frontend/js/app.ts (references to compiled *.ts files as modules). If you have errors, the JavaScript files under www-server folder (dist) may not update.
+Browserify (in gulpfile.js) compiles TypeScript files starting from frontend/scripts/_references.d.ts (references to external modules) and frontend/scripts/app.ts (references to compiled *.ts files as modules). If you have errors, the JavaScript files under www-server folder (dist) may not update.
 
 ## Possible some more technologies if needed ##
 
@@ -205,6 +205,16 @@ These will make it easy to write event-based code. Use events as infinite lists 
 
 Some kind of Javascript-side router may be taken into use for single-page-app:
 e.g. [Crossroads.js](https://millermedeiros.github.io/crossroads.js/)
+
+Other useful components:
+
+- Web-testing: [canopy](http://lefthandedgoat.github.io/canopy/)
+- Unit-testing: [FsUnit.xUnit](http://fsprojects.github.io/FsUnit/)
+- Image-slider: [Slippry](http://slippry.com/)
+- Localization-templates: [mustache.js](https://github.com/janl/mustache.js/)
+- File-upload: [JQuery File Uploader](https://github.com/danielm/uploader/)
+- Chart-library: [Rickshaw](https://github.com/shutterstock/rickshaw)
+- Maps: [Google Maps] (https://developers.google.com/maps/documentation/javascript/)
 
 If you want to avoid pure JavaScript (or ES6) coding, then you should probably use one of these:
 
