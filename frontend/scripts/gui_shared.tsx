@@ -16,15 +16,15 @@ var CompanyWebNavBar = React.createClass<NavbarProps, any>({
         <div id="mainMenu" className="icon-bar three-up">
           <a className="item" href="index.html">
             <span className="white fa fa-search"></span>
-            <label>Search</label>
+            <p className="white">Search</p>
           </a>
           <a className="item" href={companyUrl}>
             <span className="white fa fa-database"></span>
-            <label>Company page</label>
+            <p className="white">Company page</p>
           </a>
           <a className="item" href="https://github.com/Thorium/WebsitePlayground" target="_blank">
             <span className="white fa fa-github"></span>
-            <label>External GitHub link</label>
+            <p className="white">External GitHub link</p>
           </a>
         </div>
         );

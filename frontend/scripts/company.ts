@@ -2,7 +2,7 @@ import tools = require("./tools");
 import signalhub = require("./signalhub");
 interface ICompanyHub extends SignalR { CompanyHub : any; }
 
-if(window.location.href.indexOf("company") > 0){
+export function initCompany(locale) {
 	$(document).ready(function () {
 	
 		// UrlParameters: /company.html#/item/1
@@ -26,9 +26,9 @@ if(window.location.href.indexOf("company") > 0){
 			   return tupleArray;
             }
 			
-			var loginId = parsed.item;
+			var compId = parsed.item;
 			
-			if(loginId===undefined){
+			if(compId===undefined){
 
 				$("#profileInfo").text("Create a new company");
 				$("#updatebtn").css({ display: "none", visibility: "hidden" });
@@ -39,7 +39,7 @@ if(window.location.href.indexOf("company") > 0){
 						function(data){ 
 							var id = _.filter(data, function(i:any){return i.Item1==="Id";});
 							var idval = _.map(id, function(i:any){return i.Item2;});
-							document.location.href = "company.html#/item/" + idval[0];
+							document.location.href = "company.html?i=" + idval[0] + "#/item/" + idval[0];
 						});
 					return false;
 				});
@@ -48,15 +48,15 @@ if(window.location.href.indexOf("company") > 0){
 				$("#profileInfo").text("Update company");
 				$("#createbtn").css({ display: "none", visibility: "hidden" });
 
-				companyHub.server.read(loginId).done(setValuesToForm);
+				companyHub.server.read(compId).done(setValuesToForm);
 
 				$("#updatebtn").click(function () {
-					companyHub.server.update(loginId, parseFieldFromForm()).done(function(d){ alert("Company updated!"); setValuesToForm(d);});
+					companyHub.server.update(compId, parseFieldFromForm()).done(function(d){ alert("Company updated!"); setValuesToForm(d);});
 					return false;
 				});
 				$("#deletebtn").click(function () {
 					if(confirm("Are you sure?")){
-						companyHub.server.delete(loginId).done(function(d){ alert("Deleted!"); document.location.href="company.html"; });
+						companyHub.server.delete(compId).done(function(d){ alert("Deleted!"); document.location.href="company.html"; });
 					}
 					return false;
 				});	

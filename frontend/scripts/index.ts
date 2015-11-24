@@ -1,5 +1,6 @@
 import tools = require("./tools");
 
+export function initIndex(locale) {
     $(document).ready(function () {
         $("#search").click(function () {
 			// Do search			
@@ -21,3 +22,4 @@ import tools = require("./tools");
 			doToggleMore(100);
         });
     });
+}

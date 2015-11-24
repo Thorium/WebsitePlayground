@@ -29,7 +29,7 @@ var gulp = require('gulp'),
 
 var files = {
     targetPath: 'frontend/dist',
-    typescripts: ['frontend/js/*.ts', 'frontend/js/*.tsx'],
+    typescripts: ['frontend/scripts/*.ts', 'frontend/scripts/*.tsx'],
     jslibs: ['paket-files/ajax.aspnetcdn.com/jquery.min.js','paket-files/**/*.js'],  //TODO check if jquery included twice
     styles: ['frontend/styles/*.less'],
     csslibs: ['paket-files/**/*.css'],
@@ -55,7 +55,7 @@ var errorHandler = function(title) {
 
 gulp.task('typeScripts', function () {
     return browserify({
-            entries: ['./frontend/js/_references.d.ts','frontend/js/app.ts'],
+            entries: ['./frontend/scripts/_references.d.ts','frontend/scripts/app.ts'],
             transform: [reactify],
             debug: !isRelease})
         .plugin('tsify', { 
