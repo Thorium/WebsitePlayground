@@ -30,7 +30,10 @@ var gulp = require('gulp'),
 var files = {
     targetPath: 'frontend/dist',
     typescripts: ['frontend/scripts/*.ts', 'frontend/scripts/*.tsx'],
-    jslibs: ['paket-files/ajax.aspnetcdn.com/jquery.min.js','paket-files/**/*.js'],  //TODO check if jquery included twice
+    jslibs: ['paket-files/ajax.aspnetcdn.com/jquery.min.js',
+             'paket-files/lodash/lodash/dist/lodash.min.js',
+             'paket-files/reactjs/react-bower/react.min.js',  //TODO check if these included twice
+             'paket-files/**/*.js'],
     styles: ['frontend/styles/*.less'],
     csslibs: ['paket-files/**/*.css'],
     htmls: ['frontend/*.html'],
@@ -105,7 +108,7 @@ function minifyless(items, target) {
 function lintjs(lintfiles) {
     return gulp.src(lintfiles)
         .pipe(jshint())
-        .pipe(jshint.reporter('default'))
+        .pipe(jshint.reporter('jshint-stylish'))
 // This takes about 30sec, so skipping it now:
 //        .pipe(plato('./report', {
 //            jshint: { options: {strict: true} },

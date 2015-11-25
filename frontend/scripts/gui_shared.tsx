@@ -95,14 +95,14 @@ var AvailableCompaniesList = React.createClass<CompaniesProps, any>({
 });
 
 export function renderAvailableCompanies(theCompanies, buyStocks) {
-  React.render(
+  ReactDOM.render(
     <AvailableCompaniesList companies={theCompanies} buyStocks={buyStocks} />,
     document.getElementById('companies')
   );
 }
 
 export function renderNavBar(companyId) {
-  React.render(
+  ReactDOM.render(
     <CompanyWebNavBar companyId={companyId} />,
     document.getElementById('navbar')
   );
