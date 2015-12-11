@@ -9,6 +9,6 @@ export function initResults(locale) {
 
     signalhub.refreshResultList();				
     tools.onChangeInputs(["companyname", "foundedafter", "foundedbefore", "ceoname"],signalhub.refreshResultList);
-    $('#companyname').keyup(signalhub.refreshResultList);
-    $('#ceoname').keyup(signalhub.refreshResultList);    
+    $('#companyname').keyup(Foundation.utils.throttle(function() {signalhub.refreshResultList();},300));
+    $('#ceoname').keyup(Foundation.utils.throttle(function() {signalhub.refreshResultList();},300));    
 }

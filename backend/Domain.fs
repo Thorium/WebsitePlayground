@@ -43,7 +43,8 @@ type TypeProviderConnection.dataContext with
   member x.SubmitUpdates2() = 
     try x.SubmitUpdates()
     with
-    | e -> x.ClearUpdates() |> ignore
+    | e -> Console.WriteLine (e.ToString() + "\r\n\r\n"+ System.Diagnostics.StackTrace(1, true).ToString())
+           x.ClearUpdates() |> ignore
            reraise()
 
 // --- Domain model, system actions -----------------------------
@@ -75,3 +76,7 @@ let ``calculate SHA256 hash`` : string -> string =
     System.Text.Encoding.UTF8.GetBytes 
     >> System.Security.Cryptography.SHA256Managed.Create().ComputeHash
     >> Convert.ToBase64String
+
+let GetUnionCaseName (x:'a) = 
+    match Microsoft.FSharp.Reflection.FSharpValue.GetUnionFields(x, typeof<'a>) with
+    | case, _ -> case.Name
