@@ -38,12 +38,14 @@ let ExecuteSql (query : string) parameters =
     parameters |> List.iter(fun (par:string*string) -> command.Parameters.AddWithValue(par) |> ignore)
     command.ExecuteNonQuery();
 
+let logger = Logary.Logging.getCurrentLogger ()
+
 type TypeProviderConnection.dataContext with
   /// SubmitUpdates() but on error ClearUpdates()
   member x.SubmitUpdates2() = 
     try x.SubmitUpdates()
     with
-    | e -> Console.WriteLine (e.ToString() + "\r\n\r\n"+ System.Diagnostics.StackTrace(1, true).ToString())
+    | e -> Logary.LogLine.error (e.ToString() + "\r\n\r\n"+ System.Diagnostics.StackTrace(1, true).ToString()) |> logger.Log
            x.ClearUpdates() |> ignore
            reraise()
 

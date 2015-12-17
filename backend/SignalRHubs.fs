@@ -14,6 +14,7 @@ type IMessageToClient =  // Server can push data to single or all clients
 
 let rnd = Random()
 open System.Security.Claims
+open Logary
 
 // Example of queries and real-time communtication
 [<HubName("SignalHub")>]
@@ -22,7 +23,7 @@ type SignalHub() as this =
 
     override __.OnConnected() =
         let t = base.OnConnected()
-        printfn "Client connected: %s" this.Context.ConnectionId
+        LogLine.info ("Client connected: " + this.Context.ConnectionId) |> logger.Log
         // We could do authentication check here.
         t
 

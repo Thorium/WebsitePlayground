@@ -1,6 +1,7 @@
 FAKE
 FSharp.Formatting
 FSharp.Data
+Logary
 Microsoft.AspNet.SignalR.Core
 Microsoft.AspNet.WebApi.OwinSelfHost
 Microsoft.Owin.Cors

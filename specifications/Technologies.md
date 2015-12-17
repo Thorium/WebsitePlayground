@@ -105,6 +105,10 @@ We use F# Data type providers to avoid complex O/R-mappings and domain models:
 
 [SignalR](http://signalr.net/) is a real-time communication library that can handle also push-based notifications from the server to the clients. It uses WebSockets and fallbacks to long-polling.
 
+### Logary ###
+
+[Logary] (https://logary.github.io/) is a logging library that makes it easy to integrate with many different "Operational Intelligence platforms" to gather real-time log data from distributed web-servers.
+
 # Frontend #
 
 This is just basic HTML-frontend.

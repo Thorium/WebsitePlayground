@@ -17,6 +17,8 @@ nuget MySql.Data
 nuget Rx-Main
 nuget SQLProvider
 nuget SourceLink.Fake
+nuget Logary
+
 // Testing frameworks:
 // nuget canopy
 // nuget FsUnit.xUnit

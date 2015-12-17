@@ -42,15 +42,33 @@
 #r @"./../packages/Newtonsoft.Json/lib/net45/Newtonsoft.Json.dll"
 #I @"./../packages/Owin/lib/net40"
 #r @"./../packages/Owin/lib/net40/Owin.dll"
+#I @"./../packages/Logary/lib/net40"
+#r @"./../packages/Logary/lib/net40/Logary.dll"
 
 #r @"System.Configuration.dll"
 
 open System
+open System.Configuration
+open System.Linq
+open FSharp.Data
+open FSharp.Data.Sql
+open System.Data.SqlClient
+open System.Threading.Tasks
+open MySql.Data.MySqlClient
+open System.Security.Claims
+open Microsoft.AspNet.SignalR
+open Microsoft.AspNet.SignalR.Hubs 
+open System.Threading.Tasks
+open Logary
 
 #load "Domain.fs"
 #load "SignalRHubs.fs"
 #load "OwinStartup.fs"
 #load "Program.fs"
-MyApp.main [||] |> ignore
+let logger = Logary.Logging.getCurrentLogger ()
+try 
+    MyApp.main [||] |> ignore
+with
+    | e -> Logary.LogLine.error (e.Message) |> logger.Log
 
 #endif

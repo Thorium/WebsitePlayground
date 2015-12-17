@@ -27,15 +27,20 @@
 
 ### Runtime environment ###
 
-1. Install Node.js to get npm-package manager. 
+1. Install Node.js (the new version 4.x) to get npm-package manager. 
    Install npm and Gulp. Npm should be in the path. 
    [Here are short instructions how!](https://gist.github.com/Thorium/b74c7e3a70e6d20bf705)
+
    (Install Visual Studio Code (https://code.visualstudio.com/) TypeScript editor, for *.ts and *.tsx files)
 
 2. If you install to Mac/Linux, install F# (and Mono). Here are the instructions:
    - [Linux](http://fsharp.org/use/linux/)
    - [Mac](http://fsharp.org/use/mac/)
    
+   - After basic install run this to update HTTPS certificates
+
+     mozroots --import --sync
+
 2. If you install to Windows, install Visual Studio 2015 (Community-edition is ok and it's free).
    - [Visual Studio 2015](https://www.visualstudio.com/downloads/download-visual-studio-vs) From installer options select F# to be installed also.
    - If on-line installer is not working, the page has also downloads-section for the full image.
