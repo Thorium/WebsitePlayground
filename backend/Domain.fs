@@ -40,14 +40,22 @@ let ExecuteSql (query : string) parameters =
     parameters |> List.iter(fun (par:string*string) -> command.Parameters.AddWithValue(par) |> ignore)
     command.ExecuteNonQuery();
 
+open System.IO
 let getRootedPath (path:string) =
-    let parsed = 
-        path.Split([|@"\"; "/"|], StringSplitOptions.None)
-        |> System.IO.Path.Combine
-    if System.IO.Path.IsPathRooted parsed then 
-        parsed 
+    if Path.IsPathRooted path then 
+        path 
     else 
-        System.IO.Path.Combine(Environment.CurrentDirectory, parsed)
+        let parsed = 
+            path.Split([|@"\"; "/"|], StringSplitOptions.None)
+            |> Path.Combine
+#if INTERACTIVE
+        let basePath = __SOUCRE_DIRECTORY__
+#else
+        let basePath = 
+            System.Reflection.Assembly.GetExecutingAssembly().Location
+            |> Path.GetDirectoryName
+#endif
+        Path.Combine(basePath, parsed)
 
 type TypeProviderConnection.dataContext with
   /// SubmitUpdates() but on error ClearUpdates()
