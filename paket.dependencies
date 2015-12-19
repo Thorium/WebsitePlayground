@@ -30,11 +30,12 @@ nuget Logary
 
 // Client side, Javascript: (Please use minified, save some build time)
 github zurb/bower-foundation css/foundation.css
+github zurb/bower-foundation css/foundation.min.css
 github zurb/bower-foundation css/normalize.css
 github zurb/bower-foundation js/foundation.min.js
 github SignalR/bower-signalr jquery.signalR.js
 github aFarkas/html5shiv dist/html5shiv.min.js
-// Use react.js to debug, react.min.js in production.
+github reactjs/react-bower react.js
 github reactjs/react-bower react.min.js
 github reactjs/react-bower react-dom.min.js
 github FortAwesome/Font-Awesome css/font-awesome.min.css

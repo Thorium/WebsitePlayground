@@ -1,4 +1,5 @@
 #!/bin/bash
+# To release build: sh ./build.sh package "Configuration=Release"
 if test "$OS" = "Windows_NT"
 then
   # use .Net

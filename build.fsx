@@ -4,12 +4,16 @@
 
 #I @"./packages/FAKE/tools"
 #r @"./packages/FAKE/tools/FakeLib.dll"
+#r @"System.IO.Compression.dll"
+#r @"System.IO.Compression.FileSystem.dll"
+
 open Fake
 open Fake.Git
 open Fake.ReleaseNotesHelper
 open System
 open System.IO
 open System.Diagnostics
+open System.IO.Compression
 
 let buildDir = __SOURCE_DIRECTORY__
 let verbosity = MSBuildVerbosity.Minimal
@@ -28,7 +32,9 @@ Target "npm" (fun _ ->
 )
 /// Client side gulp-tasks
 Target "gulp" (fun _ ->
-    runShell("gulp","deploy")
+    if snd(buildMode)="Release" || snd(buildMode)="release" then
+         runShell("gulp","deploy --release ok")
+    else runShell("gulp","deploy")
 )
 
 /// Build the server side project
@@ -64,6 +70,27 @@ Target "database" (fun _ ->
 Target "demodata" (fun _ ->
     let path = Path.Combine("backend", "sql", "createdemodata.sql")
     runShell("mysql","-u webuser -pp4ssw0rd companyweb -e \"source " + path + "\" --abort-source-on-error"))
+Target "package" ( fun _ ->
+    
+    let tag = "Packaged-" + DateTime.Now.ToString("yyyy-MM-dd-HH.mm.ss")
+    let resolvePath p = System.IO.Path.Combine [|__SOURCE_DIRECTORY__; p|]
+    let resolvePath2 p1 p2 = System.IO.Path.Combine [|__SOURCE_DIRECTORY__; p1; p2|]
+    
+    if not(Directory.Exists(Path.Combine [| __SOURCE_DIRECTORY__; "release" |])) then
+        Path.Combine [| __SOURCE_DIRECTORY__; "release" |] |> Directory.CreateDirectory |> ignore
+
+    let generateZip source target =
+        if not(Directory.Exists source) then failwith ("Directory not exists: " + source)
+        if File.Exists target then File.Delete target
+        System.IO.Compression.ZipFile.CreateFromDirectory(source, target, CompressionLevel.Optimal, false)
+
+    (resolvePath2 "frontend" "dist", resolvePath2 "release" "wwwroot.zip") ||> generateZip
+    (resolvePath2 "backend" "bin", resolvePath2 "release" "server.zip") ||> generateZip
+    
+    // What you could do: Modify .config-file with "FSharp.Configuration" NuGet-package...
+
+    Branches.tag "" tag
+)
 
 Target "start" DoNothing
 
@@ -78,5 +105,8 @@ Target "start" DoNothing
   ==> "demodata"
   ==> "project"
   ==> "all"
+
+"all"
+  ==> "package"
 
 RunTargetOrDefault "all"

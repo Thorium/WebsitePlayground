@@ -2,8 +2,6 @@
  'use strict';
 
 //npm install
-// Set to true for production build.
-var isRelease = false;
 
 var gulp = require('gulp'),
     jshint = require('gulp-jshint'),
@@ -27,15 +25,24 @@ var gulp = require('gulp'),
     stylishts = require('gulp-tslint-stylish')
 	;
 
+// Set to true for production build. gulp deploy --release ok
+var isRelease = gutil.env.release ? true : false;
+
+var excludeReact = isRelease? "!paket-files/reactjs/react-bower/react.js" : "!paket-files/reactjs/react-bower/react.min.js"
+var excludeFoundation = isRelease? "!paket-files/**/foundation.css" : "!paket-files/**/foundation.min.css"
+
 var files = {
     targetPath: 'frontend/dist',
     typescripts: ['frontend/scripts/*.ts', 'frontend/scripts/*.tsx'],
     jslibs: ['paket-files/ajax.aspnetcdn.com/jquery.min.js',
              'paket-files/lodash/lodash/dist/lodash.min.js',
-             'paket-files/reactjs/react-bower/react.min.js',  //TODO check if these included twice
-             'paket-files/**/*.js'],
+             'paket-files/reactjs/react-bower/react.min.js',
+             'paket-files/reactjs/react-bower/react.js',
+             'paket-files/**/*.js',
+              excludeReact], // Gulp is intelligent enough to not include same twice
+
     styles: ['frontend/styles/*.less'],
-    csslibs: ['paket-files/**/*.css'],
+    csslibs: ['paket-files/**/*.css', excludeFoundation],
     htmls: ['frontend/*.html'],
     statics: ['frontend/*.ico'],
     fonts: ['paket-files/**/*font*.svg',

@@ -16,6 +16,7 @@ open System.Threading.Tasks
 open System.Configuration
 open System.Security.Principal
 
+let serverPath = Microsoft.Owin.FileSystems.PhysicalFileSystem(ConfigurationManager.AppSettings.["WebServerFolder"].ToString() |> getRootedPath)
 open Owin.Security.AesDataProtectorProvider
 
 type MyWebStartup() =
@@ -44,10 +45,9 @@ type MyWebStartup() =
         //ap.UseGoogleAuthentication g
 
         //Static files server (Note: default FileSystem is current directory!)
-        let dir = match System.IO.Directory.Exists __SOURCE_DIRECTORY__ with true -> __SOURCE_DIRECTORY__ | false -> ""
         let fileServerOptions = Microsoft.Owin.StaticFiles.FileServerOptions()
         fileServerOptions.DefaultFilesOptions.DefaultFileNames.Add "index.html"
-        fileServerOptions.FileSystem <- (Microsoft.Owin.FileSystems.PhysicalFileSystem (dir + ConfigurationManager.AppSettings.["RelativeWebServerFolder"]))
+        fileServerOptions.FileSystem <- serverPath
         ap.UseFileServer(fileServerOptions) |> ignore
         ()
 

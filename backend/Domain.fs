@@ -31,6 +31,8 @@ let dbContext =
     if cstr = null then TypeProviderConnection.GetDataContext()
     else TypeProviderConnection.GetDataContext cstr
 
+let logger = Logary.Logging.getCurrentLogger ()
+
 let ExecuteSql (query : string) parameters =
     use rawSqlConnection = new MySqlConnection(cstr)
     rawSqlConnection.Open()
@@ -38,7 +40,14 @@ let ExecuteSql (query : string) parameters =
     parameters |> List.iter(fun (par:string*string) -> command.Parameters.AddWithValue(par) |> ignore)
     command.ExecuteNonQuery();
 
-let logger = Logary.Logging.getCurrentLogger ()
+let getRootedPath (path:string) =
+    let parsed = 
+        path.Split([|@"\"; "/"|], StringSplitOptions.None)
+        |> System.IO.Path.Combine
+    if System.IO.Path.IsPathRooted parsed then 
+        parsed 
+    else 
+        System.IO.Path.Combine(Environment.CurrentDirectory, parsed)
 
 type TypeProviderConnection.dataContext with
   /// SubmitUpdates() but on error ClearUpdates()

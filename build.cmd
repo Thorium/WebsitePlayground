@@ -1,4 +1,5 @@
 @echo off
+rem To release build: build.cmd package "Configuration=Release"
 cls
 .\.paket\paket.bootstrapper.exe --prefer-nuget
 if errorlevel 1 (exit /b %errorlevel%)
