@@ -57,7 +57,7 @@ type public FSharpServiceInstaller() =
 [<EntryPoint>]
 #endif
 let main args = 
-    if Environment.UserInteractive then
+    if Environment.UserInteractive || Type.GetType ("Mono.Runtime") <> null then
         startServer()
         LogLine.info "Press Enter to stop & quit." |> logger.Log
         Console.ReadLine() |> ignore
