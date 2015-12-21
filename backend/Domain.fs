@@ -49,7 +49,7 @@ let getRootedPath (path:string) =
             path.Split([|@"\"; "/"|], StringSplitOptions.None)
             |> Path.Combine
 #if INTERACTIVE
-        let basePath = __SOUCRE_DIRECTORY__
+        let basePath = __SOURCE_DIRECTORY__
 #else
         let basePath = 
             System.Reflection.Assembly.GetExecutingAssembly().Location
