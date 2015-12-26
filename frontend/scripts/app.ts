@@ -17,7 +17,7 @@ $(function() {
         // var localized = translate(locale,htmlBody);
         // $(document.body).html(localized);
         idx.initIndex(locale);
-        if(window.location.href.indexOf("company") > 0){ company.initCompany(locale); }
-        if(window.location.href.indexOf("results") > 0){ results.initResults(locale); }
+        if(window.location.href.indexOf("company.html") > 0){ company.initCompany(locale); }
+        if(window.location.href.indexOf("results.html") > 0){ results.initResults(locale); }
     });
 });
