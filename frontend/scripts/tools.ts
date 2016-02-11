@@ -3,7 +3,9 @@
 
 export function emitUrlPathParameters(dict) {
     let keys = Object.keys(dict);
-    function qparam(a, k){ return a + "/"+k+"/"+dict[k].replace("/", ""); }
+	function qparam(a, k){ 
+       if(dict[k]===null) { return a; } else {
+       return a + "/"+k+"/"+dict[k].replace("/", ""); }}
     return _.reduce(keys, qparam, "");
 }
 
@@ -21,39 +23,50 @@ export function parseUrlPathParameters(url) {
     return res; 
 }
 
+function getItemValue(jQControl){
+    if(jQControl.is(':checkbox') || jQControl.is(':radio')){
+        return jQControl.prop('checked').toString();
+    }else if(jQControl.hasClass('hasDatepicker')){
+        return jQControl.datepicker('getDate');
+    }else{
+        return jQControl.val();
+    }    
+} 
+function setItemValue(jQControl, parval){
+    if(jQControl.is(':checkbox') || jQControl.is(':radio')){
+        jQControl.prop('checked', parval === 'true');
+    }else if(jQControl.hasClass('hasDatepicker')){
+        jQControl.datepicker("setDate", new Date(parval) );
+    }else{
+        jQControl.val(parval); 
+    }
+}
+
 export function setFormValues(params) {
     let keys = Object.keys(params);
-	_.each(keys, x => { 
-        if($('#'+x).is(':checkbox') || $('#'+x).is(':radio')){
-            $('#'+x).prop('checked', params[x] === 'true');
-        }else{
-            $('#'+x).val(params[x]); 
-        }
-    });
+	_.each(keys, x => { setItemValue($('#'+x), params[x]); });
 }
 
 export function getFormValues(paramNames:Array<string>) {
     let res = {};
     let params = _.filter(paramNames, c => $('#'+c).is(":visible") || $('#'+c).hasClass("containsInput"));
-	_.each(params, p => { 
-        if($('#'+p).is(':checkbox') || $('#'+p).is(':radio')){
-            res[p] = $('#'+p).prop('checked').toString();
-        }else{
-            res[p] = $('#'+p).val();
-        }
-    });
+	_.each(params, p => { res[p] = getItemValue($('#'+p)); });
 	return res;
 }
 
 export function getFormValuesFrom(form, paramNames:Array<string>) {
 	let res = {};
 	let params = _.filter(paramNames, c => form.find('#'+c).is(":visible") || form.find('#'+c).hasClass("containsInput"));
-	_.each(params, p => { res[p] = form.find('#'+p).val();});
+	_.each(params, p => { 
+        res[p] = getItemValue(form.find('#'+p));
+    });
 	return res;
 }
 
 export function setValuesToForm(data) {
-    _.each(data, (c:any) => { $('#'+c.Item1).val(c.Item2); });
+    _.each(data, (c:any) => { 
+        setItemValue($('#'+c.Item1), c.Item2);
+    });
 }
 
 export function parseTuplesToDictionary(listOfItems) {

@@ -28,7 +28,6 @@ type SignalHub() as this =
         t
 
     member __.SearchCompanies (searchparams:SearchObject) =
-        let tempRating = Math.Round(rnd.NextDouble()*5.0,2)
         let ceoFilter =
             match searchparams.CEOName with
             | None -> ""
@@ -77,7 +76,7 @@ type CompanyHub() =
     let ``map data from form to database format`` (formData: seq<string*obj>) =
             formData // Add missing fields
             |> Seq.append [| 
-                    "LastUpdate", DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss") |> box ; 
+                    "LastUpdate", DateTimeNow() |> box ; 
                 |]
             |> Seq.map (
                 fun (key, valu) ->  // Convert some fields

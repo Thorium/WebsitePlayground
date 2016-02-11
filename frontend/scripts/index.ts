@@ -19,5 +19,6 @@ export function initIndex(locale) {
     
     $("#toggleMore").click(function () {
         doToggleMore(100);
+        return false;
     });
 }

@@ -42,9 +42,18 @@ export function mapOptionType(p) {
 	var fieldValue = $('#'+p.toLowerCase()).val();
 	if(p==="CompanyName") { return fieldValue; }
 	if(p==="FoundedAfter" || p==="FoundedBefore") {
-		var parts = fieldValue.split('.');
-		var parsed = new Date(parts[2], parts[1]-1, parts[0]);
-		return parsed;
+		if(fieldValue.indexOf(".") > -1){
+            let parts = fieldValue.split('.');
+            let parsed = new Date(parts[2], parts[1]-1, parts[0]);
+            return parsed;            
+        } else if (fieldValue.indexOf("/") > -1){
+            let parts = fieldValue.split('/');
+            let parsed = new Date(parts[2], parts[1]-1, parts[0]);
+            return parsed;
+        } else {
+            let parsed = new Date(Date.parse(fieldValue));
+            return parsed;
+        }
 	}
 	return {Case: "Some", Fields: [fieldValue]};
 	// Option Union-types would be: {Case: "Some", Fields: [{Case: fieldValue}]};

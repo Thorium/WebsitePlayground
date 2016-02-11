@@ -15,8 +15,13 @@ open System.Threading.Tasks
 
 open System.Configuration
 open System.Security.Principal
+open System.IO
 
-let serverPath = Microsoft.Owin.FileSystems.PhysicalFileSystem(ConfigurationManager.AppSettings.["WebServerFolder"].ToString() |> getRootedPath)
+let serverPath = 
+    let path = ConfigurationManager.AppSettings.["WebServerFolder"].ToString() |> getRootedPath
+    if not(Directory.Exists path) then Directory.CreateDirectory (path) |> ignore
+    Microsoft.Owin.FileSystems.PhysicalFileSystem path
+
 open Owin.Security.AesDataProtectorProvider
 
 type MyWebStartup() =

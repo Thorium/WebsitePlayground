@@ -9,10 +9,11 @@ open Logary.Targets
 open Logary.Metrics
 
 let mutable server = Unchecked.defaultof<IDisposable>
+let mutable log = Unchecked.defaultof<IDisposable>
 
 let startServer() =
-    let logary = 
-        withLogary "WebsitePlayground" (
+    log <-
+        withLogary' "WebsitePlayground" (
             withTargets [
                 // See Logary examples for advanced logging.
                 Console.create (Console.empty) "console"
@@ -30,6 +31,8 @@ let startServer() =
 let stopServer() =
     if server <> Unchecked.defaultof<IDisposable> then
         server.Dispose()
+    if log <> Unchecked.defaultof<IDisposable> then
+        log.Dispose()
 
 /// Start as service:
 /// sc create companyweb binPath= "c:\...\WebsitePlayground.exe"

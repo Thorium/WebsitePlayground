@@ -12,6 +12,8 @@ var gulp = require('gulp'),
     autoprefixer = require('gulp-autoprefixer'),
     sourcemaps = require('gulp-sourcemaps'),
     less = require('gulp-less'),
+    sass = require('gulp-sass'),
+    gulpMerge = require('gulp-merge'),	
     mincss = require('gulp-minify-css'),
     flatten = require('gulp-flatten'),
     gulpif = require('gulp-if'),
@@ -41,7 +43,8 @@ var files = {
              'paket-files/**/*.js',
               excludeReact], // Gulp is intelligent enough to not include same twice
 
-    styles: ['frontend/styles/*.less'],
+    lessstyles: ['frontend/styles/*.less'],
+    sassstyles: ['frontend/styles/*.scss'],
     csslibs: ['paket-files/**/*.css', excludeFoundation],
     htmls: ['frontend/*.html'],
     statics: ['frontend/*.ico'],
@@ -99,11 +102,18 @@ function minifycss(items, target) {
       .pipe(gulp.dest(files.targetPath + '/css'));
 }
 
-function minifyless(items, target) {
-    return gulp.src(items)
+function minifystyles(target) {
+    var lessfile = gulp.src(files.lessstyles)
 	  .pipe(sourcemaps.init())
 	  .pipe(less()).on('error', errorHandler('Less'))
-      .pipe(autoprefixer('last 2 version'))
+      .pipe(autoprefixer('last 2 version'));
+
+	var sassfile = gulp.src(files.sassstyles)
+	  .pipe(sourcemaps.init())
+	  .pipe(sass()).on('error', errorHandler('Sass'))
+      .pipe(autoprefixer('last 2 version'));
+
+    return gulpMerge(sassfile, lessfile)
       .pipe(concat(target+'.css'))
       .pipe(rename({suffix: '.min'}))
       .pipe(mincss())
@@ -134,7 +144,7 @@ gulp.task('tslint', function(){
         }));
 });
 
-gulp.task('styles', function () { minifyless(files.styles, 'app');});
+gulp.task('styles', function () { minifystyles('app');});
 gulp.task('styleslib', function () { minifycss(files.csslibs, 'libs');});
 
 gulp.task('images', function () { return gulp.src(files.images).pipe(gulp.dest(files.targetPath + '/img/'));});
@@ -154,7 +164,8 @@ gulp.task('deployStatic', ['htmls', 'fonts', 'jqueryImages', 'images', 'statics'
 
 // Watch Files For Changes
 gulp.task('watch', function () {
-    gulp.watch(files.styles, ['styles']);
+    gulp.watch(files.lessstyles, ['styles']);
+    gulp.watch(files.sassstyles, ['styles']);
     gulp.watch(files.fonts, ['fonts']);
     gulp.watch(files.images, ['images']);
     gulp.watch(files.htmls, ['htmls']);

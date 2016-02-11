@@ -33,6 +33,14 @@ let dbContext =
 
 let logger = Logary.Logging.getCurrentLogger ()
 
+//FSharp.Data.Sql.Common.QueryEvents.SqlQueryEvent |> Event.add (fun e -> ("Executed SQL:\r\n" + e.ToString()) |> Logary.LogLine.debug |> logger.Log)
+
+let DateTimeString (dt:DateTime) =
+    dt.ToString("yyyy-MM-dd HH\:mm\:ss") //temp .NET fix as MySQL.Data.dll is broken: fails without .ToString(...)
+
+let DateTimeNow() =
+    DateTimeString System.DateTime.Now
+
 let ExecuteSql (query : string) parameters =
     use rawSqlConnection = new MySqlConnection(cstr)
     rawSqlConnection.Open()

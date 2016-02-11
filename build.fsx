@@ -22,12 +22,23 @@ let buildMode = "Configuration", getBuildParamOrDefault "Configuration" "Debug"
 let buildType = match snd(buildMode) with | "Release" -> "Rebuild" | _ -> "Build"
 
 let runShell = fun (command,args) ->
-    let P = Process.Start(command, args);
-    P.WaitForExit();
-    if P.ExitCode <> 0 then failwith ("Command failed, try running manually: " + command + " " + args)
+    try
+        let P = Process.Start(command, args);
+        P.WaitForExit();
+        if P.ExitCode <> 0 then failwith ("Command failed, try running manually: " + command + " " + args)
+    with
+    | :? System.ComponentModel.Win32Exception -> 
+        printf "\r\n\r\nFailed: %s\r\n" command
+        reraise ()
 
 Target "npm" (fun _ ->
-    runShell("npm","install -g npm")
+    try
+       runShell("npm","install -g npm")
+       runShell("npm","install -g gulp jshint eslint")
+    with
+    | :? System.ComponentModel.Win32Exception -> 
+       printf "\r\n\r\nNPM and Gulp global install failed."
+       runShell("npm","install npm")
     runShell("npm","install")
 )
 /// Client side gulp-tasks
