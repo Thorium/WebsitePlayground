@@ -24,7 +24,9 @@ var gulp = require('gulp'),
     streamify = require('gulp-streamify'),
     reactify = require('reactify'),
     tslint = require('gulp-tslint'),
-    stylishts = require('gulp-tslint-stylish')
+    stylishts = require('gulp-tslint-stylish'),
+    htmlhint = require("gulp-htmlhint"),
+	htmlmin = require('gulp-htmlmin')
 	;
 
 // Set to true for production build. gulp deploy --release ok
@@ -153,10 +155,15 @@ gulp.task('fonts', function () { return gulp.src(files.fonts).pipe(flatten()).pi
 gulp.task('statics', function () { return gulp.src(files.statics).pipe(gulp.dest(files.targetPath));});
 gulp.task('htmls', function () { 
     return gulp.src(files.htmls)
+               .pipe(htmlhint('.htmlhintrc'))
+			   .pipe(htmlhint.reporter("htmlhint-stylish"))
+			   .pipe(htmlhint.failReporter({ suppress: true }))
+			   .on('error', errorHandler('HTML'))
 // Nice lint but gives wrong line numbers:
 //               .pipe(jshint.extract('always'))    
 //               .pipe(jshint())
 //               .pipe(jshint.reporter('default'))
+               .pipe(gulpif(isRelease, htmlmin({collapseWhitespace: true})))
                .pipe(gulp.dest(files.targetPath));
 });
 gulp.task('deployStatic', ['htmls', 'fonts', 'jqueryImages', 'images', 'statics']);

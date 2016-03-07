@@ -4,9 +4,14 @@
 export function emitUrlPathParameters(dict) {
     let keys = Object.keys(dict);
 	function qparam(a, k){ 
-       if(dict[k]===null) { return a; } else {
-       return a + "/"+k+"/"+dict[k].replace("/", ""); }}
-    return _.reduce(keys, qparam, "");
+       if(dict[k]===null) { 
+           return a; 
+       } else if(dict[k] instanceof Date){
+           return a + "/"+k+"/"+dict[k].toISOString().replace("/", ""); 
+       } else {
+           return a + "/"+k+"/"+dict[k].replace("/", ""); 
+       }
+    }    return _.reduce(keys, qparam, "");
 }
 
 // eg app.html#/param1/value1
@@ -28,6 +33,8 @@ function getItemValue(jQControl){
         return jQControl.prop('checked').toString();
     }else if(jQControl.hasClass('hasDatepicker')){
         return jQControl.datepicker('getDate');
+    }else if(jQControl.is('span') || jQControl.is('p')){
+        return jQControl.html();
     }else{
         return jQControl.val();
     }    
@@ -37,6 +44,8 @@ function setItemValue(jQControl, parval){
         jQControl.prop('checked', parval === 'true');
     }else if(jQControl.hasClass('hasDatepicker')){
         jQControl.datepicker("setDate", new Date(parval) );
+    }else if(jQControl.is('span') || jQControl.is('p')){
+        jQControl.html(parval); 
     }else{
         jQControl.val(parval); 
     }
@@ -76,6 +85,14 @@ export function parseTuplesToDictionary(listOfItems) {
         return dict;
     });
     return all;
+}
+
+export function parseTuplesToObject(listOfItems) {
+	let res = {};
+    _.each(listOfItems, function(item) {
+        res[item.Item1] = item.Item2;
+    });
+    return res;
 }
 
 export function parseFieldsFromForm(form){

@@ -16,6 +16,8 @@ open System.Threading.Tasks
 open System.Configuration
 open System.Security.Principal
 open System.IO
+let displayErrors = ConfigurationManager.AppSettings.["WebServerDebug"].ToString().ToLower() = "true"
+let hubConfig = Microsoft.AspNet.SignalR.HubConfiguration(EnableDetailedErrors = displayErrors, EnableJavaScriptProxies = true)
 
 let serverPath = 
     let path = ConfigurationManager.AppSettings.["WebServerFolder"].ToString() |> getRootedPath
@@ -31,13 +33,13 @@ type MyWebStartup() =
         ap.UseAesDataProtectorProvider("mykey123") 
 
         //OWIN Component registrations here...
-        ap.UseErrorPage(new ErrorPageOptions(ShowExceptionDetails = true))
+        ap.UseErrorPage(new ErrorPageOptions(ShowExceptionDetails = displayErrors))
 
         //Allow cross domain
         |> fun app -> app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll)
 
         //SignalR:
-        |> fun app -> app.MapSignalR(SignalRHubs.hubConfig) |> ignore
+        |> fun app -> app.MapSignalR(hubConfig) |> ignore
 
         // REST Web Api if needed:
         //use httpConfig = new HttpConfiguration()

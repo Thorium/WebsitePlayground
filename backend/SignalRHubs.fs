@@ -103,4 +103,4 @@ type CompanyHub() =
     member __.Delete itemId = 
         executeCrud itemId (fun e -> e.Delete())
 
-let hubConfig = HubConfiguration(EnableDetailedErrors = true, EnableJavaScriptProxies = true)
+

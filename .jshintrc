@@ -1,5 +1,5 @@
 {
-    "globals": { "React": false, "_":  false, "$": false },
+    "globals": { "React": false, "_": false, "alert": false, "$": false },
     "bitwise": true,
     "browser": true,
     "camelcase": true,

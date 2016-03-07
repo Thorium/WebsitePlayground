@@ -25,13 +25,16 @@ export function initCompany(locale) {
     }
     
     var compId = parsed.item;
+
+    $("#updatebtn").hide();
+    $("#deletebtn").hide();
+    $("#createbtn").hide();
     
     if(compId===undefined){
 
         $("#profileInfo").text("Create a new company");
-        $("#updatebtn").css({ display: "none", visibility: "hidden" });
-        $("#deletebtn").css({ display: "none", visibility: "hidden" });
 
+        $("#createbtn").show();
         $("#createbtn").click(function () {
             companyHub.server.create(parseFieldFromForm()).done(
                 function(data){ 
@@ -44,9 +47,11 @@ export function initCompany(locale) {
         
     }else {
         $("#profileInfo").text("Update company");
-        $("#createbtn").css({ display: "none", visibility: "hidden" });
 
         companyHub.server.read(compId).done(setValuesToForm);
+
+        $("#updatebtn").show();
+        $("#deletebtn").show();
 
         $("#updatebtn").click(function () {
             companyHub.server.update(compId, parseFieldFromForm()).done(function(d){ alert("Company updated!"); setValuesToForm(d);});

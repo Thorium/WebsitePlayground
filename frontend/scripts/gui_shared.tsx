@@ -5,6 +5,7 @@ var CompanyWebNavBar = React.createClass<NavbarProps, any>({
   },
   handleClick: function(event) {
     this.setState({menuOn: !this.state.menuOn});
+    return false;
   },
   render: function() {
     var menutoggle = [];	
