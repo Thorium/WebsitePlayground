@@ -22,11 +22,25 @@ let startServer() =
             ]
         )
     //Scheduler.doStuff()
-    let url = System.Configuration.ConfigurationManager.AppSettings.["WebServer"]
-    server <- Microsoft.Owin.Hosting.WebApp.Start<MyWebStartup> url
+
+    let options = Microsoft.Owin.Hosting.StartOptions()
+
+    let addPorts protocol addr (ports:string) =
+        ports.Split(',')
+        |> Array.filter(fun p -> p<>"")
+        |> Array.map(fun port -> protocol + "://" + addr + ":" + port)
+        |> Array.iter(fun url ->
+            LogLine.info url |> logger.Log
+            options.Urls.Add url
+        )
+
+    addPorts "http" System.Configuration.ConfigurationManager.AppSettings.["WebServerIp"] System.Configuration.ConfigurationManager.AppSettings.["WebServerPorts"]
+    addPorts "https" System.Configuration.ConfigurationManager.AppSettings.["WebServerIpSSL"] System.Configuration.ConfigurationManager.AppSettings.["WebServerPortsSSL"]
+
+    server <- Microsoft.Owin.Hosting.WebApp.Start<MyWebStartup> options
 
     let logger = Logging.getCurrentLogger ()
-    LogLine.info ("Server started at: " + url) |> logger.Log
+    LogLine.info ("Server started.") |> logger.Log
 
 let stopServer() =
     if server <> Unchecked.defaultof<IDisposable> then

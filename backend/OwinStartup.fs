@@ -35,6 +35,8 @@ type MyWebStartup() =
         //OWIN Component registrations here...
         ap.UseErrorPage(new ErrorPageOptions(ShowExceptionDetails = displayErrors))
 
+        |> fun app -> app.UseCompressionModule()
+
         //Allow cross domain
         |> fun app -> app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll)
 

@@ -103,7 +103,15 @@ Target "package" ( fun _ ->
     Branches.tag "" tag
 )
 
-Target "start" DoNothing
+Target "start" ( fun _ ->
+    if snd(buildMode)="Release" || snd(buildMode)="release" then
+        let frontendDistPath = Path.Combine [| __SOURCE_DIRECTORY__; "frontend"; "dist" |]
+        let backendBinPath = Path.Combine [| __SOURCE_DIRECTORY__; "backend"; "bin" |]
+        if Directory.Exists frontendDistPath then
+            Directory.Delete(frontendDistPath, true)
+        if Directory.Exists backendBinPath then
+            Directory.Delete(backendBinPath, true)
+)
 
 "start"
 //  =?> ("npm",hasBuildParam "npmrestore")

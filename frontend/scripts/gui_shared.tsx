@@ -103,8 +103,11 @@ export function renderAvailableCompanies(theCompanies, buyStocks) {
 }
 
 export function renderNavBar(companyId) {
-  ReactDOM.render(
-    <CompanyWebNavBar companyId={companyId} />,
-    document.getElementById('navbar')
-  );
+  var navbard = document.getElementById('navbar');
+  if(navbard!==null){
+    ReactDOM.render(
+      <CompanyWebNavBar companyId={companyId} />,
+      navbard
+    );
+  }
 }

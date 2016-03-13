@@ -12,6 +12,7 @@ nuget Microsoft.Owin.StaticFiles
 nuget Microsoft.Owin.Diagnostics
 nuget Microsoft.Owin.Security.Facebook
 nuget Microsoft.Owin.Security.Google
+nuget Owin.Compression
 nuget Owin.Security.AesDataProtectorProvider
 nuget MySql.Data
 nuget Rx-Main

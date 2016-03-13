@@ -1,5 +1,6 @@
 #!/bin/bash
 # To release build: sh ./build.sh package "Configuration=Release"
+kill `pgrep gulp` > /dev/null 2>&1
 if test "$OS" = "Windows_NT"
 then
   # use .Net

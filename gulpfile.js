@@ -106,12 +106,12 @@ function minifycss(items, target) {
 
 function minifystyles(target) {
     var lessfile = gulp.src(files.lessstyles)
-	  .pipe(sourcemaps.init())
+	  .pipe(gulpif(!isRelease, sourcemaps.init()))
 	  .pipe(less()).on('error', errorHandler('Less'))
       .pipe(autoprefixer('last 2 version'));
 
 	var sassfile = gulp.src(files.sassstyles)
-	  .pipe(sourcemaps.init())
+	  .pipe(gulpif(!isRelease, sourcemaps.init()))
 	  .pipe(sass()).on('error', errorHandler('Sass'))
       .pipe(autoprefixer('last 2 version'));
 
@@ -119,7 +119,7 @@ function minifystyles(target) {
       .pipe(concat(target+'.css'))
       .pipe(rename({suffix: '.min'}))
       .pipe(mincss())
-      .pipe(sourcemaps.write('/.'))
+      .pipe(gulpif(!isRelease, sourcemaps.write({includeContent: true, sourceRoot: '/css/'})))
       .pipe(gulp.dest(files.targetPath + '/css'));
 }
 
@@ -140,7 +140,7 @@ gulp.task('tslint', function(){
       return gulp.src(files.typescripts)
         .pipe(tslint())
         .pipe(tslint.report(stylishts, {
-            emitError: false,
+            emitError: true,
             sort: true,
             bell: true
         }));

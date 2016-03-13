@@ -12,6 +12,7 @@ Microsoft.Owin.Security.Facebook
 Microsoft.Owin.Security.Google
 MySql.Data
 Newtonsoft.Json
+Owin.Compression
 Owin.Security.AesDataProtectorProvider
 Rx-Main
 SQLProvider
