@@ -23,7 +23,7 @@ type SignalHub() as this =
 
     override __.OnConnected() =
         let t = base.OnConnected()
-        LogLine.info ("Client connected: " + this.Context.ConnectionId) |> logger.Log
+        Message.eventInfo ("Client connected: " + this.Context.ConnectionId) |> writeLog
         // We could do authentication check here.
         t
 

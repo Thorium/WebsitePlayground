@@ -16,7 +16,10 @@ let timer eventType interval scheduledAction = async {
     | Recurring ->
         while true do
             do! interval |> Async.Sleep
-            scheduledAction()
+            try
+                scheduledAction()
+            with // if error on recurring action, just log and skip one
+            | e -> Logary.Message.eventError (e.ToString() + "\r\n\r\n"+ System.Diagnostics.StackTrace(1, true).ToString()) |> writeLog
 }
 
 // Basic idea from: http://msdn.microsoft.com/en-us/library/ee370246.aspx

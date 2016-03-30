@@ -7,20 +7,21 @@ open Logary
 open Logary.Configuration
 open Logary.Targets
 open Logary.Metrics
+open Hopac
 
 let mutable server = Unchecked.defaultof<IDisposable>
 let mutable log = Unchecked.defaultof<IDisposable>
 
 let startServer() =
     log <-
-        withLogary' "WebsitePlayground" (
+        withLogaryManager "WebsitePlayground" (
             withTargets [
                 // See Logary examples for advanced logging.
-                Console.create (Console.empty) "console"
+                Console.create (Console.empty) (PointName.ofSingle "console")
             ] >> withRules [
-                Rule.createForTarget "console"
+                Rule.createForTarget (PointName.ofSingle "console")
             ]
-        )
+        ) |> run
     //Scheduler.doStuff()
 
     let options = Microsoft.Owin.Hosting.StartOptions()
@@ -30,7 +31,7 @@ let startServer() =
         |> Array.filter(fun p -> p<>"")
         |> Array.map(fun port -> protocol + "://" + addr + ":" + port)
         |> Array.iter(fun url ->
-            LogLine.info url |> logger.Log
+            Message.eventInfo url |> writeLog
             options.Urls.Add url
         )
 
@@ -40,7 +41,7 @@ let startServer() =
     server <- Microsoft.Owin.Hosting.WebApp.Start<MyWebStartup> options
 
     let logger = Logging.getCurrentLogger ()
-    LogLine.info ("Server started.") |> logger.Log
+    Message.eventInfo ("Server started.") |> writeLog
 
 let stopServer() =
     if server <> Unchecked.defaultof<IDisposable> then
@@ -76,7 +77,7 @@ type public FSharpServiceInstaller() =
 let main args = 
     if Environment.UserInteractive || Type.GetType ("Mono.Runtime") <> null then
         startServer()
-        LogLine.info "Press Enter to stop & quit." |> logger.Log
+        Message.eventInfo "Press Enter to stop & quit." |> writeLog
         Console.ReadLine() |> ignore
         stopServer()
     else

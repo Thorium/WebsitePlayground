@@ -45,11 +45,18 @@
 #I @"./../packages/Logary/lib/net40"
 #r @"./../packages/Logary/lib/net40/Logary.dll"
 #I @"./../packages/NodaTime/lib/portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1+XamariniOS1"
-#I @"./../packages/FSharp.Actor-logary/lib/net40"
+#r @"./../packages/NodaTime/lib/portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1+XamariniOS1/NodaTime.dll"
+#I @"./../packages/Hopac/lib/net45"
+#r @"./../packages/Hopac/lib/net45/Hopac.Core.dll"
+#r @"./../packages/Hopac/lib/net45/Hopac.dll"
+#I @"./../packages/Owin.Compression/lib/net45"
+#r @"./../packages/Owin.Compression/lib/net45/Owin.Compression.dll"
+
 
 #r @"System.Configuration.dll"
 #r @"System.ServiceProcess.dll"
 #r @"System.Configuration.Install.dll"
+#r "System.Xml.Linq.dll"
 
 open System
 open System.Configuration
@@ -74,6 +81,6 @@ let logger = Logary.Logging.getCurrentLogger ()
 try 
     MyApp.main [||] |> ignore
 with
-    | e -> Logary.LogLine.error (e.Message) |> logger.Log
+    | e -> Logary.Message.eventError (e.Message) |> writeLog
 
 #endif

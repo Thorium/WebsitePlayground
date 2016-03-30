@@ -10,8 +10,10 @@ open System.Data.SqlClient
 open System.Threading.Tasks
 
 open MySql.Data.MySqlClient
+open Hopac
 
 // --- SQL-Server connection ------------------------------------
+
 
 [<Literal>]
 let Mysqldatapath = __SOURCE_DIRECTORY__ + @"/../packages/MySql.Data/lib/net45/"
@@ -32,21 +34,31 @@ let dbContext =
     else TypeProviderConnection.GetDataContext cstr
 
 let logger = Logary.Logging.getCurrentLogger ()
+let writeLog = logger.log >> start
 
-//FSharp.Data.Sql.Common.QueryEvents.SqlQueryEvent |> Event.add (fun e -> ("Executed SQL:\r\n" + e.ToString()) |> Logary.LogLine.debug |> logger.Log)
+FSharp.Data.Sql.Common.QueryEvents.SqlQueryEvent |> Event.add (fun e -> ("Executed SQL:\r\n" + e.ToString()) |> Logary.Message.eventDebug |> writeLog)
 
 let DateTimeString (dt:DateTime) =
     dt.ToString("yyyy-MM-dd HH\:mm\:ss") //temp .NET fix as MySQL.Data.dll is broken: fails without .ToString(...)
 
 let DateTimeNow() =
-    DateTimeString System.DateTime.Now
+    DateTimeString System.DateTime.UtcNow
 
 let ExecuteSql (query : string) parameters =
     use rawSqlConnection = new MySqlConnection(cstr)
     rawSqlConnection.Open()
+//    Message.eventInfo (query) |> writeLog
     use command = new MySqlCommand(query, rawSqlConnection)
     parameters |> List.iter(fun (par:string*string) -> command.Parameters.AddWithValue(par) |> ignore)
-    command.ExecuteNonQuery();
+    let affectedRows = command.ExecuteNonQuery()
+    match affectedRows with
+    | 0 -> 
+        "ExecuteSql 0 rows afffected: " + query |> Logary.Message.eventWarn |> writeLog
+        ()
+    | x -> 
+        //"ExecuteSql " + x + " rows afffected: " + query |> Logary.Message.eventWarn |> writeLog
+        ()
+
 
 open System.IO
 let getRootedPath (path:string) =
@@ -70,7 +82,7 @@ type TypeProviderConnection.dataContext with
   member x.SubmitUpdates2() = 
     try x.SubmitUpdates()
     with
-    | e -> Logary.LogLine.error (e.ToString() + "\r\n\r\n"+ System.Diagnostics.StackTrace(1, true).ToString()) |> logger.Log
+    | e -> Logary.Message.eventError (e.ToString() + "\r\n\r\n"+ System.Diagnostics.StackTrace(1, true).ToString()) |> writeLog
            x.ClearUpdates() |> ignore
            reraise()
 
