@@ -17,7 +17,7 @@ then
   	exit $exit_code
   fi
   
-  packages/FAKE/tools/FAKE.exe $@ --fsiargs -d:MONO build.fsx "parallel-jobs=4" npmrestore
+  packages/build/FAKE/tools/FAKE.exe $@ --fsiargs -d:MONO build.fsx "parallel-jobs=4" npmrestore
 else
   # use mono
   mono .paket/paket.bootstrapper.exe
@@ -32,5 +32,5 @@ else
   	exit $exit_code
   fi
 
-  mono packages/FAKE/tools/FAKE.exe $@ --fsiargs -d:MONO build.fsx "parallel-jobs=4" npmrestore
+  mono packages/build/FAKE/tools/FAKE.exe $@ --fsiargs -d:MONO build.fsx "parallel-jobs=4" npmrestore
 fi

@@ -28,6 +28,45 @@ export function parseUrlPathParameters(url) {
     return res; 
 }
 
+var formCache = {};
+export function validateFormWithInvalid(jqForm, callback, invalidcallback) {
+    function onValid(){ callback(); }
+    function onInvalid(){ invalidcallback(); }
+    if(jqForm.selector === undefined || !formCache[document.location.href + "_" + jqForm.selector]){
+        jqForm
+            .on('invalid.fndtn.abide', function () { onInvalid(); })
+            .on('valid.fndtn.abide', function () { onValid(); })
+            .on('valid', function () { onInvalid(); })
+            .on('invalid', function () { onValid(); })
+            .on('submit', function(){return false;});  
+        formCache[document.location.href + "_" + jqForm.selector] = true;
+    }
+    jqForm.submit();
+    return false;
+}
+
+var warning = "Please correct invalid fields!";
+export function validateForm(jqForm, callback) {
+    let invalidcallback = function () { /*alert(warning);*/ }; 
+    return validateFormWithInvalid(jqForm, callback, invalidcallback);
+}
+
+export function validateFormWithMsg(jqForm, callback) {
+    var invalidcallback = function (){
+        var invalid_fields = jqForm.find('[data-invalid]');
+        var fieldnames = _.reduce(invalid_fields, (acc, f:any) => {
+            return  f === null || f.id === null ? acc : acc + ", " + f.id;
+        });
+        
+        let message = 
+            fieldnames !== null && fieldnames.toString().length > 0 ? 
+            warning + " ("+ fieldnames.toString() + ")" :
+            warning;
+        alert(message);
+    };
+    return validateFormWithInvalid(jqForm, callback, invalidcallback);
+}
+
 function getItemValue(jQControl){
     if(jQControl.is(':checkbox') || jQControl.is(':radio')){
         return jQControl.prop('checked').toString();
@@ -58,18 +97,24 @@ export function setFormValues(params) {
 
 export function getFormValues(paramNames:Array<string>) {
     let res = {};
-    let params = _.filter(paramNames, c => $('#'+c).is(":visible") || $('#'+c).hasClass("containsInput"));
+    let params = _.filter(paramNames, c => $('#'+c).is(":visible") || $('#'+c).attr('type') === 'hidden' || $('#'+c).hasClass("containsInput"));
 	_.each(params, p => { res[p] = getItemValue($('#'+p)); });
 	return res;
 }
 
 export function getFormValuesFrom(form, paramNames:Array<string>) {
 	let res = {};
-	let params = _.filter(paramNames, c => form.find('#'+c).is(":visible") || form.find('#'+c).hasClass("containsInput"));
+	let params = _.filter(paramNames, c => form.find('#'+c).is(":visible") || $('#'+c).attr('type') === 'hidden' || form.find('#'+c).hasClass("containsInput"));
 	_.each(params, p => { 
         res[p] = getItemValue(form.find('#'+p));
     });
 	return res;
+}
+
+export function setValuesToFormName(formIdName, data) {
+    _.each(data, (c:any) => { 
+        setItemValue($('#' + formIdName + ' #'+c.Item1), c.Item2);
+    });
 }
 
 export function setValuesToForm(data) {

@@ -1,5 +1,3 @@
-FAKE
-FSharp.Formatting
 FSharp.Data
 Logary
 Microsoft.AspNet.SignalR.Core
@@ -16,4 +14,3 @@ Owin.Compression
 Owin.Security.AesDataProtectorProvider
 Rx-Main
 SQLProvider
-SourceLink.Fake

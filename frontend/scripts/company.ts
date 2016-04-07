@@ -36,12 +36,14 @@ export function initCompany(locale) {
 
         $("#createbtn").show();
         $("#createbtn").click(function () {
-            companyHub.server.create(parseFieldFromForm()).done(
-                function(data){ 
-                    var id = _.filter(data, function(i:any){return i.Item1==="Id";});
-                    var idval = _.map(id, function(i:any){return i.Item2;});
-                    document.location.href = "company.html?i=" + idval[0] + "#/item/" + idval[0];
-                });
+            tools.validateForm($("#companyform"), function () {
+                companyHub.server.create(parseFieldFromForm()).done(
+                    function(data){ 
+                        var id = _.filter(data, function(i:any){return i.Item1==="Id";});
+                        var idval = _.map(id, function(i:any){return i.Item2;});
+                        document.location.href = "company.html?i=" + idval[0] + "#/item/" + idval[0];
+                    });
+            });
             return false;
         });
         
@@ -54,7 +56,9 @@ export function initCompany(locale) {
         $("#deletebtn").show();
 
         $("#updatebtn").click(function () {
-            companyHub.server.update(compId, parseFieldFromForm()).done(function(d){ alert("Company updated!"); setValuesToForm(d);});
+            tools.validateForm($("#companyform"), function () {
+                companyHub.server.update(compId, parseFieldFromForm()).done(function(d){ alert("Company updated!"); setValuesToForm(d);});
+            });
             return false;
         });
         $("#deletebtn").click(function () {

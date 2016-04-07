@@ -2,8 +2,8 @@
 // FAKE build script
 // --------------------------------------------------------------------------------------
 
-#I @"./packages/FAKE/tools"
-#r @"./packages/FAKE/tools/FakeLib.dll"
+#I @"./packages/build/FAKE/tools"
+#r @"./packages/build/FAKE/tools/FakeLib.dll"
 #r @"System.IO.Compression.dll"
 #r @"System.IO.Compression.FileSystem.dll"
 
@@ -24,6 +24,9 @@ let buildType = match snd(buildMode) with | "Release" -> "Rebuild" | _ -> "Build
 let runShell = fun (command,args) ->
     try
         let P = Process.Start(command, args);
+        if (P = null) then (
+            printf "\r\n\r\nFailed: %s\r\n" command
+        )
         P.WaitForExit();
         if P.ExitCode <> 0 then failwith ("Command failed, try running manually: " + command + " " + args)
     with

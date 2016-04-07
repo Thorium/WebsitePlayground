@@ -1,8 +1,6 @@
 source https://www.nuget.org/api/v2
 
 // Server side, F# .NET:
-nuget FAKE
-nuget FSharp.Formatting
 nuget FSharp.Data
 nuget Microsoft.AspNet.SignalR.Core
 nuget Microsoft.AspNet.WebApi.OwinSelfHost
@@ -17,17 +15,7 @@ nuget Owin.Security.AesDataProtectorProvider
 nuget MySql.Data
 nuget Rx-Main
 nuget SQLProvider
-nuget SourceLink.Fake
 nuget Logary
-
-// Testing frameworks:
-// nuget canopy
-// nuget FsUnit.xUnit
-// nuget xunit.core
-// nuget xunit.abstractions
-// nuget xunit.runner.visualstudio >= 2.0 version_in_path: true
-// nuget xunit.runner.console
-// nuget PhantomJS
 
 // Client side, Javascript: (Please use minified, save some build time)
 github zurb/bower-foundation css/foundation.css
@@ -46,6 +34,7 @@ github FortAwesome/Font-Awesome fonts/fontawesome-webfont.ttf
 github FortAwesome/Font-Awesome fonts/fontawesome-webfont.woff
 github FortAwesome/Font-Awesome fonts/fontawesome-webfont.woff2
 github lodash/lodash dist/lodash.min.js
+github Reactive-Extensions/RxJS dist/rx.lite.min.js
 // other possible:
 // danielm/uploader booncon/slippry janl/mustache.js shutterstock/rickshaw
 
@@ -66,10 +55,35 @@ github borisyankov/DefinitelyTyped lodash/lodash.d.ts
 github borisyankov/DefinitelyTyped jquery/jquery.d.ts 
 github borisyankov/DefinitelyTyped jqueryui/jqueryui.d.ts
 github borisyankov/DefinitelyTyped signalr/signalr.d.ts
-github borisyankov/DefinitelyTyped google.analytics/ga.d.ts 
+github borisyankov/DefinitelyTyped google.analytics/ga.d.ts
+github borisyankov/DefinitelyTyped rx/rx.lite.d.ts
+github borisyankov/DefinitelyTyped rx/rx-lite.d.ts
+github borisyankov/DefinitelyTyped rx/rx.async-lite.d.ts
+github borisyankov/DefinitelyTyped rx/rx.binding-lite.d.ts
+github borisyankov/DefinitelyTyped rx/rx.time-lite.d.ts
+github borisyankov/DefinitelyTyped rx/rx.backpressure-lite.d.ts
+github borisyankov/DefinitelyTyped rx/rx.coincidence-lite.d.ts
+
 // github borisyankov/DefinitelyTyped googlemaps/google.maps.d.ts
 // github borisyankov/DefinitelyTyped mustache/mustache.d.ts
 
-http http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.4.min.js jquery.min.js
-http https://code.jquery.com/ui/1.10.4/jquery-ui.min.js
-http https://code.jquery.com/ui/1.10.4/themes/sunny/jquery-ui.min.css
+http http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.1.min.js jquery.min.js
+http http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.1.min.map jquery.min.map
+http https://code.jquery.com/ui/1.11.4/jquery-ui.min.js
+http https://code.jquery.com/ui/1.11.4/themes/sunny/jquery-ui.min.css
+group Build
+  source https://nuget.org/api/v2
+  nuget FAKE
+  nuget FSharp.Configuration
+
+// Testing frameworks:
+//group Test
+//  source https://nuget.org/api/v2
+//  
+//  nuget canopy
+//  nuget FsUnit.xUnit
+//  nuget xunit.core
+//  nuget xunit.abstractions
+//  nuget xunit.runner.visualstudio >= 2.0 version_in_path: true
+//  nuget xunit.runner.console
+//  nuget PhantomJS

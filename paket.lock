@@ -1,17 +1,10 @@
 NUGET
   remote: https://www.nuget.org/api/v2
   specs:
-    FAKE (4.22.8)
     FParsec (1.0.2)
-    FSharp.Compiler.Service (2.0.0.7)
     FSharp.Core (4.0.0.1)
     FSharp.Data (2.2.5)
-      Zlib.Portable (>= 1.10.0) - framework: portable-net40+sl50+wp80+win80
-    FSharp.Formatting (2.14.0)
-      FSharp.Compiler.Service (>= 2.0.0.3 < 2.1.0)
-      FSharpVSPowerTools.Core (>= 2.3.0 < 2.4.0)
-    FSharpVSPowerTools.Core (2.3.0)
-      FSharp.Compiler.Service (>= 2.0.0.3)
+      Zlib.Portable (>= 1.10) - framework: portable-net40+sl50+wp80+win80
     Hopac (0.1.3)
       FSharp.Core (>= 3.1.2.5)
     Logary (4.0.3)
@@ -23,12 +16,12 @@ NUGET
     Microsoft.AspNet.Identity.Core (2.2.1)
     Microsoft.AspNet.Identity.Owin (2.2.1)
       Microsoft.AspNet.Identity.Core (>= 2.2.1)
-      Microsoft.Owin.Security (>= 2.1.0)
-      Microsoft.Owin.Security.Cookies (>= 2.1.0)
-      Microsoft.Owin.Security.OAuth (>= 2.1.0)
-    Microsoft.AspNet.SignalR.Core (2.2.0)
-      Microsoft.Owin (>= 2.1.0)
-      Microsoft.Owin.Security (>= 2.1.0)
+      Microsoft.Owin.Security (>= 2.1)
+      Microsoft.Owin.Security.Cookies (>= 2.1)
+      Microsoft.Owin.Security.OAuth (>= 2.1)
+    Microsoft.AspNet.SignalR.Core (2.2)
+      Microsoft.Owin (>= 2.1)
+      Microsoft.Owin.Security (>= 2.1)
       Newtonsoft.Json (>= 6.0.4)
       Owin (>= 1.0)
     Microsoft.AspNet.WebApi.Client (5.2.3)
@@ -37,11 +30,11 @@ NUGET
     Microsoft.AspNet.WebApi.Core (5.2.3)
       Microsoft.AspNet.WebApi.Client (>= 5.2.3)
     Microsoft.AspNet.WebApi.Owin (5.2.3)
-      Microsoft.AspNet.WebApi.Core (>= 5.2.3 < 5.3.0)
+      Microsoft.AspNet.WebApi.Core (>= 5.2.3 < 5.3)
       Microsoft.Owin (>= 2.0.2)
       Owin (>= 1.0)
     Microsoft.AspNet.WebApi.OwinSelfHost (5.2.3)
-      Microsoft.AspNet.WebApi.Owin (>= 5.2.3 < 5.3.0)
+      Microsoft.AspNet.WebApi.Owin (>= 5.2.3 < 5.3)
       Microsoft.Owin.Host.HttpListener (>= 2.0.2)
       Microsoft.Owin.Hosting (>= 2.0.2)
     Microsoft.Bcl (1.1.10) - framework: portable-wp80+win+net45+wp81+wpa81
@@ -53,7 +46,7 @@ NUGET
     Microsoft.Owin (3.0.1)
       Owin (>= 1.0)
     Microsoft.Owin.Cors (3.0.1)
-      Microsoft.AspNet.Cors (>= 5.0.0)
+      Microsoft.AspNet.Cors (>= 5.0)
       Microsoft.Owin (>= 3.0.1)
       Owin (>= 1.0)
     Microsoft.Owin.Diagnostics (3.0.1)
@@ -94,10 +87,10 @@ NUGET
     Newtonsoft.Json (8.0.3)
     NodaTime (1.3.1)
     Owin (1.0)
-    Owin.Compression (1.0.2)
-      Microsoft.Owin (>= 3.0.1 < 3.1.0)
-      Owin (>= 1.0.0-prerelease <= 1.0.0)
-    Owin.Security.AesDataProtectorProvider (1.1.0)
+    Owin.Compression (1.0.5)
+      Microsoft.Owin (>= 3.0.1 < 3.1)
+      Owin (>= 1.0.0-prerelease <= 1.0)
+    Owin.Security.AesDataProtectorProvider (1.1)
       Microsoft.Owin.Security (>= 3.0.1)
     Rx-Core (2.2.5)
       Rx-Interfaces (>= 2.2.5)
@@ -113,62 +106,78 @@ NUGET
     Rx-PlatformServices (2.2.5)
       Rx-Core (>= 2.2.5)
       Rx-Interfaces (>= 2.2.5)
-    SourceLink.Fake (1.1.0)
-    SQLProvider (0.0.9-alpha)
-    Zlib.Portable (1.11.0) - framework: portable-net40+sl50+wp80+win80
+    SQLProvider (0.0.11-alpha)
+    Zlib.Portable (1.11) - framework: portable-net40+sl50+wp80+win80
 GITHUB
   remote: zurb/bower-foundation
   specs:
-    css/foundation.css (3d654b4c0b2e254155a984a73a57bf14bf4febaa)
-    css/foundation.min.css (3d654b4c0b2e254155a984a73a57bf14bf4febaa)
-    css/normalize.css (3d654b4c0b2e254155a984a73a57bf14bf4febaa)
-    js/foundation.min.js (3d654b4c0b2e254155a984a73a57bf14bf4febaa)
+    css/foundation.css (097429dedd59d357f3756425213bcd8f726ecd85)
+    css/foundation.min.css (097429dedd59d357f3756425213bcd8f726ecd85)
+    css/normalize.css (097429dedd59d357f3756425213bcd8f726ecd85)
+    js/foundation.min.js (097429dedd59d357f3756425213bcd8f726ecd85)
   remote: SignalR/bower-signalr
   specs:
     jquery.signalR.js (26092205231972de4b3db966e5689ddbee971ef9)
   remote: aFarkas/html5shiv
   specs:
-    dist/html5shiv.min.js (ed28c56c071bddfe7d635ad88995674957a016be)
+    dist/html5shiv.min.js (a3c7567c5f7055f9b76230bbbc79967d0b9f7003)
   remote: reactjs/react-bower
   specs:
-    react-dom.min.js (9110d34ba7ec27b1e6d7beb2b164057ddb74d292)
-    react.js (9110d34ba7ec27b1e6d7beb2b164057ddb74d292)
-    react.min.js (9110d34ba7ec27b1e6d7beb2b164057ddb74d292)
+    react-dom.min.js (17d686c85ca20569a9363d1968456b94575bf62d)
+    react.js (17d686c85ca20569a9363d1968456b94575bf62d)
+    react.min.js (17d686c85ca20569a9363d1968456b94575bf62d)
   remote: FortAwesome/Font-Awesome
   specs:
-    css/font-awesome.min.css (d41173050a8cf547a4dfb4c214740a9a38a4073b)
-    fonts/fontawesome-webfont.eot (d41173050a8cf547a4dfb4c214740a9a38a4073b)
-    fonts/fontawesome-webfont.svg (d41173050a8cf547a4dfb4c214740a9a38a4073b)
-    fonts/fontawesome-webfont.ttf (d41173050a8cf547a4dfb4c214740a9a38a4073b)
-    fonts/fontawesome-webfont.woff (d41173050a8cf547a4dfb4c214740a9a38a4073b)
-    fonts/fontawesome-webfont.woff2 (d41173050a8cf547a4dfb4c214740a9a38a4073b)
+    css/font-awesome.min.css (8c8ac86edc5cc3a4a9760bf0b5d8d118c3f71789)
+    fonts/fontawesome-webfont.eot (8c8ac86edc5cc3a4a9760bf0b5d8d118c3f71789)
+    fonts/fontawesome-webfont.svg (8c8ac86edc5cc3a4a9760bf0b5d8d118c3f71789)
+    fonts/fontawesome-webfont.ttf (8c8ac86edc5cc3a4a9760bf0b5d8d118c3f71789)
+    fonts/fontawesome-webfont.woff (8c8ac86edc5cc3a4a9760bf0b5d8d118c3f71789)
+    fonts/fontawesome-webfont.woff2 (8c8ac86edc5cc3a4a9760bf0b5d8d118c3f71789)
   remote: lodash/lodash
   specs:
-    dist/lodash.min.js (f4beda29db1bcbfdc35f8cd2f364503c8446b32d)
+    dist/lodash.min.js (f0f6a1e38220708f1af77bf6b2b7416f66fdf020)
+  remote: Reactive-Extensions/RxJS
+  specs:
+    dist/rx.lite.min.js (41bd1110c6233484f1955cbb16d9dfa443b9e0a7)
   remote: borisyankov/DefinitelyTyped
   specs:
-    foundation/foundation.d.ts (c393f8974d44840a6c9cc6d5b5c0188a8f05143d)
-    google.analytics/ga.d.ts (c393f8974d44840a6c9cc6d5b5c0188a8f05143d)
-    jquery/jquery.d.ts (c393f8974d44840a6c9cc6d5b5c0188a8f05143d)
-    jqueryui/jqueryui.d.ts (c393f8974d44840a6c9cc6d5b5c0188a8f05143d)
-    lodash/lodash.d.ts (c393f8974d44840a6c9cc6d5b5c0188a8f05143d)
-    react/react-addons-create-fragment.d.ts (c393f8974d44840a6c9cc6d5b5c0188a8f05143d)
-    react/react-addons-css-transition-group.d.ts (c393f8974d44840a6c9cc6d5b5c0188a8f05143d)
-    react/react-addons-linked-state-mixin.d.ts (c393f8974d44840a6c9cc6d5b5c0188a8f05143d)
-    react/react-addons-perf.d.ts (c393f8974d44840a6c9cc6d5b5c0188a8f05143d)
-    react/react-addons-pure-render-mixin.d.ts (c393f8974d44840a6c9cc6d5b5c0188a8f05143d)
-    react/react-addons-test-utils.d.ts (c393f8974d44840a6c9cc6d5b5c0188a8f05143d)
-    react/react-addons-transition-group.d.ts (c393f8974d44840a6c9cc6d5b5c0188a8f05143d)
-    react/react-addons-update.d.ts (c393f8974d44840a6c9cc6d5b5c0188a8f05143d)
-    react/react-dom.d.ts (c393f8974d44840a6c9cc6d5b5c0188a8f05143d)
-    react/react-global.d.ts (c393f8974d44840a6c9cc6d5b5c0188a8f05143d)
-    react/react.d.ts (c393f8974d44840a6c9cc6d5b5c0188a8f05143d)
-    signalr/signalr.d.ts (c393f8974d44840a6c9cc6d5b5c0188a8f05143d)
+    foundation/foundation.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
+    google.analytics/ga.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
+    jquery/jquery.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
+    jqueryui/jqueryui.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
+    lodash/lodash.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
+    react/react-addons-create-fragment.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
+    react/react-addons-css-transition-group.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
+    react/react-addons-linked-state-mixin.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
+    react/react-addons-perf.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
+    react/react-addons-pure-render-mixin.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
+    react/react-addons-test-utils.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
+    react/react-addons-transition-group.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
+    react/react-addons-update.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
+    react/react-dom.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
+    react/react-global.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
+    react/react.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
+    rx/rx-lite.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
+    rx/rx.async-lite.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
+    rx/rx.backpressure-lite.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
+    rx/rx.binding-lite.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
+    rx/rx.coincidence-lite.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
+    rx/rx.lite.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
+    rx/rx.time-lite.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
+    signalr/signalr.d.ts (8fbac50741f2b0f8eb9747a4064e24509b07d907)
 HTTP
   remote: http://ajax.aspnetcdn.com
   specs:
-    jquery.min.js (/ajax/jQuery/jquery-2.1.4.min.js)
+    jquery.min.js (/ajax/jQuery/jquery-2.2.1.min.js)
+    jquery.min.map (/ajax/jQuery/jquery-2.2.1.min.map)
   remote: https://code.jquery.com
   specs:
-    jquery-ui.min.css (/ui/1.10.4/themes/sunny/jquery-ui.min.css)
-    jquery-ui.min.js (/ui/1.10.4/jquery-ui.min.js)
+    jquery-ui.min.css (/ui/1.11.4/themes/sunny/jquery-ui.min.css)
+    jquery-ui.min.js (/ui/1.11.4/jquery-ui.min.js)
+GROUP Build
+NUGET
+  remote: https://www.nuget.org/api/v2
+  specs:
+    FAKE (4.23.1)
+    FSharp.Configuration (0.5.12)
