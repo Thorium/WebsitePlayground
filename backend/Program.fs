@@ -37,6 +37,7 @@ let startServer() =
     addPorts "http" System.Configuration.ConfigurationManager.AppSettings.["WebServerIp"] System.Configuration.ConfigurationManager.AppSettings.["WebServerPorts"]
     addPorts "https" System.Configuration.ConfigurationManager.AppSettings.["WebServerIpSSL"] System.Configuration.ConfigurationManager.AppSettings.["WebServerPortsSSL"]
 
+    // You probably need adnmin rights to start a web server:
     server <- Microsoft.Owin.Hosting.WebApp.Start<MyWebStartup> options
 
     let logger = Logging.getCurrentLogger ()
