@@ -7,11 +7,13 @@ export function emitUrlPathParameters(dict) {
        if(dict[k]===null) { 
            return a; 
        } else if(dict[k] instanceof Date){
+		   dict[k].setHours(0, -dict[k].getTimezoneOffset(), 0, 0);
            return a + "/"+k+"/"+dict[k].toISOString().replace("/", ""); 
        } else {
            return a + "/"+k+"/"+dict[k].replace("/", ""); 
        }
-    }    return _.reduce(keys, qparam, "");
+    }
+    return _.reduce(keys, qparam, "");
 }
 
 // eg app.html#/param1/value1
@@ -20,6 +22,7 @@ export function parseUrlPathParameters(url) {
     if (ix < 0) { return {}; }
 
     let items1 = url.substring(ix+2);
+    if(items1 === "=_") {return {};}
     let items = items1.split("/");
     let res : any = {};
     for (var k = 0;k<items.length/2;k++) {
