@@ -1,5 +1,5 @@
 
-'use strict';
+
 
 export function emitUrlPathParameters(dict) {
     let keys = Object.keys(dict);
