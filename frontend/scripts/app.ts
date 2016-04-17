@@ -8,6 +8,13 @@ import company = require('./company');
 import results = require('./results');
 
 // Here would be client-side routing and localization of html-content.
+
+if (typeof jQuery === 'undefined') {  
+    // ensure script loadings in FireFox.
+    document.write('<script src="js/libs.min.js">\x3C/script>');
+    document.location.reload(false);
+}
+
 $(function() {
     signalhub.hubConnector.done(function () {
         window.onunload = undefined;
