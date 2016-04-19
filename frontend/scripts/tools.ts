@@ -100,14 +100,16 @@ export function setFormValues(params) {
 
 export function getFormValues(paramNames:Array<string>) {
     let res = {};
-    let params = _.filter(paramNames, c => $('#'+c).is(":visible") || $('#'+c).attr('type') === 'hidden' || $('#'+c).hasClass("containsInput"));
+    let params = _.filter(paramNames, c => 
+        $('#'+c).is(":visible") || $('#'+c).attr('type') === 'hidden' || $('#'+c).hasClass("containsInput"));
 	_.each(params, p => { res[p] = getItemValue($('#'+p)); });
 	return res;
 }
 
 export function getFormValuesFrom(form, paramNames:Array<string>) {
 	let res = {};
-	let params = _.filter(paramNames, c => form.find('#'+c).is(":visible") || $('#'+c).attr('type') === 'hidden' || form.find('#'+c).hasClass("containsInput"));
+	let params = _.filter(paramNames, c => 
+        form.find('#'+c).is(":visible") || $('#'+c).attr('type') === 'hidden' || form.find('#'+c).hasClass("containsInput"));
 	_.each(params, p => { 
         res[p] = getItemValue(form.find('#'+p));
     });
