@@ -4,8 +4,8 @@ import signalhub = require("./signalhub");
 export function initResults(locale) {
     tools.setFormValues(tools.parseUrlPathParameters(window.location.href));
 
-    $("#foundedafter").datepicker({ dateFormat: 'dd.mm.yy' });
-    $("#foundedbefore").datepicker({ dateFormat: 'dd.mm.yy' });
+    $("#foundedafter").datepicker({ dateFormat: 'yy-mm-dd' });
+    $("#foundedbefore").datepicker({ dateFormat: 'yy-mm-dd' });
 
     signalhub.refreshResultList();				
     tools.onChangeInputs(["companyname", "foundedafter", "foundedbefore", "ceoname"],signalhub.refreshResultList);

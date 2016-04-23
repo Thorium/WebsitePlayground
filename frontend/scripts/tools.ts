@@ -1,8 +1,5 @@
-
-
-
 export function emitUrlPathParameters(dict) {
-    let keys = Object.keys(dict);
+    const keys = Object.keys(dict);
 	function qparam(a, k){ 
        if(dict[k]===null) { 
            return a; 
@@ -18,12 +15,12 @@ export function emitUrlPathParameters(dict) {
 
 // eg app.html#/param1/value1
 export function parseUrlPathParameters(url) {
-    let ix = url.indexOf("#");
+    const ix = url.indexOf("#");
     if (ix < 0) { return {}; }
 
-    let items1 = url.substring(ix+2);
+    const items1 = url.substring(ix+2);
     if(items1 === "=_") {return {};}
-    let items = items1.split("/");
+    const items = items1.split("/");
     let res : any = {};
     for (var k = 0;k<items.length/2;k++) {
         res[items[2*k]] = items[2*k+1];
@@ -48,23 +45,23 @@ export function validateFormWithInvalid(jqForm, callback, invalidcallback) {
     return false;
 }
 
-var warning = "Please correct invalid fields!";
+const warning = "Please correct invalid fields!";
 export function validateForm(jqForm, callback) {
-    let invalidcallback = function () { /*alert(warning);*/ }; 
+    const invalidcallback = function () { /*alert(warning);*/ }; 
     return validateFormWithInvalid(jqForm, callback, invalidcallback);
 }
 
 export function validateFormWithMsg(jqForm, callback) {
-    var invalidcallback = function (){
-        var invalid_fields = jqForm.find('[data-invalid]');
-        var fieldnames = _.reduce(invalid_fields, (acc, f:any) => {
+    const invalidcallback = function (){
+        const invalid_fields = jqForm.find('[data-invalid]');
+        const fieldnames = _.reduce(invalid_fields, (acc, f:any) => {
             return  f === null || f.id === null ? acc : acc + ", " + f.id;
         });
         
-        let message = 
-            fieldnames !== null && fieldnames.toString().length > 0 ? 
-            warning + " ("+ fieldnames.toString() + ")" :
-            warning;
+        const message = 
+              fieldnames !== null && fieldnames.toString().length > 0 ? 
+              warning + " ("+ fieldnames.toString() + ")" :
+              warning;
         alert(message);
     };
     return validateFormWithInvalid(jqForm, callback, invalidcallback);
@@ -94,13 +91,13 @@ function setItemValue(jQControl, parval){
 }
 
 export function setFormValues(params) {
-    let keys = Object.keys(params);
+    const keys = Object.keys(params);
 	_.each(keys, x => { setItemValue($('#'+x), params[x]); });
 }
 
 export function getFormValues(paramNames:Array<string>) {
     let res = {};
-    let params = _.filter(paramNames, c => 
+    const params = _.filter(paramNames, c => 
         $('#'+c).is(":visible") || $('#'+c).attr('type') === 'hidden' || $('#'+c).hasClass("containsInput"));
 	_.each(params, p => { res[p] = getItemValue($('#'+p)); });
 	return res;
@@ -108,7 +105,7 @@ export function getFormValues(paramNames:Array<string>) {
 
 export function getFormValuesFrom(form, paramNames:Array<string>) {
 	let res = {};
-	let params = _.filter(paramNames, c => 
+	const params = _.filter(paramNames, c => 
         form.find('#'+c).is(":visible") || $('#'+c).attr('type') === 'hidden' || form.find('#'+c).hasClass("containsInput"));
 	_.each(params, p => { 
         res[p] = getItemValue(form.find('#'+p));
@@ -129,7 +126,7 @@ export function setValuesToForm(data) {
 }
 
 export function parseTuplesToDictionary(listOfItems) {
-    let all = _.map(listOfItems, function(item) {
+    const all = _.map(listOfItems, function(item) {
         let dict : any = {};
         _.each(item, (c:any) => { dict[c.Item1] = c.Item2; });
         return dict;
@@ -146,11 +143,11 @@ export function parseTuplesToObject(listOfItems) {
 }
 
 export function parseFieldsFromForm(form){
-   let nonbuttons = _.filter(form.find(":input"), (i:any) => i.type !== "button");
-   let ids = _.map(nonbuttons, (i:any) => i.id);
-   let values = getFormValuesFrom(form, ids);
-   let keys = Object.keys(values);
-   let tupleArray = _.map(keys, k => { return { Item1: k, Item2: values[k]};});
+   const nonbuttons = _.filter(form.find(":input"), (i:any) => i.type !== "button");
+   const ids = _.map(nonbuttons, (i:any) => i.id);
+   const values = getFormValuesFrom(form, ids);
+   const keys = Object.keys(values);
+   const tupleArray = _.map(keys, k => { return { Item1: k, Item2: values[k]};});
    return tupleArray;
 }
 export function onChangeInputs(inputs,callback) {

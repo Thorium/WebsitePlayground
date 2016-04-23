@@ -19,9 +19,9 @@ $(function() {
     signalhub.hubConnector.done(function () {
         window.onunload = undefined;
         window.onbeforeunload = undefined;
-        var locale = "en"; // (navigator.language || navigator.userLanguage).substring(0,2);
-        // var htmlBody = $(document.body).html();
-        // var localized = translate(locale,htmlBody);
+        const locale = "en"; // (navigator.language || navigator.userLanguage).substring(0,2);
+        // const htmlBody = $(document.body).html();
+        // const localized = translate(locale,htmlBody);
         // $(document.body).html(localized);
         idx.initIndex(locale);
         if(window.location.href.indexOf("company.html") > 0){ company.initCompany(locale); }

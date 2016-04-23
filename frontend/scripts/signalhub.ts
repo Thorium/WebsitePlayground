@@ -8,15 +8,15 @@ $(document).ready(function () {
 
 	// SignalR Hub:
 	$.connection.hub.url = "/signalr";
-    var con = <ISignalHub>$.connection;
+    const con = <ISignalHub>$.connection;
 	signalHub = con.SignalHub; // Hub class
-	var connection = !signalHub?$.hubConnection():$.connection.hub;
+	const connection = !signalHub?$.hubConnection():$.connection.hub;
 	if (!signalHub) {
 	   console.log("hub not found");
 	}
 	
 	signalHub.client.listCompanies = function (data) {
-        var act = signalHub.server.buyStocks;
+        const act = signalHub.server.buyStocks;
 		gui_shared.renderAvailableCompanies(data, act);
 	};
 
@@ -39,19 +39,19 @@ $(document).ready(function () {
     gui_shared.renderNavBar("");
 });
 export function mapOptionType(p) {
-	var fieldValue = $('#'+p.toLowerCase()).val();
+	const fieldValue = $('#'+p.toLowerCase()).val();
 	if(p==="CompanyName") { return fieldValue; }
 	if(p==="FoundedAfter" || p==="FoundedBefore") {
 		if(fieldValue.indexOf(".") > -1){
-            let parts = fieldValue.split('.');
-            let parsed = new Date(parts[2], parts[1]-1, parts[0]);
+            const parts = fieldValue.split('.');
+            const parsed = new Date(parts[2], parts[1]-1, parts[0]);
             return parsed;            
         } else if (fieldValue.indexOf("/") > -1){
-            let parts = fieldValue.split('/');
-            let parsed = new Date(parts[2], parts[1]-1, parts[0]);
+            const parts = fieldValue.split('/');
+            const parsed = new Date(parts[2], parts[1]-1, parts[0]);
             return parsed;
         } else {
-            let parsed = new Date(Date.parse(fieldValue));
+            const parsed = new Date(Date.parse(fieldValue));
             return parsed;
         }
 	}
@@ -60,17 +60,17 @@ export function mapOptionType(p) {
 }
 
 export function refreshResultList() {
-	var ms = new Date().getTime() + 86400000;
-	var tomorrow = new Date(ms);
-	var searchObject = { 
+	const ms = new Date().getTime() + 86400000;
+	const tomorrow = new Date(ms);
+	const searchObject = { 
 		FoundedAfter : new Date(0), // "1970-01-01T00:00:00.0000000+03:00"
 		FoundedBefore : tomorrow, // "2015-07-12T15:26:13.7884528+03:00"
 		CompanyName : "",
 		CEOName: null // {"Case":"Nadela"}
 	};
 	
-	var keys = Object.keys(searchObject);
-	var params = _.filter(keys, function(c){return ($('#'+c.toLowerCase()).val()!=="");});
+	const keys = Object.keys(searchObject);
+	const params = _.filter(keys, function(c){return ($('#'+c.toLowerCase()).val()!=="");});
 	_.each(params, function(p){ searchObject[p] = mapOptionType(p);});
 	signalHub.server.searchCompanies(searchObject);
 }

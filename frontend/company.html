@@ -20,59 +20,59 @@
     <div class="panel formScreen">
         <form id="companyform" method="post" data-abide="ajax">
 			<div class="row">
-				<div class="large-3 columns">
+				<div class="medium-3 columns">
 					<label><span class="fa fa-arrow-circle-o-right"></span>Company Name</label>
 				</div>
-				<div class="large-9 columns">
+				<div class="medium-9 columns">
 					<input type="text" id="Name" placeholder="" required />
 					<small class="error">Name is required.</small>
 				</div>
 			</div>
 			<div class="row">
-				<div class="large-3 columns">
+				<div class="medium-3 columns">
 						<label><span class="fa fa-user"></span> CEO</label>
 				</div>
-				<div class="large-3 columns">
+				<div class="medium-3 columns">
 					<input type="text" id="CEO" placeholder="Name" />
 					<small class="error">CEO is required.</small>
 				</div>
-				<div class="large-3 columns">
+				<div class="medium-3 columns">
 					<label><span class="fa fa-calendar"></span> Founded</label>
 				</div>
-				<div class="large-3 columns">
-					<input type="text" id="Founded" placeholder="dd.mm.yyyy" required pattern="[0-9]{1,2}.[0-9]{1,2}.[0-9]{4}" />
-					<small class="error">Type date in format dd.mm.yyyy.</small>
+				<div class="medium-3 columns">
+					<input type="text" id="Founded" placeholder="yyyy-mm-dd" required pattern="[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}" />
+					<small class="error">Type date in format yyyy-mm-dd.</small>
 				</div>
 			</div>
 			<div class="row">
-				<div class="large-3 columns">
+				<div class="medium-3 columns">
 						<label><span class="fa fa-users"></span> Founder(s)</label>
 				</div>
-				<div class="large-9 columns">
+				<div class="medium-9 columns">
 					<input type="text" id="Founder" placeholder="Name(s)" required />
 					<small class="error">Founder is required.</small>
 				</div>
 			</div>
 			<div class="row">
-				<div class="large-3 columns">
+				<div class="medium-3 columns">
 						<label><span class="fa fa-link"></span> WebSite</label>
 				</div>
-				<div class="large-9 columns">
+				<div class="medium-9 columns">
 					<input type="text" id="WebSite" placeholder="http://..." pattern="url" />
 					<small class="error">WebSite has to be url.</small>
 				</div>
 			</div>
 			<div class="row">
-				<div class="large-3 columns">
+				<div class="medium-3 columns">
 						<label><span class="fa fa-star"></span> Logo</label>
 				</div>
-				<div class="large-9 columns">
+				<div class="medium-9 columns">
 					<input type="text" id="LogoUrl" placeholder="http://..." pattern="url" />
 					<small class="error">Input logo url.</small>
 				</div>
 			</div>
 			<div class="row">
-				<div class="large-12 columns">
+				<div class="medium-12 columns">
 					<input type="button" class = "button" id="createbtn" value="Create" />
 					<input type="button" class = "button" id="updatebtn" value="Update" />
 					<input type="button" class = "button" id="deletebtn" value="Delete" />

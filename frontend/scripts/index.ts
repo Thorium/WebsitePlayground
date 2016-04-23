@@ -3,14 +3,14 @@ import tools = require("./tools");
 export function initIndex(locale) {
     $("#search").click(function () {
         // Do search			
-        var options = ["companyname", "foundedafter", "foundedbefore", "ceoname"];
-        var qry2 = tools.emitUrlPathParameters(tools.getFormValues(options));
+        const options = ["companyname", "foundedafter", "foundedbefore", "ceoname"];
+        const qry2 = tools.emitUrlPathParameters(tools.getFormValues(options));
         document.location.href = "results.html#" + qry2;
         return false;
     });        
     
-    $("#foundedafter").datepicker({ dateFormat: 'dd.mm.yy' });
-    $("#foundedbefore").datepicker({ dateFormat: 'dd.mm.yy' });
+    $("#foundedafter").datepicker({ dateFormat: 'yy-mm-dd' });
+    $("#foundedbefore").datepicker({ dateFormat: 'yy-mm-dd' });
             
     function doToggleMore(speed) {
         $( "#toggleMoreIcon" ).toggleClass( "fa fa-angle-double-up", speed );

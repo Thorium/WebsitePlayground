@@ -5,26 +5,26 @@ export function initCompany(locale) {
 	
     // UrlParameters: /company.html#/item/1
 
-    var parsed = tools.parseUrlPathParameters(window.location.href);
+    const parsed = tools.parseUrlPathParameters(window.location.href);
 
-    var conn = <ICompanyHub> $.connection;
-    var companyHub = conn.CompanyHub; // Hub class
+    const conn = <ICompanyHub> $.connection;
+    const companyHub = conn.CompanyHub; // Hub class
     
     function setValuesToForm(data) {
         _.each(data, function(c:any){ $('#'+c.Item1).val(c.Item2); });
     }
     
     function parseFieldFromForm(){
-       var nonbuttons = _.filter($(":input"), function(i) { return i.type !== "button";});
-       var ids = _.map(nonbuttons, function(i) { return i.id;});
-       var values = tools.getFormValues(ids);
-       var keys = Object.keys(values);
-       var tupleArray = _.map(keys, function(k) { return { Item1: k, Item2: values[k]};});
+       const nonbuttons = _.filter($(":input"), function(i) { return i.type !== "button";});
+       const ids = _.map(nonbuttons, function(i) { return i.id;});
+       const values = tools.getFormValues(ids);
+       const keys = Object.keys(values);
+       const tupleArray = _.map(keys, function(k) { return { Item1: k, Item2: values[k]};});
        // debugger;
        return tupleArray;
     }
     
-    var compId = parsed.item;
+    const compId = parsed.item;
 
     $("#updatebtn").hide();
     $("#deletebtn").hide();
@@ -39,8 +39,8 @@ export function initCompany(locale) {
             tools.validateForm($("#companyform"), function () {
                 companyHub.server.create(parseFieldFromForm()).done(
                     function(data){ 
-                        var id = _.filter(data, function(i:any){return i.Item1==="Id";});
-                        var idval = _.map(id, function(i:any){return i.Item2;});
+                        const id = _.filter(data, function(i:any){return i.Item1==="Id";});
+                        const idval = _.map(id, function(i:any){return i.Item2;});
                         document.location.href = "company.html?i=" + idval[0] + "#/item/" + idval[0];
                     });
             });
@@ -50,7 +50,12 @@ export function initCompany(locale) {
     }else {
         $("#profileInfo").text("Update company");
 
-        companyHub.server.read(compId).done(setValuesToForm);
+        companyHub.server.read(compId).done(data => {
+            setValuesToForm(data);
+            const stempdate = $("#Founded").val().split("T")[0];
+            $("#Founded").val(stempdate);
+            return false;
+        });
 
         $("#updatebtn").show();
         $("#deletebtn").show();
