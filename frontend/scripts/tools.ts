@@ -32,13 +32,17 @@ var formCache = {};
 export function validateFormWithInvalid(jqForm, callback, invalidcallback) {
     function onValid(){ callback(); }
     function onInvalid(){ invalidcallback(); }
+    $(document).foundation();
     if(jqForm.selector === undefined || !formCache[document.location.href + "_" + jqForm.selector]){
         jqForm
             .on('invalid.fndtn.abide', function () { onInvalid(); })
             .on('valid.fndtn.abide', function () { onValid(); })
             .on('valid', function () { onInvalid(); })
             .on('invalid', function () { onValid(); })
-            .on('submit', function(){return false;});  
+            .on('submit', Foundation.utils.debounce(function(e){ 
+                formCache[document.location.href + "_" + jqForm.selector] = false;
+                return false;
+            }, 300, true));
         formCache[document.location.href + "_" + jqForm.selector] = true;
     }
     jqForm.submit();

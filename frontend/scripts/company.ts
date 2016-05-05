@@ -4,6 +4,9 @@ interface ICompanyHub extends SignalR { CompanyHub : any; }
 export function initCompany(locale) {
 	
     // UrlParameters: /company.html#/item/1
+    $("#updatebtn").hide();
+    $("#deletebtn").hide();
+    $("#createbtn").hide();
 
     const parsed = tools.parseUrlPathParameters(window.location.href);
 
@@ -25,12 +28,8 @@ export function initCompany(locale) {
     }
     
     const compId = parsed.item;
-
-    $("#updatebtn").hide();
-    $("#deletebtn").hide();
-    $("#createbtn").hide();
     
-    if(compId===undefined){
+    if(compId===undefined || compId === "undefined"){
 
         $("#profileInfo").text("Create a new company");
 

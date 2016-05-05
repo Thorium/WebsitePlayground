@@ -24,17 +24,63 @@ type TypeProviderConnection =
         IndividualsAmount=1000,
         UseOptionTypes=true, 
         Owner="companyweb",
-// Values for new version of SQLProvider:
-//        CaseSensitivityChange = Common.CaseSensitivityChange.ORIGINAL,
+        CaseSensitivityChange = Common.CaseSensitivityChange.ORIGINAL,
         ResolutionPath=Mysqldatapath>
 
 let cstr = System.Configuration.ConfigurationManager.AppSettings.["RuntimeDBConnectionString"]
-let dbContext = 
+let dbReadContext = 
     if cstr = null then TypeProviderConnection.GetDataContext()
     else TypeProviderConnection.GetDataContext cstr
 
+type DataContext = TypeProviderConnection.dataContext
+
 let logger = Logary.Logging.getCurrentLogger ()
-let writeLog = logger.log >> start
+let writeLog x = Logary.Logger.log logger x |> start
+
+let writeWithDbContextManualComplete<'T>() =
+    let isMono = Type.GetType ("Mono.Runtime") <> null
+    let context = TypeProviderConnection.GetDataContext cstr
+    let scope =
+        match isMono with
+        | true -> new Transactions.TransactionScope()
+        | false ->
+            // Mono would fail to compilation, so we have to construct this via reflection:
+            // new Transactions.TransactionScope(Transactions.TransactionScopeAsyncFlowOption.Enabled)
+            let transactionAssembly = System.Reflection.Assembly.GetAssembly typeof<System.Transactions.TransactionScope>
+            let asynctype = transactionAssembly.GetType "System.Transactions.TransactionScopeAsyncFlowOption"
+            let transaction = typeof<System.Transactions.TransactionScope>.GetConstructor [|asynctype|]
+            transaction.Invoke [|1|] :?> System.Transactions.TransactionScope
+    scope, context
+
+open System.Threading.Tasks
+/// Write operations should be wrapped to transaction with this.
+let writeWithDbContext<'T> (func:TypeProviderConnection.dataContext -> 'T) =
+    let transaction, context = writeWithDbContextManualComplete()
+    use scope = transaction
+    let res = func context
+    match box res with
+    | :? Task as task -> 
+        let commit = Action<Task>(fun a -> 
+            scope.Complete()
+            )
+        let commitTran1 = task.ContinueWith(commit, TaskContinuationOptions.OnlyOnRanToCompletion)
+        res
+    | item when item <> null && item.GetType().Name = "FSharpAsync`1" ->
+        let msg = "Use writeWithDbContextAsync"
+        msg |> Logary.Message.eventError |> writeLog
+        failwith msg 
+    | x -> 
+        scope.Complete()
+        res
+
+let writeWithDbContextAsync<'T> (func:TypeProviderConnection.dataContext -> Async<'T>) =
+    async {
+        let transaction, context = writeWithDbContextManualComplete()
+        use scope = transaction
+        let! res = func context
+        scope.Complete()
+        return res
+    }
 
 FSharp.Data.Sql.Common.QueryEvents.SqlQueryEvent |> Event.add (fun e -> ("Executed SQL:\r\n" + e.ToString()) |> Logary.Message.eventDebug |> writeLog)
 
@@ -45,20 +91,33 @@ let DateTimeNow() =
     DateTimeString System.DateTime.UtcNow
 
 let ExecuteSql (query : string) parameters =
-    use rawSqlConnection = new MySqlConnection(cstr)
-    rawSqlConnection.Open()
-//    Message.eventInfo (query) |> writeLog
-    use command = new MySqlCommand(query, rawSqlConnection)
-    parameters |> List.iter(fun (par:string*string) -> command.Parameters.AddWithValue(par) |> ignore)
-    let affectedRows = command.ExecuteNonQuery()
-    match affectedRows with
-    | 0 -> 
-        "ExecuteSql 0 rows afffected: " + query |> Logary.Message.eventWarn |> writeLog
-        ()
-    | x -> 
-        //"ExecuteSql " + x + " rows afffected: " + query |> Logary.Message.eventWarn |> writeLog
-        ()
+    async {
+       use rawSqlConnection = new MySqlConnection(cstr)
+       do! rawSqlConnection.OpenAsync() |> Async.AwaitTask
+//       Message.eventInfo (query) |> writeLog
+       use command = new MySqlCommand(query, rawSqlConnection)
+       parameters |> List.iter(fun (par:string*string) -> command.Parameters.AddWithValue(par) |> ignore)
+       let! affectedRows = command.ExecuteNonQueryAsync() |> Async.AwaitTask
+       match affectedRows with
+       | 0 -> 
+           "ExecuteSql 0 rows afffected: " + query |> Logary.Message.eventWarn |> writeLog
+           ()
+       | x -> 
+           //"ExecuteSql " + x + " rows afffected: " + query |> Logary.Message.eventWarn |> writeLog
+           ()
+    }
 
+
+type Data.Common.DbDataReader with
+    member reader.CollectItems(collectfunc) = 
+        let rec readitems acc =
+            async {
+                let! moreitems = reader.ReadAsync() |> Async.AwaitTask
+                match moreitems with
+                | true -> return! readitems (collectfunc(reader)::acc)
+                | false -> return acc
+            }
+        readitems []
 
 open System.IO
 let getRootedPath (path:string) =
@@ -80,7 +139,7 @@ let getRootedPath (path:string) =
 type TypeProviderConnection.dataContext with
   /// SubmitUpdates() but on error ClearUpdates()
   member x.SubmitUpdates2() = 
-    try x.SubmitUpdates()
+    try x.SubmitUpdatesAsync()
     with
     | e -> Logary.Message.eventError (e.ToString() + "\r\n\r\n"+ System.Diagnostics.StackTrace(1, true).ToString()) |> writeLog
            x.ClearUpdates() |> ignore

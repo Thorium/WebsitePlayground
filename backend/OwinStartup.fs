@@ -25,10 +25,18 @@ let serverPath =
     Microsoft.Owin.FileSystems.PhysicalFileSystem path
 
 open Owin.Security.AesDataProtectorProvider
+open System.Net
 
 type MyWebStartup() =
 
     member __.Configuration(ap:Owin.IAppBuilder) =
+        if Type.GetType ("Mono.Runtime") <> null then
+           //Workaround for Mono incompatibility https://katanaproject.codeplex.com/workitem/438
+           let (sux, httpListener) = ap.Properties.TryGetValue(typeof<HttpListener>.FullName)
+           try
+               (httpListener :?> HttpListener).IgnoreWriteExceptions <- true;
+           with ex ->
+               ()
 
         ap.UseAesDataProtectorProvider("mykey123") 
 

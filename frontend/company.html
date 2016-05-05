@@ -13,80 +13,83 @@
 
 </head>
 <body>
-    <div id="navbar"></div> 
+    <div class="pageLoader"><nav class="tab-bar desktop-navbar"></nav><span class="fa fa-spinner fa-spin fa-4x"></span></div>
+    <div class="pageLoaded">
+		<div id="navbar"></div> 
 
-    <span id="profileInfo" class="desktop-bold-medium"></span>
+		<span id="profileInfo" class="desktop-bold-medium"></span>
 
-    <div class="panel formScreen">
-        <form id="companyform" method="post" data-abide="ajax">
-			<div class="row">
-				<div class="medium-3 columns">
-					<label><span class="fa fa-arrow-circle-o-right"></span>Company Name</label>
+		<div class="panel formScreen">
+			<form id="companyform" method="post" data-abide="ajax">
+				<div class="row">
+					<div class="medium-3 columns">
+						<label><span class="fa fa-arrow-circle-o-right"></span>Company Name</label>
+					</div>
+					<div class="medium-9 columns">
+						<input type="text" id="Name" placeholder="" required />
+						<small class="error">Name is required.</small>
+					</div>
 				</div>
-				<div class="medium-9 columns">
-					<input type="text" id="Name" placeholder="" required />
-					<small class="error">Name is required.</small>
+				<div class="row">
+					<div class="medium-3 columns">
+							<label><span class="fa fa-user"></span> CEO</label>
+					</div>
+					<div class="medium-3 columns">
+						<input type="text" id="CEO" placeholder="Name" />
+						<small class="error">CEO is required.</small>
+					</div>
+					<div class="medium-3 columns">
+						<label><span class="fa fa-calendar"></span> Founded</label>
+					</div>
+					<div class="medium-3 columns">
+						<input type="text" id="Founded" placeholder="yyyy-mm-dd" required pattern="[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}" />
+						<small class="error">Type date in format yyyy-mm-dd.</small>
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="medium-3 columns">
-						<label><span class="fa fa-user"></span> CEO</label>
+				<div class="row">
+					<div class="medium-3 columns">
+							<label><span class="fa fa-users"></span> Founder(s)</label>
+					</div>
+					<div class="medium-9 columns">
+						<input type="text" id="Founder" placeholder="Name(s)" required />
+						<small class="error">Founder is required.</small>
+					</div>
 				</div>
-				<div class="medium-3 columns">
-					<input type="text" id="CEO" placeholder="Name" />
-					<small class="error">CEO is required.</small>
+				<div class="row">
+					<div class="medium-3 columns">
+							<label><span class="fa fa-link"></span> WebSite</label>
+					</div>
+					<div class="medium-9 columns">
+						<input type="text" id="WebSite" placeholder="http://..." pattern="url" />
+						<small class="error">WebSite has to be url.</small>
+					</div>
 				</div>
-				<div class="medium-3 columns">
-					<label><span class="fa fa-calendar"></span> Founded</label>
+				<div class="row">
+					<div class="medium-3 columns">
+							<label><span class="fa fa-star"></span> Logo</label>
+					</div>
+					<div class="medium-9 columns">
+						<input type="text" id="LogoUrl" placeholder="http://..." pattern="url" />
+						<small class="error">Input logo url.</small>
+					</div>
 				</div>
-				<div class="medium-3 columns">
-					<input type="text" id="Founded" placeholder="yyyy-mm-dd" required pattern="[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}" />
-					<small class="error">Type date in format yyyy-mm-dd.</small>
+				<div class="row">
+					<div class="medium-12 columns">
+						<input type="button" class = "button" id="createbtn" value="Create" />
+						<input type="button" class = "button" id="updatebtn" value="Update" />
+						<input type="button" class = "button" id="deletebtn" value="Delete" />
+						<input type="button" class = "secondary button" id="back" value="Back" />
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="medium-3 columns">
-						<label><span class="fa fa-users"></span> Founder(s)</label>
-				</div>
-				<div class="medium-9 columns">
-					<input type="text" id="Founder" placeholder="Name(s)" required />
-					<small class="error">Founder is required.</small>
-				</div>
-			</div>
-			<div class="row">
-				<div class="medium-3 columns">
-						<label><span class="fa fa-link"></span> WebSite</label>
-				</div>
-				<div class="medium-9 columns">
-					<input type="text" id="WebSite" placeholder="http://..." pattern="url" />
-					<small class="error">WebSite has to be url.</small>
-				</div>
-			</div>
-			<div class="row">
-				<div class="medium-3 columns">
-						<label><span class="fa fa-star"></span> Logo</label>
-				</div>
-				<div class="medium-9 columns">
-					<input type="text" id="LogoUrl" placeholder="http://..." pattern="url" />
-					<small class="error">Input logo url.</small>
-				</div>
-			</div>
-			<div class="row">
-				<div class="medium-12 columns">
-					<input type="button" class = "button" id="createbtn" value="Create" />
-					<input type="button" class = "button" id="updatebtn" value="Update" />
-					<input type="button" class = "button" id="deletebtn" value="Delete" />
-	            	<input type="button" class = "secondary button" id="back" value="Back" />
-				</div>
-			</div>
-        </form>
-        <p>
-            Just for technical info, the URL for companies will be: <br/>
-            <a href="company.html#/item/1">company.html#/item/1</a><br/>
-            <a href="company.html#/item/2">company.html#/item/2</a><br/>
-            ...
-        </p>
-    </div>
-    <div id="footer"></div>
+			</form>
+			<p>
+				Just for technical info, the URL for companies will be: <br/>
+				<a href="company.html#/item/1">company.html#/item/1</a><br/>
+				<a href="company.html#/item/2">company.html#/item/2</a><br/>
+				...
+			</p>
+		</div>
+		<div id="footer"></div>
+	</div>
 	</body>
 </html>

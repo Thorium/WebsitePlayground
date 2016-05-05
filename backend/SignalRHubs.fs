@@ -4,6 +4,7 @@ module SignalRHubs
 open System
 open FSharp.Data
 open FSharp.Data.Sql
+open FSharp.Data.Sql.Common
 open Microsoft.AspNet.SignalR
 open Microsoft.AspNet.SignalR.Hubs 
 open System.Threading.Tasks
@@ -33,24 +34,26 @@ type SignalHub() as this =
             | None -> ""
             | Some(ceo) -> ceo
 
-        let hosts = 
-            query {
-                for c in dbContext.``[companyweb].[company]`` do
-                // join d in dbContext.``[companyweb].[stocks]`` on (c.Id = d.ForeignKey)
-                where (
-                    c.Founded < searchparams.FoundedBefore
-                    && c.Founded > searchparams.FoundedAfter
-                    && c.Name =% "%" + searchparams.CompanyName.ToUpper() + "%"
-                    && c.CEO =% "%" + ceoFilter + "%"
-                )
-                select ({
-                        Id = c.Id;
-                        CompanyName = c.Name; 
-                        Url = c.WebSite;
-                        Image = c.LogoUrl
-                        }) 
-            } |> Seq.toArray
-        this.Clients.Caller.ListCompanies hosts |> ignore
+        async{
+            let! hosts = 
+                query {
+                    for c in dbReadContext.Companyweb.Company do
+                    // join d in dbContext.Companyweb.Stocks on (c.Id = d.ForeignKey)
+                    where (
+                        c.Founded < searchparams.FoundedBefore
+                        && c.Founded > searchparams.FoundedAfter
+                        && c.Name =% "%" + searchparams.CompanyName.ToUpper() + "%"
+                        && c.Ceo =% "%" + ceoFilter + "%"
+                    )
+                    select ({
+                            Id = c.Id;
+                            CompanyName = c.Name; 
+                            Url = c.WebSite;
+                            Image = c.LogoUrl
+                            }) 
+                } |> Seq.executeQueryAsync
+            this.Clients.Caller.ListCompanies hosts |> ignore
+        } |> Async.StartAsTask
 
     //[<Authorize(Roles = "loggedin")>]
     member __.BuyStocks (company:string) (amount:int) = 
@@ -62,16 +65,22 @@ type SignalHub() as this =
 type CompanyHub() = 
     inherit Hub<IMessageToClient>()
 
-    let executeCrud itemId actionToEntity =
-        let entity =
-            query {
-                for u in dbContext.``[companyweb].[company]`` do
-                where (u.Id = itemId)
-                head
-            }
-        entity |> actionToEntity
-        dbContext.SubmitUpdates2 ()
-        entity.ColumnValues
+    let executeCrud (dbContext:DataContext) itemId actionToEntity =
+        async {
+            let! fetched =
+                query {
+                    for u in dbContext.Companyweb.Company do
+                    where (u.Id = itemId)
+                    take 1
+                } |> Seq.executeQueryAsync
+            let foundEntity = fetched |> Seq.tryHead
+            match foundEntity with
+            | Some entity ->
+                entity |> actionToEntity
+                do! dbContext.SubmitUpdates2 ()
+                return entity.ColumnValues
+            | None -> return Seq.empty
+        } |> Async.StartAsTask
 
     let ``map data from form to database format`` (formData: seq<string*obj>) =
             formData // Add missing fields
@@ -88,19 +97,26 @@ type CompanyHub() =
 
 
     member __.Create (data: seq<string*obj>) = 
-        let entity = data
-                     |> ``map data from form to database format``
-                     |> dbContext.``[companyweb].[company]``.Create
-        dbContext.SubmitUpdates2()
-        entity.ColumnValues
+      let transaction =
+        writeWithDbContextAsync <| fun (dbContext:DataContext) ->
+            async {
+                let entity = data
+                             |> ``map data from form to database format``
+                             |> dbContext.Companyweb.Company.Create
+                do! dbContext.SubmitUpdates2()
+                return entity.ColumnValues
+            } 
+      transaction |> Async.StartAsTask
 
     member __.Read itemId = 
-        executeCrud itemId (fun e -> ())
+        executeCrud dbReadContext itemId (fun e -> ())
 
     member __.Update itemId data = 
-        executeCrud itemId (fun e -> data |> ``map data from form to database format`` |> Seq.iter(fun (k,o) -> e.SetColumn(k, o)))
+      writeWithDbContext <| fun (dbContext:DataContext) ->
+        executeCrud dbContext itemId (fun e -> data |> ``map data from form to database format`` |> Seq.iter(fun (k,o) -> e.SetColumn(k, o)))
 
     member __.Delete itemId = 
-        executeCrud itemId (fun e -> e.Delete())
+      writeWithDbContext <| fun (dbContext:DataContext) ->
+        executeCrud dbContext itemId (fun e -> e.Delete())
 
 
