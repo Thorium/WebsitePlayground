@@ -2,6 +2,7 @@
 
 open System
 open System.Threading
+open FSharp.Data.Sql
 
 type ScheduledEventType =
 | Once
@@ -12,12 +13,12 @@ let timer eventType interval scheduledAction = async {
     match eventType with
     | Once -> 
         do! interval |> Async.Sleep
-        scheduledAction()
+        do! scheduledAction()
     | Recurring ->
         while true do
             do! interval |> Async.Sleep
             try
-                scheduledAction()
+                do! scheduledAction()
             with // if error on recurring action, just log and skip one
             | e -> Logary.Message.eventError (e.ToString() + "\r\n\r\n"+ System.Diagnostics.StackTrace(1, true).ToString()) |> writeLog
 }
@@ -51,8 +52,8 @@ let cancelAction id =
 
 // Testing:
 (*
-let someAction() = Console.WriteLine "hello1"
-let someAction2() = Console.WriteLine "hello2"
+let someAction() = async { Console.WriteLine "hello1" }
+let someAction2() = async { Console.WriteLine "hello2" }
 
 let jobId1 = scheduleAction ScheduledEventType.Recurring 3000 someAction
 let jobId2 = scheduleAction ScheduledEventType.Recurring 5000 someAction2

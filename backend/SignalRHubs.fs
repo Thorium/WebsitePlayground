@@ -71,16 +71,14 @@ type CompanyHub() =
                 query {
                     for u in dbContext.Companyweb.Company do
                     where (u.Id = itemId)
-                    take 1
-                } |> Seq.executeQueryAsync
-            let foundEntity = fetched |> Seq.tryHead
-            match foundEntity with
+                } |> Seq.tryHeadAsync
+            match fetched with
             | Some entity ->
                 entity |> actionToEntity
                 do! dbContext.SubmitUpdates2 ()
                 return entity.ColumnValues
             | None -> return Seq.empty
-        } |> Async.StartAsTask
+        }
 
     let ``map data from form to database format`` (formData: seq<string*obj>) =
             formData // Add missing fields
@@ -110,13 +108,16 @@ type CompanyHub() =
 
     member __.Read itemId = 
         executeCrud dbReadContext itemId (fun e -> ())
+        |> Async.StartAsTask
 
     member __.Update itemId data = 
       writeWithDbContext <| fun (dbContext:DataContext) ->
         executeCrud dbContext itemId (fun e -> data |> ``map data from form to database format`` |> Seq.iter(fun (k,o) -> e.SetColumn(k, o)))
+        |> Async.StartAsTask
 
     member __.Delete itemId = 
       writeWithDbContext <| fun (dbContext:DataContext) ->
         executeCrud dbContext itemId (fun e -> e.Delete())
+        |> Async.StartAsTask
 
 

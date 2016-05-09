@@ -40,6 +40,7 @@ export function validateFormWithInvalid(jqForm, callback, invalidcallback) {
             .on('valid', function () { onInvalid(); })
             .on('invalid', function () { onValid(); })
             .on('submit', Foundation.utils.debounce(function(e){ 
+                jqForm.off('submit');
                 formCache[document.location.href + "_" + jqForm.selector] = false;
                 return false;
             }, 300, true));

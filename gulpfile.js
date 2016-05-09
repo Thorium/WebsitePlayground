@@ -153,6 +153,7 @@ gulp.task('images', function () { return gulp.src(files.images).pipe(gulp.dest(f
 gulp.task('jqueryImages', function () { return gulp.src(files.jqueryImages).pipe(gulp.dest(files.targetPath + '/css/images/'));});
 gulp.task('fonts', function () { return gulp.src(files.fonts).pipe(flatten()).pipe(gulp.dest(files.targetPath + '/fonts'));});
 gulp.task('statics', function () { return gulp.src(files.statics).pipe(gulp.dest(files.targetPath));});
+gulp.task('maps', function () { return gulp.src('paket-files/**/*.map').pipe(flatten()).pipe(gulpif(!isRelease, gulp.dest(files.targetPath + '/js')));});
 gulp.task('htmls', function () { 
     return gulp.src(files.htmls)
                .pipe(htmlhint('.htmlhintrc'))
@@ -181,5 +182,5 @@ gulp.task('watch', function () {
 });
 
 // Default Task
-gulp.task('deploy', ['deployStatic', 'tslint', 'typeScripts', 'styles', 'styleslib', 'concatLibs']);
+gulp.task('deploy', ['deployStatic', 'tslint', 'typeScripts', 'styles', 'styleslib', 'concatLibs', 'maps']);
 gulp.task('default', ['deploy', 'watch']);

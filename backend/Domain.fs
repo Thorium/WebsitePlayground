@@ -11,6 +11,7 @@ open System.Threading.Tasks
 
 open MySql.Data.MySqlClient
 open Hopac
+open Logary
 
 // --- SQL-Server connection ------------------------------------
 
@@ -57,19 +58,32 @@ open System.Threading.Tasks
 let writeWithDbContext<'T> (func:TypeProviderConnection.dataContext -> 'T) =
     let transaction, context = writeWithDbContextManualComplete()
     use scope = transaction
+    let transId =
+        match System.Transactions.Transaction.Current <> null && System.Transactions.Transaction.Current.TransactionInformation <> null with
+        | true -> System.Transactions.Transaction.Current.TransactionInformation.LocalIdentifier
+        | false -> ""
+    let logmsg act tid =
+        let tidm = match String.IsNullOrEmpty tid with | true -> "" | false -> " at trhead " + tid
+        "Transaction " + transId + " " + act + tidm
+            |> Message.eventDebug |> writeLog
+    logmsg "started" System.Threading.Thread.CurrentThread.Name
     let res = func context
     match box res with
     | :? Task as task -> 
         let commit = Action<Task>(fun a -> 
+            logmsg "completed" System.Threading.Thread.CurrentThread.Name
             scope.Complete()
             )
         let commitTran1 = task.ContinueWith(commit, TaskContinuationOptions.OnlyOnRanToCompletion)
+        let commitTran2 = task.ContinueWith((fun _ -> 
+            logmsg "failed" System.Threading.Thread.CurrentThread.Name), TaskContinuationOptions.NotOnRanToCompletion)
         res
     | item when item <> null && item.GetType().Name = "FSharpAsync`1" ->
         let msg = "Use writeWithDbContextAsync"
         msg |> Logary.Message.eventError |> writeLog
         failwith msg 
     | x -> 
+        logmsg "completed" System.Threading.Thread.CurrentThread.Name
         scope.Complete()
         res
 
@@ -77,7 +91,17 @@ let writeWithDbContextAsync<'T> (func:TypeProviderConnection.dataContext -> Asyn
     async {
         let transaction, context = writeWithDbContextManualComplete()
         use scope = transaction
+        let transId =
+            match System.Transactions.Transaction.Current <> null && System.Transactions.Transaction.Current.TransactionInformation <> null with
+            | true -> System.Transactions.Transaction.Current.TransactionInformation.LocalIdentifier
+            | false -> ""
+        let logmsg act tid =
+            let tidm = match String.IsNullOrEmpty tid with | true -> "" | false -> " at trhead " + tid
+            "Transaction " + transId + " " + act + tidm
+            |> Message.eventDebug |> writeLog
+        logmsg "started" System.Threading.Thread.CurrentThread.Name
         let! res = func context
+        logmsg "completed" System.Threading.Thread.CurrentThread.Name
         scope.Complete()
         return res
     }

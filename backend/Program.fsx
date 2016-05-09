@@ -54,8 +54,9 @@
 
 
 #r @"System.Configuration.dll"
-#r @"System.ServiceProcess.dll"
 #r @"System.Configuration.Install.dll"
+#r @"System.ServiceProcess.dll"
+#r @"System.Transactions.dll"
 #r "System.Xml.Linq.dll"
 
 open System
@@ -74,6 +75,7 @@ open System.Threading.Tasks
 open Logary
 
 #load "Domain.fs"
+#load "Scheduler.fs"
 #load "SignalRHubs.fs"
 #load "OwinStartup.fs"
 #load "Program.fs"
