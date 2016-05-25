@@ -124,10 +124,10 @@ let ExecuteSql (query : string) parameters =
        let! affectedRows = command.ExecuteNonQueryAsync() |> Async.AwaitTask
        match affectedRows with
        | 0 -> 
-           "ExecuteSql 0 rows afffected: " + query |> Logary.Message.eventWarn |> writeLog
+           "ExecuteSql 0 rows affected: " + query |> Logary.Message.eventWarn |> writeLog
            ()
        | x -> 
-           //"ExecuteSql " + x + " rows afffected: " + query |> Logary.Message.eventWarn |> writeLog
+           //"ExecuteSql " + x + " rows affected: " + query |> Logary.Message.eventWarn |> writeLog
            ()
     }
 
