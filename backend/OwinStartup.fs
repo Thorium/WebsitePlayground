@@ -27,6 +27,22 @@ let serverPath =
 open Owin.Security.AesDataProtectorProvider
 open System.Net
 
+type LoggingPipelineModule() =
+    inherit Microsoft.AspNet.SignalR.Hubs.HubPipelineModule() with 
+        override __.OnIncomingError(exceptionContext, invokerContext) =
+            let invokeMethod = invokerContext.MethodDescriptor
+            let args = String.Join(", ", invokerContext.Args)
+            Logary.Message.eventError(invokeMethod.Hub.Name + "." + invokeMethod.Name + "(" + args + ") exception:\r\n " + exceptionContext.Error.ToString()) |> writeLog
+            base.OnIncomingError(exceptionContext, invokerContext)
+
+        override __.OnBeforeIncoming context =
+            Logary.Message.eventDebug("=> Invoking " + context.MethodDescriptor.Hub.Name + "." + context.MethodDescriptor.Name) |> writeLog
+            base.OnBeforeIncoming context
+
+        override __.OnBeforeOutgoing context =
+            Logary.Message.eventDebug("<= Invoking " + context.Invocation.Hub + "." + context.Invocation.Method) |> writeLog
+            base.OnBeforeOutgoing context
+
 type MyWebStartup() =
 
     member __.Configuration(ap:Owin.IAppBuilder) =
@@ -37,6 +53,8 @@ type MyWebStartup() =
                (httpListener :?> HttpListener).IgnoreWriteExceptions <- true;
            with ex ->
                ()
+
+        Microsoft.AspNet.SignalR.GlobalHost.HubPipeline.AddModule(new LoggingPipelineModule()) |> ignore
 
         ap.UseAesDataProtectorProvider("mykey123") 
 
