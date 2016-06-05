@@ -76,7 +76,9 @@ function getItemValue(jQControl){
     if(jQControl.is(':checkbox') || jQControl.is(':radio')){
         return jQControl.prop('checked').toString();
     }else if(jQControl.hasClass('hasDatepicker')){
-        return jQControl.datepicker('getDate');
+        let dt = jQControl.datepicker('getDate');
+        if(dt!==null) { dt.setHours(0, -dt.getTimezoneOffset(), 0, 0); }
+        return dt;
     }else if(jQControl.is('span') || jQControl.is('p')){
         return jQControl.html();
     }else{

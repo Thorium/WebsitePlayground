@@ -79,6 +79,7 @@ group Build
 // Testing frameworks:
 //group Test
 //  source https://nuget.org/api/v2
+//  framework >= 4.0
 //  
 //  nuget canopy
 //  nuget FsUnit.xUnit
