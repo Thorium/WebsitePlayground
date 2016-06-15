@@ -13,7 +13,13 @@ export function initIndex(locale) {
     $("#foundedbefore").datepicker({ dateFormat: 'yy-mm-dd' });
             
     function doToggleMore(speed) {
-        $( "#toggleMoreIcon" ).toggleClass( "fa fa-angle-double-up", speed );
+        if ($('#toggleMoreIcon').attr('class') === 'fa fa-angle-double-down') {
+          $('#toggleMoreIcon').removeClass('fa fa-angle-double-down');
+          $('#toggleMoreIcon').addClass('fa fa-angle-double-up');
+        } else {
+          $('#toggleMoreIcon').removeClass('fa fa-angle-double-up');
+          $('#toggleMoreIcon').addClass('fa fa-angle-double-down');
+        }
         $( "#moreOptions" ).toggle( "blind", {}, speed );
     }
     

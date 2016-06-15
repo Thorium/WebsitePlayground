@@ -4,6 +4,7 @@ import signalhub = require("./signalhub");
 export function initResults(locale) {
     tools.setFormValues(tools.parseUrlPathParameters(window.location.href));
 
+    $(".pagination").hide();
     $("#foundedafter").datepicker({ dateFormat: 'yy-mm-dd' });
     $("#foundedbefore").datepicker({ dateFormat: 'yy-mm-dd' });
 

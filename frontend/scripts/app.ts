@@ -16,6 +16,13 @@ if (typeof jQuery === 'undefined') {
 }
 
 $(function() {
+    function doInit(locale) {
+        idx.initIndex(locale);
+        if(window.location.href.indexOf("company.html") > 0){ company.initCompany(locale); }
+        if(window.location.href.indexOf("results.html") > 0){ results.initResults(locale); }
+        $(document).foundation();
+    }
+
     signalhub.hubConnector.done(function () {
         window.onunload = undefined;
         window.onbeforeunload = undefined;
@@ -23,9 +30,12 @@ $(function() {
         // const htmlBody = $(document.body).html();
         // const localized = translate(locale,htmlBody);
         // $(document.body).html(localized);
-        idx.initIndex(locale);
-        if(window.location.href.indexOf("company.html") > 0){ company.initCompany(locale); }
-        if(window.location.href.indexOf("results.html") > 0){ results.initResults(locale); }
+
+        doInit(locale);
+        
+        // Refresh page if url hash part changes:
+        window.onhashchange = function() { doInit(locale); };
+
         
         $(".pageLoader").hide();
         $(".pageLoaded").show();

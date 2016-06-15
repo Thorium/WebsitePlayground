@@ -14,7 +14,7 @@ var CompanyWebNavBar = React.createClass<NavbarProps, any>({
     var companyUrl = "company.html" + (this.props.companyId!==""? "#/item/"+this.props.companyId : "");
     if(this.state.menuOn){
       menubar.push(
-        <div id="mainMenu" className="icon-bar three-up">
+        <div id="mainMenu" key="menubar" className="icon-bar three-up">
           <a className="item" href="index.html">
             <span className="white fa fa-search"></span>
             <p className="white">Search</p>
@@ -30,7 +30,7 @@ var CompanyWebNavBar = React.createClass<NavbarProps, any>({
         </div>
         );
     }
-    menutoggle.push(<section className="left-small">
+    menutoggle.push(<section key="left" className="left-small">
     <a id="hamburger" className="left-off-canvas-toggle menu-icon" href="#" onClick={this.handleClick}><span></span></a>
     </section>);
     return (
@@ -49,7 +49,7 @@ var CompanyWebNavBar = React.createClass<NavbarProps, any>({
   }
 });
 
-interface CompanyProps { company: any; buyStocks: any; }
+interface CompanyProps { key: any; company: any; buyStocks: any; }
 var AvailableCompany = React.createClass<CompanyProps, any>({
     handleClick: function(event) {
         this.props.buyStocks(this.props.company.CompanyName, 50);
@@ -60,10 +60,12 @@ var AvailableCompany = React.createClass<CompanyProps, any>({
         var company = this.props.company;
         var floatRight = {"float":"right"};
         if(company.Image!==null){
-            logoImage.push(<a className="th" href={company.Image.Fields}><img src={company.Image.Fields} /></a>);
+            logoImage.push(<a className="th" key={company.Id} href={company.Image.Fields}><img src={company.Image.Fields} /></a>);
         }
         if(company.Url!==null){
-            webPage.push(<span>Website: <a href={company.Url.Fields} target="_blank">{company.Url.Fields}</a></span>);
+            webPage.push(<span key={company.Url.Fields}>Website: 
+                           <a href={company.Url.Fields} target="_blank">{company.Url.Fields}</a>
+                         </span>);
         }
         return (
               <div className="panel searchresultItem">
@@ -85,8 +87,8 @@ var AvailableCompaniesList = React.createClass<CompaniesProps, any>({
       var buyTheseStocks = this.props.buyStocks;
       var companies = {};
       if(this.props.companies !== null && this.props.companies.length !== 0){
-          companies = _.map(this.props.companies, function(company) { 
-              return (<AvailableCompany company={company} buyStocks={buyTheseStocks} />);
+          companies = _.map(this.props.companies, function(company, idx) { 
+              return (<AvailableCompany key={idx} company={company} buyStocks={buyTheseStocks} />);
           });
       } else {
           companies = "No companies found.";

@@ -112,7 +112,8 @@ export function getFormValues(paramNames:Array<string>) {
 
 export function getFormValuesFrom(form, paramNames:Array<string>) {
 	let res = {};
-	const params = _.filter(paramNames, c => 
+    const paramNamesf = _.filter(paramNames, c => c !== "");
+	const params = _.filter(paramNamesf, c => 
         form.find('#'+c).is(":visible") || $('#'+c).attr('type') === 'hidden' || form.find('#'+c).hasClass("containsInput"));
 	_.each(params, p => { 
         res[p] = getItemValue(form.find('#'+p));
