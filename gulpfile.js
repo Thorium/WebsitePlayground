@@ -32,22 +32,24 @@ var gulp = require('gulp'),
 // Set to true for production build. gulp deploy --release ok
 var isRelease = gutil.env.release ? true : false;
 
-var excludeReact = isRelease? "!paket-files/reactjs/react-bower/react.js" : "!paket-files/reactjs/react-bower/react.min.js"
+var excludeReact = isRelease? "!paket-files/clientside/reactjs/react-bower/react.js" : "!paket-files/clientside/reactjs/react-bower/react.min.js"
 var excludeFoundation = isRelease? "!paket-files/**/foundation.css" : "!paket-files/**/foundation.min.css"
+
+var excludePaketGithubBinaries = "!paket-files/github.com/**/*.*"
 
 var files = {
     targetPath: 'frontend/dist',
     typescripts: ['frontend/scripts/*.ts', 'frontend/scripts/*.tsx'],
-    jslibs: ['paket-files/ajax.aspnetcdn.com/jquery.min.js',
-             'paket-files/lodash/lodash/dist/lodash.min.js',
-             'paket-files/reactjs/react-bower/react.min.js',
-             'paket-files/reactjs/react-bower/react.js',
+    jslibs: ['paket-files/clientside/ajax.aspnetcdn.com/jquery.min.js',
+             'paket-files/clientside/lodash/lodash/dist/lodash.min.js',
+             'paket-files/clientside/reactjs/react-bower/react.min.js',
+             'paket-files/clientside/reactjs/react-bower/react.js',
              'paket-files/**/*.js',
-              excludeReact], // Gulp is intelligent enough to not include same twice
+              excludeReact, excludePaketGithubBinaries], // Gulp is intelligent enough to not include same twice
 
     lessstyles: ['frontend/styles/*.less'],
     sassstyles: ['frontend/styles/*.scss'],
-    csslibs: ['paket-files/**/*.css', excludeFoundation],
+    csslibs: ['paket-files/**/*.css', excludeFoundation, excludePaketGithubBinaries],
     htmls: ['frontend/*.html'],
     statics: ['frontend/*.ico'],
     fonts: ['paket-files/**/*font*.svg',
@@ -56,7 +58,7 @@ var files = {
         'paket-files/**/*.otf',
         'paket-files/**/*.ttf',
         'paket-files/**/*.woff',
-        'paket-files/**/*.woff2'],
+        'paket-files/**/*.woff2', excludePaketGithubBinaries],
     images: 'frontend/img/**/*.*',
     jqueryImages: 'frontend/jqueryImages/**/*.*'
 };

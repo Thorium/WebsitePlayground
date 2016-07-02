@@ -37,8 +37,8 @@ export function validateFormWithInvalid(jqForm, callback, invalidcallback) {
         jqForm
             .on('invalid.fndtn.abide', function () { onInvalid(); })
             .on('valid.fndtn.abide', function () { onValid(); })
-            .on('valid', function () { onInvalid(); })
-            .on('invalid', function () { onValid(); })
+            .on('invalid', function () { onInvalid(); })
+            .on('valid', function () { onValid(); })
             .on('submit', Foundation.utils.debounce(function(e){ 
                 jqForm.off('submit');
                 formCache[document.location.href + "_" + jqForm.selector] = false;
