@@ -14,7 +14,8 @@ What are the key points:
 Technology-stack:
 
 - General: Git, Markdown
-- Backend: MariaDB (MySQL), Paket, F# (FSharp), TypeProviders, OWIN, SignalR (WebSockets/Long-Polling)
+- SQL-Server: SQLProvider supports any: MS-SQL/Postgres/Oracle/MySql/MariaDB/SQLite/MS-Access. Instructions for MariaDB is included.
+- Backend: F# (FSharp), Paket, TypeProviders, OWIN, SignalR (WebSockets/Long-Polling), Logary
 - Frontend: Gulp, React.js, Less, Foundation.css, FontAwesome, Lodash, jQuery / jQuery-UI, TypeScript / ES6
 - Maybe in the future: Crossroads.js, Rx/Rx.Js, FsUnit.xUnit, Canopy 
 
