@@ -3,7 +3,7 @@
 
 ### Database ###
 
-- First install [MariaDB](https://downloads.mariadb.org/). Version 10.0.20 or later.
+- First install [MariaDB](https://downloads.mariadb.org/). Version 10.0.20 or later. (MySQL should work as well, it's just a non-free version of MariaDB.) For different databases see the end of this file.
 - Ensure that the server is in the path: mysql -command should work. 
 - (Ensure that the server is running. To start server e.g. on Mac, run: `mysql.server start`.) 
 - Create a user and a database. To login to server: `mysql -u root -p`
@@ -15,6 +15,7 @@
 
 (This will also available as a script file: backend/sql/createuser.sql)
 - If you want graphical user interface for DB management, you may use MySQL Workbench: http://dev.mysql.com/downloads/workbench/
+
 
 ### Version control ###
 
@@ -88,3 +89,12 @@ If you have problems, you may miss somethig from the path. Try running the follo
 
 Installers should add paths. But if not, In Windows the path is modified from:
 Control Panel -> System -> Advanced System Settings -> Advanced -> Environment Variables -> PATH. Do not replace the existing one, just add with semicolon separated the new ones.
+
+##### How to run on a different database? #####
+
+- There are some other options for databases on folder `backend/sql/other`: MS-SQL script files or SQLite database file. You could also use PostgreSQL, Oracle or MsAccess but then you have to do your own database by looking the simple database structure provided.
+- Create this simple database to your system.
+- From `build.fsx` end of the file, comment/remove the two lines : `==> "database"` and `==> "demodata"`. This will disable auto-installation of MariaDB database.
+- Modify the design time SqlDataProvider parameters from `backend/Domain.fs`. MS-SQL connectionstring is like this: `@"Data Source=localhost; Initial Catalog=companyweb; Integrated Security=True"` and for SQLite like: `@"Data Source=C:\git\WebsitePlayground\backend\sql\other\database-sqlite.db;Version=3"`
+- Also modify the RuntimeDBConnectionString from `backend/app.config` correspondingly.
+- Maybe some code changes needed, your editor intellisense should help here. Try to build.

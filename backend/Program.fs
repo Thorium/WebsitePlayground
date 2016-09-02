@@ -17,9 +17,9 @@ let startServer() =
         withLogaryManager "WebsitePlayground" (
             withTargets [
                 // See Logary examples for advanced logging.
-                Console.create (Console.empty) (PointName.ofSingle "console")
+                Console.create (Console.empty) "console"
             ] >> withRules [
-                Rule.createForTarget (PointName.ofSingle "console")
+                Rule.createForTarget "console"
             ]
         ) |> run
     //Scheduler.doStuff()

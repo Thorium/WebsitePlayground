@@ -114,22 +114,22 @@ let DateTimeString (dt:DateTime) =
 let DateTimeNow() =
     DateTimeString System.DateTime.UtcNow
 
-let ExecuteSql (query : string) parameters =
-    async {
-       use rawSqlConnection = new MySqlConnection(cstr)
-       do! rawSqlConnection.OpenAsync() |> Async.AwaitTask
-//       Message.eventInfo (query) |> writeLog
-       use command = new MySqlCommand(query, rawSqlConnection)
-       parameters |> List.iter(fun (par:string*string) -> command.Parameters.AddWithValue(par) |> ignore)
-       let! affectedRows = command.ExecuteNonQueryAsync() |> Async.AwaitTask
-       match affectedRows with
-       | 0 -> 
-           "ExecuteSql 0 rows affected: " + query |> Logary.Message.eventWarn |> writeLog
-           ()
-       | x -> 
-           //"ExecuteSql " + x + " rows affected: " + query |> Logary.Message.eventWarn |> writeLog
-           ()
-    }
+//let ExecuteSql (query : string) parameters =
+//    async {
+//       use rawSqlConnection = new MySqlConnection(cstr)
+//       do! rawSqlConnection.OpenAsync() |> Async.AwaitTask
+////       Message.eventInfo (query) |> writeLog
+//       use command = new MySqlCommand(query, rawSqlConnection)
+//       parameters |> List.iter(fun (par:string*string) -> command.Parameters.AddWithValue(par) |> ignore)
+//       let! affectedRows = command.ExecuteNonQueryAsync() |> Async.AwaitTask
+//       match affectedRows with
+//       | 0 -> 
+//           "ExecuteSql 0 rows affected: " + query |> Logary.Message.eventWarn |> writeLog
+//           ()
+//       | x -> 
+//           //"ExecuteSql " + x + " rows affected: " + query |> Logary.Message.eventWarn |> writeLog
+//           ()
+//    }
 
 
 type Data.Common.DbDataReader with

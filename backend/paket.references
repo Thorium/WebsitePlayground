@@ -12,5 +12,4 @@ MySql.Data
 Newtonsoft.Json
 Owin.Compression
 Owin.Security.AesDataProtectorProvider
-Rx-Main
 SQLProvider

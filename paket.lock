@@ -1,15 +1,15 @@
+FRAMEWORK: >= NET40
 NUGET
   remote: https://www.nuget.org/api/v2
     FParsec (1.0.2)
     FSharp.Core (4.0.0.1)
     FSharp.Data (2.3.2)
-      Zlib.Portable (>= 1.11) - framework: portable-net45+sl5+win8, portable-net45+win8, portable-net45+win8+wp8+wpa81
-    Hopac (0.2.1)
+    Hopac (0.3.13)
       FSharp.Core (>= 3.1.2.5)
-    Logary (4.0.20)
+    Logary (4.0.101)
       FParsec (>= 1.0.2)
       FSharp.Core (>= 4.0.0.1)
-      Hopac (>= 0.2.1)
+      Hopac (>= 0.3.13)
       NodaTime (>= 1.3.2)
     Microsoft.AspNet.Cors (5.2.3)
     Microsoft.AspNet.Identity.Core (2.2.1)
@@ -24,8 +24,7 @@ NUGET
       Newtonsoft.Json (>= 6.0.4)
       Owin (>= 1.0)
     Microsoft.AspNet.WebApi.Client (5.2.3)
-      Microsoft.Net.Http (>= 2.2.22) - framework: portable-wp80+win+net45+wp81+wpa81
-      Newtonsoft.Json (>= 6.0.4) - framework: >= net45, portable-wp80+win+net45+wp81+wpa81
+      Newtonsoft.Json (>= 6.0.4) - framework: >= net45
     Microsoft.AspNet.WebApi.Core (5.2.3)
       Microsoft.AspNet.WebApi.Client (>= 5.2.3)
     Microsoft.AspNet.WebApi.Owin (5.2.3)
@@ -36,12 +35,6 @@ NUGET
       Microsoft.AspNet.WebApi.Owin (>= 5.2.3 < 5.3)
       Microsoft.Owin.Host.HttpListener (>= 2.0.2)
       Microsoft.Owin.Hosting (>= 2.0.2)
-    Microsoft.Bcl (1.1.10) - framework: portable-wp80+win+net45+wp81+wpa81
-      Microsoft.Bcl.Build (>= 1.0.14)
-    Microsoft.Bcl.Build (1.0.21) - import_targets: false, framework: portable-wp80+win+net45+wp81+wpa81
-    Microsoft.Net.Http (2.2.29) - framework: portable-wp80+win+net45+wp81+wpa81
-      Microsoft.Bcl (>= 1.1.10)
-      Microsoft.Bcl.Build (>= 1.0.14)
     Microsoft.Owin (3.0.1)
       Owin (>= 1.0)
     Microsoft.Owin.Cors (3.0.1)
@@ -83,7 +76,7 @@ NUGET
       Microsoft.Owin.FileSystems (>= 3.0.1)
       Owin (>= 1.0)
     MySql.Data (6.9.9)
-    Newtonsoft.Json (8.0.3)
+    Newtonsoft.Json (9.0.1)
     NodaTime (1.3.2)
     Owin (1.0)
     Owin.Compression (1.0.10)
@@ -92,28 +85,13 @@ NUGET
       Owin (>= 1.0.0-prerelease <= 1.0)
     Owin.Security.AesDataProtectorProvider (1.1)
       Microsoft.Owin.Security (>= 3.0.1)
-    Rx-Core (2.2.5)
-      Rx-Interfaces (>= 2.2.5)
-    Rx-Interfaces (2.2.5)
-    Rx-Linq (2.2.5)
-      Rx-Core (>= 2.2.5)
-      Rx-Interfaces (>= 2.2.5)
-    Rx-Main (2.2.5)
-      Rx-Core (>= 2.2.5)
-      Rx-Interfaces (>= 2.2.5)
-      Rx-Linq (>= 2.2.5)
-      Rx-PlatformServices (>= 2.2.5)
-    Rx-PlatformServices (2.2.5)
-      Rx-Core (>= 2.2.5)
-      Rx-Interfaces (>= 2.2.5)
-    SQLProvider (1.0.24)
-    Zlib.Portable (1.11) - framework: portable-net45+sl5+win8, portable-net45+win8, portable-net45+win8+wp8+wpa81
+    SQLProvider (1.0.31)
 
 GROUP Build
 NUGET
   remote: https://www.nuget.org/api/v2
-    FAKE (4.36)
-    FSharp.Configuration (0.6.1)
+    FAKE (4.39)
+    FSharp.Configuration (0.6.2)
 
 GROUP Clientside
 
@@ -128,20 +106,20 @@ GITHUB
   remote: aFarkas/html5shiv
     dist/html5shiv.min.js (a3c7567c5f7055f9b76230bbbc79967d0b9f7003)
   remote: reactjs/react-bower
-    react-dom.min.js (d9b4e773e1cf9c9222389ecbb07cd29f3ade09d1)
-    react.js (d9b4e773e1cf9c9222389ecbb07cd29f3ade09d1)
-    react.min.js (d9b4e773e1cf9c9222389ecbb07cd29f3ade09d1)
+    react-dom.min.js (4a2f923c09b6a90836589827ed2857d28a180717)
+    react.js (4a2f923c09b6a90836589827ed2857d28a180717)
+    react.min.js (4a2f923c09b6a90836589827ed2857d28a180717)
   remote: FortAwesome/Font-Awesome
-    css/font-awesome.min.css (c734a870286250f0e56d7585ec4c15fa8b87fec6)
-    fonts/fontawesome-webfont.eot (c734a870286250f0e56d7585ec4c15fa8b87fec6)
-    fonts/fontawesome-webfont.svg (c734a870286250f0e56d7585ec4c15fa8b87fec6)
-    fonts/fontawesome-webfont.ttf (c734a870286250f0e56d7585ec4c15fa8b87fec6)
-    fonts/fontawesome-webfont.woff (c734a870286250f0e56d7585ec4c15fa8b87fec6)
-    fonts/fontawesome-webfont.woff2 (c734a870286250f0e56d7585ec4c15fa8b87fec6)
+    css/font-awesome.min.css (ab00cfc7983f42a97aca84586f6f2110f844569d)
+    fonts/fontawesome-webfont.eot (ab00cfc7983f42a97aca84586f6f2110f844569d)
+    fonts/fontawesome-webfont.svg (ab00cfc7983f42a97aca84586f6f2110f844569d)
+    fonts/fontawesome-webfont.ttf (ab00cfc7983f42a97aca84586f6f2110f844569d)
+    fonts/fontawesome-webfont.woff (ab00cfc7983f42a97aca84586f6f2110f844569d)
+    fonts/fontawesome-webfont.woff2 (ab00cfc7983f42a97aca84586f6f2110f844569d)
   remote: lodash/lodash
-    dist/lodash.min.js (c01e7580cd39617f3c57690942efeccc09597da8)
+    dist/lodash.min.js (0d757fdc40e401da27c9bd6081bf7a16facea671)
   remote: Reactive-Extensions/RxJS
-    dist/rx.lite.min.js (29f85627e4ab71b050480f26dcc5d737f1b840f4)
+    dist/rx.lite.min.js (8fa95ac884181fb6cbff8ce7c1d669ffb190f5e4)
 HTTP
   remote: http://ajax.aspnetcdn.com
     jquery.min.js (/ajax/jQuery/jquery-2.2.1.min.js)
@@ -153,27 +131,27 @@ GROUP Typescript
 
 GITHUB
   remote: borisyankov/DefinitelyTyped
-    foundation/foundation.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
-    google.analytics/ga.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
-    jquery/jquery.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
-    jqueryui/jqueryui.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
-    lodash/lodash.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
-    react/react-addons-create-fragment.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
-    react/react-addons-css-transition-group.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
-    react/react-addons-linked-state-mixin.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
-    react/react-addons-perf.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
-    react/react-addons-pure-render-mixin.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
-    react/react-addons-test-utils.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
-    react/react-addons-transition-group.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
-    react/react-addons-update.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
-    react/react-dom.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
-    react/react-global.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
-    react/react.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
-    rx/rx-lite.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
-    rx/rx.async-lite.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
-    rx/rx.backpressure-lite.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
-    rx/rx.binding-lite.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
-    rx/rx.coincidence-lite.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
-    rx/rx.lite.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
-    rx/rx.time-lite.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
-    signalr/signalr.d.ts (ffd313adf9e5b86d9f04270e4e39b64720317352)
+    foundation/foundation.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
+    google.analytics/ga.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
+    jquery/jquery.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
+    jqueryui/jqueryui.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
+    lodash/lodash.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
+    react/react-addons-create-fragment.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
+    react/react-addons-css-transition-group.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
+    react/react-addons-linked-state-mixin.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
+    react/react-addons-perf.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
+    react/react-addons-pure-render-mixin.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
+    react/react-addons-test-utils.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
+    react/react-addons-transition-group.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
+    react/react-addons-update.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
+    react/react-dom.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
+    react/react-global.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
+    react/react.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
+    rx/rx-lite.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
+    rx/rx.async-lite.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
+    rx/rx.backpressure-lite.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
+    rx/rx.binding-lite.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
+    rx/rx.coincidence-lite.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
+    rx/rx.lite.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
+    rx/rx.time-lite.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
+    signalr/signalr.d.ts (388b9322ce823fb999a642a8dce939066a33411a)
