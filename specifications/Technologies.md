@@ -145,7 +145,7 @@ It is fetched through npm (the Node.js package manager).
 
 React.Js components are files that have extension `*.jsx` and they are in the js-folder. Downside is that you have to write HTML to JavaScript, but there are no good options. All *VM-frameworks (Angular2, Knockout, Aurelia, etc) have their problems.
 
-### Less ###
+### Less / Sass ###
 
 [Less](http://lesscss.org/) makes it possible to not repeat same html-colors etc. in the stylesheets:
 
@@ -154,6 +154,7 @@ React.Js components are files that have extension `*.jsx` and they are in the js
 
 Less-files are in the styles-folder and basically normal css-syntax is also valid less-syntax. There is a good tutorial on it's website.
 
+If you prefer [Sass](http://sass-lang.com/) over Less, just use it: it will also be parsed from the same styles-folder.
 
 ### Foundation.css ###
 

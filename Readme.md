@@ -23,6 +23,7 @@ Documentation:
 
 - [More about the Technology-stack](specifications/Technologies.md)
 - [How to install the environment](specifications/Deployment.md)
+- [General developer instructions](specifications/Development.md)
 
 
 There are two screens: 1) You can search companies. 2) CRUD-operations for companies.
