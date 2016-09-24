@@ -30,8 +30,15 @@ type TypeProviderConnection =
 
 let cstr = System.Configuration.ConfigurationManager.AppSettings.["RuntimeDBConnectionString"]
 let dbReadContext = 
-    if cstr = null then TypeProviderConnection.GetDataContext()
-    else TypeProviderConnection.GetDataContext cstr
+    let rec createCon x =
+        try
+            if cstr = null then TypeProviderConnection.GetDataContext()
+            else TypeProviderConnection.GetDataContext cstr
+        with
+        | :? System.Data.SqlClient.SqlException as ex when x < 3 ->
+            System.Threading.Thread.Sleep 50
+            createCon (x+1)
+    createCon 0
 
 type DataContext = TypeProviderConnection.dataContext
 

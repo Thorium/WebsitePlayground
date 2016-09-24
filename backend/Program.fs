@@ -13,13 +13,20 @@ let mutable server = Unchecked.defaultof<IDisposable>
 let mutable log = Unchecked.defaultof<IDisposable>
 
 let startServer() =
+    let fetchLogLevel =
+        match System.Configuration.ConfigurationManager.AppSettings.["LogLevel"].ToString().ToLower() with
+        | "error" -> LogLevel.Error
+        | "warn" -> LogLevel.Warn
+        | "debug" -> LogLevel.Debug
+        | _ -> LogLevel.Verbose
+
     log <-
         withLogaryManager "WebsitePlayground" (
             withTargets [
                 // See Logary examples for advanced logging.
                 Console.create (Console.empty) "console"
             ] >> withRules [
-                Rule.createForTarget "console"
+                Rule.createForTarget "console" |> Rule.setLevel fetchLogLevel
             ]
         ) |> run
     //Scheduler.doStuff()
