@@ -18,7 +18,7 @@ export function initCompany(locale) {
     }
     
     function parseFieldFromForm(){
-       const nonbuttons = _.filter($(":input"), function(i) { return i.type !== "button";});
+       const nonbuttons = _.filter($(":input"), i => (<HTMLInputElement>i).type !== "button");
        const ids = _.map(nonbuttons, function(i) { return i.id;});
        const values = tools.getFormValues(ids);
        const keys = Object.keys(values);

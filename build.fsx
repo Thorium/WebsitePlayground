@@ -46,9 +46,15 @@ Target "npm" (fun _ ->
 )
 /// Client side gulp-tasks
 Target "gulp" (fun _ ->
-    if snd(buildMode)="Release" || snd(buildMode)="release" then
-         runShell("gulp","deploy --release ok")
-    else runShell("gulp","deploy")
+    try
+        if snd(buildMode)="Release" || snd(buildMode)="release" then
+             runShell("gulp","deploy --release ok")
+        else runShell("gulp","deploy")
+    with
+    | _ -> 
+        let info = @"Gulp has to be in PATH. e.g in Windows: set path=%path%;%APPDATA%\npm\"
+        printfn "%s" info
+        reraise ()
 )
 
 /// Build the server side project
@@ -76,10 +82,16 @@ Target "startsql" (fun _ ->
 Target "database" (fun _ -> 
     //Note: mysql should be in Path.
     let path = Path.Combine("backend", "sql", "createtables.sql")
-    let info = @"MySQL have to be in PATH. e.g in Windows: set path=%path%;""c:\Program Files\MariaDB 10.0\bin\"""
-    printfn "%s" info
-    runShell("mysql","-u webuser -pp4ssw0rd -e \"source " + path + "\" --abort-source-on-error"))
- 
+    try
+       runShell("mysql","-u webuser -pp4ssw0rd -e \"source " + path + "\" --abort-source-on-error")
+    with
+      | _ -> 
+        let info = @"MySQL has to be in PATH. e.g in Windows: set path=%path%;""c:\Program Files\MariaDB 10.0\bin\"""
+        printfn "%s" info
+        printfn "And have you created the database user?"
+        printfn "mysql -u root -pPassword -e \"source backend\sql\createuser.sql\""
+        reraise ())
+
 /// Refresh the demo data for the database 
 Target "demodata" (fun _ ->
     let path = Path.Combine("backend", "sql", "createdemodata.sql")

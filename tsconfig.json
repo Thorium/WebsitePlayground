@@ -11,10 +11,11 @@
          "experimentalDecorators": true,
          "emitDecoratorMetadata": true
     },
-    "filesGlob": [
+    "files": [
         "./**/*.ts",
         "./**/*.tsx",
         "!./node_modules/**/*.ts",
-        "!./node_modules/**/*.tsx"
+        "!./node_modules/**/*.tsx",
+        "!./paket-files/**/*.d.ts"
     ]
 }
