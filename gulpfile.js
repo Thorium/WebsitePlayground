@@ -50,7 +50,7 @@ var files = {
     lessstyles: ['frontend/styles/*.less'],
     sassstyles: ['frontend/styles/*.scss'],
     csslibs: ['paket-files/**/*.css', excludeFoundation, excludePaketGithubBinaries],
-    htmls: ['frontend/*.html'],
+    htmls: ['frontend/**/*.html', '!frontend/dist/**/*.html'],
     statics: ['frontend/*.ico'],
     fonts: ['paket-files/**/*font*.svg',
         'frontend/fonts/*.*',
