@@ -85,7 +85,7 @@ NUGET
       Owin (>= 1.0.0-prerelease <= 1.0)
     Owin.Security.AesDataProtectorProvider (1.1)
       Microsoft.Owin.Security (>= 3.0.1)
-    SQLProvider (1.0.31)
+    SQLProvider (1.0.34)
 
 GROUP Build
 NUGET
