@@ -5,9 +5,9 @@ export function emitUrlPathParameters(dict) {
            return a; 
        } else if(dict[k] instanceof Date){
 		   dict[k].setHours(0, -dict[k].getTimezoneOffset(), 0, 0);
-           return a + "/"+k+"/"+dict[k].toISOString().replace("/", ""); 
+           return a + "/"+k+"/"+encodeURIComponent(dict[k].toISOString());
        } else {
-           return a + "/"+k+"/"+dict[k].replace("/", ""); 
+           return a + "/"+k+"/"+encodeURIComponent(dict[k]);
        }
     }
     return _.reduce(keys, qparam, "");
@@ -23,7 +23,7 @@ export function parseUrlPathParameters(url) {
     const items = items1.split("/");
     let res : any = {};
     for (var k = 0;k<items.length/2;k++) {
-        res[items[2*k]] = items[2*k+1];
+        res[items[2*k]] = decodeURIComponent(items[2*k+1]);
     }
     return res; 
 }
