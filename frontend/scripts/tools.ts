@@ -104,8 +104,10 @@ export function setFormValues(params) {
 
 export function getFormValues(paramNames:Array<string>) {
     let res = {};
-    const params = _.filter(paramNames, c => 
-        $('#'+c).is(":visible") || $('#'+c).attr('type') === 'hidden' || $('#'+c).hasClass("containsInput"));
+	const params = _.filter(paramNames, c => $('#'+c).is(":visible") || $('#'+c).attr('type') === 'hidden'
+                                           || $('#'+c).hasClass("containsInput")
+                                           || $('#'+c).prop('checked') );
+
 	_.each(params, p => { res[p] = getItemValue($('#'+p)); });
 	return res;
 }
@@ -113,8 +115,9 @@ export function getFormValues(paramNames:Array<string>) {
 export function getFormValuesFrom(form, paramNames:Array<string>) {
 	let res = {};
     const paramNamesf = _.filter(paramNames, c => c !== "");
-	const params = _.filter(paramNamesf, c => 
-        form.find('#'+c).is(":visible") || $('#'+c).attr('type') === 'hidden' || form.find('#'+c).hasClass("containsInput"));
+	const params = _.filter(paramNamesf, c => form.find('#'+c).is(":visible") || $('#'+c).attr('type') === 'hidden'
+                                           || form.find('#'+c).hasClass("containsInput")
+                                           || form.find('#'+c).prop('checked') );
 	_.each(params, p => { 
         res[p] = getItemValue(form.find('#'+p));
     });
@@ -155,7 +158,11 @@ export function parseFieldsFromForm(form){
    const ids = _.map(nonbuttons, (i:any) => i.id);
    const values = getFormValuesFrom(form, ids);
    const keys = Object.keys(values);
-   const tupleArray = _.map(keys, k => { return { Item1: k, Item2: values[k]};});
+   const tupleArray = _.map(keys, k => {
+       return k.indexOf("Date")>-1 ?
+           { Item1: k, Item2: new Date(values[k])} :
+           { Item1: k, Item2: values[k]};});
+
    return tupleArray;
 }
 export function onChangeInputs(inputs,callback) {
