@@ -29,18 +29,32 @@ type TypeProviderConnection =
         ResolutionPath=Mysqldatapath>
 
 let cstr = System.Configuration.ConfigurationManager.AppSettings.["RuntimeDBConnectionString"]
-let dbReadContext = 
+let internal createDbReadContext() = 
     let rec createCon x =
         try
             if cstr = null then TypeProviderConnection.GetDataContext()
             else TypeProviderConnection.GetDataContext cstr
         with
         | :? System.Data.SqlClient.SqlException as ex when x < 3 ->
+            Logary.Logger.log (Logary.Logging.getCurrentLogger()) (Logary.Message.eventWarn ("Error connecting SQL, retrying... " + ex.Message)) |> start
             System.Threading.Thread.Sleep 50
+            createCon (x+1)
+        | :? System.Data.SqlClient.SqlException as ex when x < 5 ->
+            Logary.Logger.log (Logary.Logging.getCurrentLogger()) (Logary.Message.eventWarn ("Error connecting SQL, retrying... " + ex.Message)) |> start
+            System.Threading.Thread.Sleep 1500
             createCon (x+1)
     createCon 0
 
 type DataContext = TypeProviderConnection.dataContext
+
+let mutable internal contextHolder = Unchecked.defaultof<Lazy<DataContext>>
+let dbReadContext() = 
+    if contextHolder = null || not (contextHolder.IsValueCreated) then
+        try
+            contextHolder <- lazy(createDbReadContext())
+        with
+        | e -> Logary.Logger.log (Logary.Logging.getCurrentLogger()) (Logary.Message.eventError ("SQL connection failed: " + e.Message)) |> start
+    contextHolder.Force()
 
 let logger = Logary.Logging.getCurrentLogger ()
 let writeLog x = Logary.Logger.log logger x |> start
@@ -150,6 +164,10 @@ type Data.Common.DbDataReader with
             }
         readitems []
 
+// WebApi routing: fails if once encoded "/" in paths.
+let doubleUrlEncode = System.Net.WebUtility.UrlEncode >> System.Net.WebUtility.UrlEncode
+let doubleUrlDecode = System.Net.WebUtility.UrlDecode >> System.Net.WebUtility.UrlDecode
+
 open System.IO
 let getRootedPath (path:string) =
     if Path.IsPathRooted path then 
@@ -205,6 +223,11 @@ let ``calculate SHA256 hash`` : string -> string =
     System.Text.Encoding.UTF8.GetBytes 
     >> System.Security.Cryptography.SHA256Managed.Create().ComputeHash
     >> Convert.ToBase64String
+
+let ``compare urlSafe hash`` clear hash =
+    let hash1 = clear |> ``calculate SHA256 hash`` |> doubleUrlDecode |> (fun x -> x.Replace("=",""))
+    let hash2 = hash |> doubleUrlDecode |> (fun x -> x.Replace("=",""))
+    hash1 = hash2
 
 let GetUnionCaseName (x:'a) = 
     match Microsoft.FSharp.Reflection.FSharpValue.GetUnionFields(x, typeof<'a>) with

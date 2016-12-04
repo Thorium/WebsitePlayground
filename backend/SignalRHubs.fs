@@ -37,7 +37,7 @@ type SignalHub() as this =
         async{
             let! hosts = 
                 query {
-                    for c in dbReadContext.Companyweb.Company do
+                    for c in dbReadContext().Companyweb.Company do
                     // join d in dbContext.Companyweb.Stocks on (c.Id = d.ForeignKey)
                     where (
                         c.Founded < searchparams.FoundedBefore
@@ -107,7 +107,7 @@ type CompanyHub() =
       transaction |> Async.StartAsTask
 
     member __.Read itemId = 
-        executeCrud dbReadContext itemId (fun e -> ())
+        executeCrud (dbReadContext()) itemId (fun e -> ())
         |> Async.StartAsTask
 
     member __.Update itemId data = 

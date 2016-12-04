@@ -9,7 +9,7 @@ import results = require('./results');
 
 // Here would be client-side routing and localization of html-content.
 
-if (typeof jQuery === 'undefined') {  
+if (typeof jQuery === 'undefined') {
     // ensure script loadings in FireFox.
     document.write('<script src="js/libs.min.js">\x3C/script>');
     document.location.reload(false);
@@ -18,8 +18,8 @@ if (typeof jQuery === 'undefined') {
 $(function() {
     function doInit(locale) {
         idx.initIndex(locale);
-        if(window.location.href.indexOf("company.html") > 0){ company.initCompany(locale); }
-        if(window.location.href.indexOf("results.html") > 0){ results.initResults(locale); }
+        if(window.location.href.indexOf("/company.html") > 0){ company.initCompany(locale); }
+        if(window.location.href.indexOf("/results.html") > 0){ results.initResults(locale); }
         $(document).foundation();
     }
 
@@ -33,11 +33,11 @@ $(function() {
         // $(document.body).html(localized);
 
         doInit(locale);
-        
+
         // Refresh page if url hash part changes:
         window.onhashchange = function() { doInit(locale); };
 
-        
+
         $(".pageLoader").hide();
         $(".pageLoaded").show();
         $(document).foundation();
