@@ -51,7 +51,8 @@ let mutable internal contextHolder = Unchecked.defaultof<Lazy<DataContext>>
 let dbReadContext() = 
     if contextHolder = null || not (contextHolder.IsValueCreated) then
         try
-            contextHolder <- lazy(createDbReadContext())
+            let itm = lazy(createDbReadContext())
+            contextHolder <- itm
         with
         | e -> Logary.Logger.log (Logary.Logging.getCurrentLogger()) (Logary.Message.eventError ("SQL connection failed: " + e.Message)) |> start
     contextHolder.Force()
