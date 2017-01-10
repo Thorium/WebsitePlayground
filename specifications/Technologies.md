@@ -170,7 +170,7 @@ Zurb [Foundation](http://foundation.zurb.com/) CSS is responsive stylesheet. It 
 - Vertical [Tabs](http://foundation.zurb.com/docs/components/tabs.html#tabs-deeplink-3)
 - ...and more.
 
-Or if you want to rather use Twitter Bootstarp 4, you can just start writing its tags, as it is also included in the infrastructure.
+Or if you want to rather use [Twitter Bootstrap 4](https://v4-alpha.getbootstrap.com/), you can just start writing its tags as it is included in the infrastructure as well.
 
 ### FontAwesome ###
 
