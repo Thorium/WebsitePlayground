@@ -170,6 +170,8 @@ Zurb [Foundation](http://foundation.zurb.com/) CSS is responsive stylesheet. It 
 - Vertical [Tabs](http://foundation.zurb.com/docs/components/tabs.html#tabs-deeplink-3)
 - ...and more.
 
+Or if you want to rather use Twitter Bootstarp 4, you can just start writing its tags, as it is also included in the infrastructure.
+
 ### FontAwesome ###
 
 To have icons in the user interface, we use [FontAwesome](http://fortawesome.github.io/Font-Awesome/) icon font. It has a [large collection](http://fortawesome.github.io/Font-Awesome/icons/) of vector graphic icons for user interface. They are used inside buttons, menus, etc. You use them like this: `<span class="fa fa-book"></span>`

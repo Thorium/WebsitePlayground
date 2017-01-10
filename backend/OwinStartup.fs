@@ -24,6 +24,22 @@ let serverPath =
     if not(Directory.Exists path) then Directory.CreateDirectory (path) |> ignore
     Microsoft.Owin.FileSystems.PhysicalFileSystem path
 
+(*
+let corsPolicy = Microsoft.Owin.Cors.CorsOptions(PolicyProvider = 
+    Microsoft.Owin.Cors.CorsPolicyProvider(PolicyResolver = fun c -> 
+        Task.FromResult(
+            let p = System.Web.Cors.CorsPolicy(
+                        AllowAnyHeader = true,
+                        AllowAnyMethod = true,
+                        AllowAnyOrigin = false,
+                        SupportsCredentials = true)
+            p.Origins.Add "http*://*.myserver.com"
+            p.Origins.Add "http://localhost"
+            if not(String.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings.["ServerAddress"])) then 
+                p.Origins.Add System.Configuration.ConfigurationManager.AppSettings.["ServerAddress"]
+            p
+        )))
+*)
 open Owin.Security.AesDataProtectorProvider
 open System.Net
 
@@ -64,7 +80,10 @@ type MyWebStartup() =
         |> fun app -> app.UseCompressionModule()
 
         //Allow cross domain
-        |> fun app -> app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll)
+        |> fun app -> 
+            app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll)
+            //app.UseCors(corsPolicy)
+
 
         //SignalR:
         |> fun app -> app.MapSignalR(hubConfig) |> ignore

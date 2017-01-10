@@ -16,7 +16,7 @@ Technology-stack:
 - General: Git, Markdown
 - SQL-Server: SQLProvider supports any: MS-SQL/Postgres/Oracle/MySql/MariaDB/SQLite/MS-Access. Instructions for MariaDB is included, MySql should work as well. Also some for SQLite database and MS-SQL scripts if you want to use those.
 - Backend: F# (FSharp), Paket, TypeProviders, OWIN, SignalR (WebSockets/Long-Polling), Logary
-- Frontend: Gulp, React.js, Less/Sass, Foundation.css, FontAwesome, Lodash, jQuery / jQuery-UI, TypeScript / ES6
+- Frontend: Gulp, React.js, Less/Sass, Bootstrap or Foundation.css, FontAwesome, Lodash, jQuery / jQuery-UI, TypeScript / ES6. Demo site is Foundation but infra supports Bootstrap notation as well.
 - Maybe in the future: Crossroads.js, Rx/Rx.Js, FsUnit.xUnit, Canopy 
 
 Documentation:

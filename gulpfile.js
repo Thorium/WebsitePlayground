@@ -13,7 +13,7 @@ var gulp = require('gulp'),
     sourcemaps = require('gulp-sourcemaps'),
     less = require('gulp-less'),
     sass = require('gulp-sass'),
-    gulpMerge = require('gulp-merge'),	
+    gulpMerge = require('gulp-merge'),
     mincss = require('gulp-minify-css'),
     flatten = require('gulp-flatten'),
     gulpif = require('gulp-if'),
@@ -44,6 +44,7 @@ var files = {
              'paket-files/clientside/lodash/lodash/dist/lodash.min.js',
              'paket-files/clientside/reactjs/react-bower/react.min.js',
              'paket-files/clientside/reactjs/react-bower/react.js',
+             'paket-files/clientside/npmcdn.com/tether.min.js',
              'paket-files/**/*.js',
               excludeReact, excludePaketGithubBinaries], // Gulp is intelligent enough to not include same twice
 
@@ -75,7 +76,7 @@ gulp.task('typeScripts', function () {
             entries: ['./frontend/scripts/_references.d.ts','frontend/scripts/app.ts'],
             transform: [reactify],
             debug: !isRelease})
-        .plugin('tsify', { 
+        .plugin('tsify', {
             /* noImplicitAny: true, */
             jsx: 'react',
             target: 'ES5' })
@@ -156,14 +157,14 @@ gulp.task('jqueryImages', function () { return gulp.src(files.jqueryImages).pipe
 gulp.task('fonts', function () { return gulp.src(files.fonts).pipe(flatten()).pipe(gulp.dest(files.targetPath + '/fonts'));});
 gulp.task('statics', function () { return gulp.src(files.statics).pipe(gulp.dest(files.targetPath));});
 gulp.task('maps', function () { return gulp.src('paket-files/**/*.map').pipe(flatten()).pipe(gulpif(!isRelease, gulp.dest(files.targetPath + '/js')));});
-gulp.task('htmls', function () { 
+gulp.task('htmls', function () {
     return gulp.src(files.htmls)
                .pipe(htmlhint('.htmlhintrc'))
 			   .pipe(htmlhint.reporter("htmlhint-stylish"))
 			   .pipe(htmlhint.failReporter({ suppress: true }))
 			   .on('error', errorHandler('HTML'))
 // Nice lint but gives wrong line numbers:
-//               .pipe(jshint.extract('always'))    
+//               .pipe(jshint.extract('always'))
 //               .pipe(jshint())
 //               .pipe(jshint.reporter('default'))
                .pipe(gulpif(isRelease, htmlmin({collapseWhitespace: true})))

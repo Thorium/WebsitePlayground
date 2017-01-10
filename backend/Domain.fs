@@ -18,18 +18,18 @@ open Logary
 
 [<Literal>]
 let Mysqldatapath = __SOURCE_DIRECTORY__ + @"/../packages/MySql.Data/lib/net45/"
-type TypeProviderConnection = 
+type TypeProviderConnection =
     SqlDataProvider< // Supports: MS SQL Server, SQLite, PostgreSQL, Oracle, MySQL (MariaDB), ODBC and MS Access
         ConnectionString = @"server = localhost; database = companyweb; uid = webuser;pwd = p4ssw0rd",
         DatabaseVendor = Common.DatabaseProviderTypes.MYSQL,
         IndividualsAmount=1000,
-        UseOptionTypes=true, 
+        UseOptionTypes=true,
         Owner="companyweb",
         CaseSensitivityChange = Common.CaseSensitivityChange.ORIGINAL,
         ResolutionPath=Mysqldatapath>
 
 let cstr = System.Configuration.ConfigurationManager.AppSettings.["RuntimeDBConnectionString"]
-let internal createDbReadContext() = 
+let internal createDbReadContext() =
     let rec createCon x =
         try
             if cstr = null then TypeProviderConnection.GetDataContext()
@@ -48,7 +48,7 @@ let internal createDbReadContext() =
 type DataContext = TypeProviderConnection.dataContext
 
 let mutable internal contextHolder = Unchecked.defaultof<Lazy<DataContext>>
-let dbReadContext() = 
+let dbReadContext() =
     if contextHolder = null || not (contextHolder.IsValueCreated) then
         try
             let itm = lazy(createDbReadContext())
@@ -91,22 +91,24 @@ let writeWithDbContext<'T> (func:TypeProviderConnection.dataContext -> 'T) =
     logmsg "started" System.Threading.Thread.CurrentThread.Name
     let res = func context
     match box res with
-    | :? Task as task -> 
-        let commit = Action<Task>(fun a -> 
-            logmsg "completed" System.Threading.Thread.CurrentThread.Name
-            scope.Complete()
+    | :? Task as task ->
+        let commit = Action<Task>(fun a ->
+            if scope<>null then
+                logmsg "completed" System.Threading.Thread.CurrentThread.Name
+                scope.Complete()
             )
         let commitTran1 = task.ContinueWith(commit, TaskContinuationOptions.OnlyOnRanToCompletion)
-        let commitTran2 = task.ContinueWith((fun _ -> 
+        let commitTran2 = task.ContinueWith((fun _ ->
             logmsg "failed" System.Threading.Thread.CurrentThread.Name), TaskContinuationOptions.NotOnRanToCompletion)
         res
     | item when item <> null && item.GetType().Name = "FSharpAsync`1" ->
         let msg = "Use writeWithDbContextAsync"
         msg |> Logary.Message.eventError |> writeLog
-        failwith msg 
-    | x -> 
-        logmsg "completed" System.Threading.Thread.CurrentThread.Name
-        scope.Complete()
+        failwith msg
+    | x ->
+        if scope<>null then
+            logmsg "completed" System.Threading.Thread.CurrentThread.Name
+            scope.Complete()
         res
 
 let writeWithDbContextAsync<'T> (func:TypeProviderConnection.dataContext -> Async<'T>) =
@@ -123,8 +125,9 @@ let writeWithDbContextAsync<'T> (func:TypeProviderConnection.dataContext -> Asyn
             |> Message.eventDebug |> writeLog
         logmsg "started" System.Threading.Thread.CurrentThread.Name
         let! res = func context
-        logmsg "completed" System.Threading.Thread.CurrentThread.Name
-        scope.Complete()
+        if scope<>null then
+            logmsg "completed" System.Threading.Thread.CurrentThread.Name
+            scope.Complete()
         return res
     }
 
@@ -145,17 +148,17 @@ let DateTimeNow() =
 //       parameters |> List.iter(fun (par:string*string) -> command.Parameters.AddWithValue(par) |> ignore)
 //       let! affectedRows = command.ExecuteNonQueryAsync() |> Async.AwaitTask
 //       match affectedRows with
-//       | 0 -> 
+//       | 0 ->
 //           "ExecuteSql 0 rows affected: " + query |> Logary.Message.eventWarn |> writeLog
 //           ()
-//       | x -> 
+//       | x ->
 //           //"ExecuteSql " + x + " rows affected: " + query |> Logary.Message.eventWarn |> writeLog
 //           ()
 //    }
 
 
 type Data.Common.DbDataReader with
-    member reader.CollectItems(collectfunc) = 
+    member reader.CollectItems(collectfunc) =
         let rec readitems acc =
             async {
                 let! moreitems = reader.ReadAsync() |> Async.AwaitTask
@@ -171,16 +174,16 @@ let doubleUrlDecode = System.Net.WebUtility.UrlDecode >> System.Net.WebUtility.U
 
 open System.IO
 let getRootedPath (path:string) =
-    if Path.IsPathRooted path then 
-        path 
-    else 
-        let parsed = 
+    if Path.IsPathRooted path then
+        path
+    else
+        let parsed =
             path.Split([|@"\"; "/"|], StringSplitOptions.None)
             |> Path.Combine
 #if INTERACTIVE
         let basePath = __SOURCE_DIRECTORY__
 #else
-        let basePath = 
+        let basePath =
             System.Reflection.Assembly.GetExecutingAssembly().Location
             |> Path.GetDirectoryName
 #endif
@@ -188,7 +191,7 @@ let getRootedPath (path:string) =
 
 type TypeProviderConnection.dataContext with
   /// SubmitUpdates() but on error ClearUpdates()
-  member x.SubmitUpdates2() = 
+  member x.SubmitUpdates2() =
     try x.SubmitUpdatesAsync()
     with
     | e -> Logary.Message.eventError (e.ToString() + "\r\n\r\n"+ System.Diagnostics.StackTrace(1, true).ToString()) |> writeLog
@@ -202,26 +205,26 @@ type TypeProviderConnection.dataContext with
 // | Before
 
 [<Serializable>]
-type SearchObject = { 
+type SearchObject = {
     // SearchDate: DateType Option;
     FoundedAfter: DateTime;
-    FoundedBefore: DateTime; 
-    CompanyName: string; 
-    CEOName: string Option; 
+    FoundedBefore: DateTime;
+    CompanyName: string;
+    CEOName: string Option;
 }
 
 [<Serializable>]
-type CompanySearchResult = { 
+type CompanySearchResult = {
     Id: uint32;
-    CompanyName: string; 
-    Url: string option; 
+    CompanyName: string;
+    Url: string option;
     Image: string option
 }
 
 // --- Common functions -----------------------------
 
 let ``calculate SHA256 hash`` : string -> string =
-    System.Text.Encoding.UTF8.GetBytes 
+    System.Text.Encoding.UTF8.GetBytes
     >> System.Security.Cryptography.SHA256Managed.Create().ComputeHash
     >> Convert.ToBase64String
 
@@ -230,6 +233,6 @@ let ``compare urlSafe hash`` clear hash =
     let hash2 = hash |> doubleUrlDecode |> (fun x -> x.Replace("=",""))
     hash1 = hash2
 
-let GetUnionCaseName (x:'a) = 
+let GetUnionCaseName (x:'a) =
     match Microsoft.FSharp.Reflection.FSharpValue.GetUnionFields(x, typeof<'a>) with
     | case, _ -> case.Name

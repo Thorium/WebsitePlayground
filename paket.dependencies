@@ -45,6 +45,9 @@ group Clientside
   http http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.1.min.map jquery.min.map
   http https://code.jquery.com/ui/1.11.4/jquery-ui.min.js
   http https://code.jquery.com/ui/1.11.4/themes/sunny/jquery-ui.min.css
+  http https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js
+  http https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css
+  http https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js
 
 //Typescript definitions
 group Typescript
@@ -62,7 +65,7 @@ group Typescript
   github borisyankov/DefinitelyTyped react/react-addons-update.d.ts
   github borisyankov/DefinitelyTyped react/react-global.d.ts
   github borisyankov/DefinitelyTyped lodash/lodash.d.ts
-  github borisyankov/DefinitelyTyped jquery/jquery.d.ts 
+  github borisyankov/DefinitelyTyped jquery/jquery.d.ts
   github borisyankov/DefinitelyTyped jqueryui/jqueryui.d.ts
   github borisyankov/DefinitelyTyped signalr/signalr.d.ts
   github borisyankov/DefinitelyTyped google.analytics/ga.d.ts
@@ -86,7 +89,7 @@ group Build
 //group Test
 //  source https://nuget.org/api/v2
 //  framework >= 4.0
-//  
+//
 //  nuget canopy
 //  nuget FsUnit.xUnit
 //  nuget xunit.core

@@ -85,7 +85,7 @@ NUGET
       Owin (>= 1.0.0-prerelease <= 1.0)
     Owin.Security.AesDataProtectorProvider (1.1)
       Microsoft.Owin.Security (>= 3.0.1)
-    SQLProvider (1.0.35)
+    SQLProvider (1.0.40)
 
 GROUP Build
 NUGET
@@ -127,6 +127,11 @@ HTTP
   remote: https://code.jquery.com
     jquery-ui.min.css (/ui/1.11.4/themes/sunny/jquery-ui.min.css)
     jquery-ui.min.js (/ui/1.11.4/jquery-ui.min.js)
+  remote: https://npmcdn.com
+    tether.min.js (/tether@1.2.4/dist/js/tether.min.js)
+  remote: https://maxcdn.bootstrapcdn.com
+    bootstrap.min.css (/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css)
+    bootstrap.min.js (/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js)
 GROUP Typescript
 
 GITHUB
