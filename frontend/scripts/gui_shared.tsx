@@ -7,15 +7,18 @@ var CompanyWebNavBar = React.createClass<NavbarProps, any>({
     this.setState({menuOn: !this.state.menuOn});
     return false;
   },
+  getLink: function (itm) {
+      return itm + ".html";
+  },
   render: function() {
-    var menutoggle = [];	
+    var menutoggle = [];
     var menubar = [];
 
-    var companyUrl = "company.html" + (this.props.companyId!==""? "#/item/"+this.props.companyId : "");
+    var companyUrl = this.getLink("company") + (this.props.companyId!==""? "#/item/"+this.props.companyId : "");
     if(this.state.menuOn){
       menubar.push(
         <div id="mainMenu" key="menubar" className="icon-bar three-up">
-          <a className="item" href="index.html">
+          <a className="item" href={this.getLink("index")}>
             <span className="white fa fa-search"></span>
             <p className="white">Search</p>
           </a>
@@ -38,7 +41,7 @@ var CompanyWebNavBar = React.createClass<NavbarProps, any>({
 		<nav className="tab-bar desktop-navbar">
 		  {menutoggle}
 		  <section className="middle tab-bar-section middletopic">
-            <a className="white mainTitle" href="index.html">Company Web</a>
+            <a className="white mainTitle" href={this.getLink("index")}>Company Web</a>
 	      </section>
 		  <section className="right">
 		  </section>
@@ -63,7 +66,7 @@ var AvailableCompany = React.createClass<CompanyProps, any>({
             logoImage.push(<a className="th" key={company.Id} href={company.Image.Fields}><img src={company.Image.Fields} /></a>);
         }
         if(company.Url!==null){
-            webPage.push(<span key={company.Url.Fields}>Website: 
+            webPage.push(<span key={company.Url.Fields}>Website:
                            <a href={company.Url.Fields} target="_blank">{company.Url.Fields}</a>
                          </span>);
         }
@@ -87,7 +90,7 @@ var AvailableCompaniesList = React.createClass<CompaniesProps, any>({
       var buyTheseStocks = this.props.buyStocks;
       var companies = {};
       if(this.props.companies !== null && this.props.companies.length !== 0){
-          companies = _.map(this.props.companies, function(company, idx) { 
+          companies = _.map(this.props.companies, function(company, idx) {
               return (<AvailableCompany key={idx} company={company} buyStocks={buyTheseStocks} />);
           });
       } else {

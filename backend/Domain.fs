@@ -94,8 +94,11 @@ let writeWithDbContext<'T> (func:TypeProviderConnection.dataContext -> 'T) =
     | :? Task as task ->
         let commit = Action<Task>(fun a ->
             if scope<>null then
-                logmsg "completed" System.Threading.Thread.CurrentThread.Name
-                scope.Complete()
+                try
+                    scope.Complete()
+                    logmsg "completed" System.Threading.Thread.CurrentThread.Name
+                with
+                | :? ObjectDisposedException -> ()
             )
         let commitTran1 = task.ContinueWith(commit, TaskContinuationOptions.OnlyOnRanToCompletion)
         let commitTran2 = task.ContinueWith((fun _ ->
@@ -107,8 +110,11 @@ let writeWithDbContext<'T> (func:TypeProviderConnection.dataContext -> 'T) =
         failwith msg
     | x ->
         if scope<>null then
-            logmsg "completed" System.Threading.Thread.CurrentThread.Name
-            scope.Complete()
+            try
+                scope.Complete()
+                logmsg "completed" System.Threading.Thread.CurrentThread.Name
+            with
+            | :? ObjectDisposedException -> ()
         res
 
 let writeWithDbContextAsync<'T> (func:TypeProviderConnection.dataContext -> Async<'T>) =
@@ -195,7 +201,10 @@ type TypeProviderConnection.dataContext with
     try x.SubmitUpdatesAsync()
     with
     | e -> Logary.Message.eventError (e.ToString() + "\r\n\r\n"+ System.Diagnostics.StackTrace(1, true).ToString()) |> writeLog
-           x.ClearUpdates() |> ignore
+           try
+               x.ClearUpdates() |> ignore
+           with
+           | ex2 -> Logary.Logger.log logger (Logary.Message.eventError (ex2.ToString())) |> start
            reraise()
 
 // --- Domain model, system actions -----------------------------
