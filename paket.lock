@@ -6,6 +6,8 @@ NUGET
     FSharp.Data (2.3.2)
     Hopac (0.3.13)
       FSharp.Core (>= 3.1.2.5)
+    Kentor.OwinCookieSaver (1.1.1)
+      Microsoft.Owin (>= 3.0)
     Logary (4.0.101)
       FParsec (>= 1.0.2)
       FSharp.Core (>= 4.0.0.1)
@@ -85,7 +87,7 @@ NUGET
       Owin (>= 1.0.0-prerelease <= 1.0)
     Owin.Security.AesDataProtectorProvider (1.1)
       Microsoft.Owin.Security (>= 3.0.1)
-    SQLProvider (1.0.40)
+    SQLProvider (1.0.43)
 
 GROUP Build
 NUGET

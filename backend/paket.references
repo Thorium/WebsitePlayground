@@ -1,5 +1,6 @@
 FSharp.Data
 Logary
+Kentor.OwinCookieSaver
 Microsoft.AspNet.SignalR.Core
 Microsoft.AspNet.WebApi.OwinSelfHost
 Microsoft.Owin.Cors

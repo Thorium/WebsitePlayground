@@ -17,6 +17,7 @@ nuget MySql.Data
 // nuget System.Reactive
 nuget SQLProvider
 nuget Logary
+nuget Kentor.OwinCookieSaver
 
 // Client side, Javascript: (Please use minified, save some build time)
 group Clientside

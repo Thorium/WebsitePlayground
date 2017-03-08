@@ -76,7 +76,7 @@ type MyWebStartup() =
 
         //OWIN Component registrations here...
         ap.UseErrorPage(new ErrorPageOptions(ShowExceptionDetails = displayErrors))
-
+        |> fun app -> ap.UseKentorOwinCookieSaver()
         |> fun app -> app.UseCompressionModule()
 
         //Allow cross domain

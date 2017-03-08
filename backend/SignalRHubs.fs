@@ -35,7 +35,7 @@ type SignalHub() as this =
             | Some(ceo) -> ceo
 
         async{
-            let! hosts = 
+            let! companies = 
                 query {
                     for c in dbReadContext().Companyweb.Company do
                     // join d in dbContext.Companyweb.Stocks on (c.Id = d.ForeignKey)
@@ -51,8 +51,8 @@ type SignalHub() as this =
                             Url = c.WebSite;
                             Image = c.LogoUrl
                             }) 
-                } |> Seq.executeQueryAsync
-            this.Clients.Caller.ListCompanies hosts |> ignore
+                } |> List.executeQueryAsync
+            this.Clients.Caller.ListCompanies companies |> ignore
         } |> Async.StartAsTask
 
     //[<Authorize(Roles = "loggedin")>]
