@@ -12,6 +12,7 @@ open System.Threading.Tasks
 open MySql.Data.MySqlClient
 open Hopac
 open Logary
+open Logary.Logger
 
 // --- SQL-Server connection ------------------------------------
 
@@ -36,11 +37,11 @@ let internal createDbReadContext() =
             else TypeProviderConnection.GetDataContext cstr
         with
         | :? System.Data.SqlClient.SqlException as ex when x < 3 ->
-            Logary.Logger.log (Logary.Logging.getCurrentLogger()) (Logary.Message.eventWarn ("Error connecting SQL, retrying... " + ex.Message)) |> start
+            logSimple (Logary.Logging.getCurrentLogger()) (Logary.Message.eventWarn ("Error connecting SQL, retrying... " + ex.Message))
             System.Threading.Thread.Sleep 50
             createCon (x+1)
         | :? System.Data.SqlClient.SqlException as ex when x < 5 ->
-            Logary.Logger.log (Logary.Logging.getCurrentLogger()) (Logary.Message.eventWarn ("Error connecting SQL, retrying... " + ex.Message)) |> start
+            logSimple (Logary.Logging.getCurrentLogger()) (Logary.Message.eventWarn ("Error connecting SQL, retrying... " + ex.Message)) 
             System.Threading.Thread.Sleep 1500
             createCon (x+1)
     createCon 0
@@ -54,11 +55,11 @@ let dbReadContext() =
             let itm = lazy(createDbReadContext())
             contextHolder <- itm
         with
-        | e -> Logary.Logger.log (Logary.Logging.getCurrentLogger()) (Logary.Message.eventError ("SQL connection failed: " + e.Message)) |> start
+        | e -> logSimple (Logary.Logging.getCurrentLogger()) (Logary.Message.eventError ("SQL connection failed: " + e.Message))
     contextHolder.Force()
 
 let logger = Logary.Logging.getCurrentLogger ()
-let writeLog x = Logary.Logger.log logger x |> start
+let writeLog x = logSimple logger x
 
 let writeWithDbContextManualComplete<'T>() =
     let isMono = Type.GetType ("Mono.Runtime") <> null
@@ -204,7 +205,7 @@ type TypeProviderConnection.dataContext with
            try
                x.ClearUpdates() |> ignore
            with
-           | ex2 -> Logary.Logger.log logger (Logary.Message.eventError (ex2.ToString())) |> start
+           | ex2 -> logSimple logger (Logary.Message.eventError (ex2.ToString()))
            reraise()
 
 // --- Domain model, system actions -----------------------------

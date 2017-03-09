@@ -2,16 +2,17 @@ FRAMEWORK: >= NET40
 NUGET
   remote: https://www.nuget.org/api/v2
     FParsec (1.0.2)
-    FSharp.Core (4.0.0.1)
+    FSharp.Core (4.1)
+      System.ValueTuple (>= 4.3)
     FSharp.Data (2.3.2)
-    Hopac (0.3.13)
+    Hopac (0.3.23)
       FSharp.Core (>= 3.1.2.5)
     Kentor.OwinCookieSaver (1.1.1)
       Microsoft.Owin (>= 3.0)
-    Logary (4.0.101)
+    Logary (4.0.311)
       FParsec (>= 1.0.2)
       FSharp.Core (>= 4.0.0.1)
-      Hopac (>= 0.3.13)
+      Hopac (>= 0.3.23)
       NodaTime (>= 1.3.2)
     Microsoft.AspNet.Cors (5.2.3)
     Microsoft.AspNet.Identity.Core (2.2.1)
@@ -79,21 +80,22 @@ NUGET
       Owin (>= 1.0)
     MySql.Data (6.9.9)
     Newtonsoft.Json (9.0.1)
-    NodaTime (1.3.2)
+    NodaTime (1.3.3)
     Owin (1.0)
-    Owin.Compression (1.0.12)
-      FSharp.Core (>= 4.0.0.1 < 4.0.1)
+    Owin.Compression (1.0.13)
+      FSharp.Core (>= 4.1 < 5.0)
       Microsoft.Owin (>= 3.0.1 < 3.1)
       Owin (>= 1.0.0-prerelease <= 1.0)
     Owin.Security.AesDataProtectorProvider (1.1)
       Microsoft.Owin.Security (>= 3.0.1)
     SQLProvider (1.0.43)
+    System.ValueTuple (4.3)
 
 GROUP Build
 NUGET
   remote: https://www.nuget.org/api/v2
-    FAKE (4.39)
-    FSharp.Configuration (0.6.2)
+    FAKE (4.52)
+    FSharp.Configuration (0.6.4)
 
 GROUP Clientside
 
@@ -108,20 +110,18 @@ GITHUB
   remote: aFarkas/html5shiv
     dist/html5shiv.min.js (a3c7567c5f7055f9b76230bbbc79967d0b9f7003)
   remote: reactjs/react-bower
-    react-dom.min.js (412983d5d56fc955e9c8a9c8c6d4e6a4717ad6b2)
-    react.js (412983d5d56fc955e9c8a9c8c6d4e6a4717ad6b2)
-    react.min.js (412983d5d56fc955e9c8a9c8c6d4e6a4717ad6b2)
+    react-dom.min.js (fb585ecef0da6d49b01c8f7621f7a56dee52aab0)
+    react.js (fb585ecef0da6d49b01c8f7621f7a56dee52aab0)
+    react.min.js (fb585ecef0da6d49b01c8f7621f7a56dee52aab0)
   remote: FortAwesome/Font-Awesome
-    css/font-awesome.min.css (48a7d9db28d450571a0882810d1591a2fadc39c6)
-    fonts/fontawesome-webfont.eot (48a7d9db28d450571a0882810d1591a2fadc39c6)
-    fonts/fontawesome-webfont.svg (48a7d9db28d450571a0882810d1591a2fadc39c6)
-    fonts/fontawesome-webfont.ttf (48a7d9db28d450571a0882810d1591a2fadc39c6)
-    fonts/fontawesome-webfont.woff (48a7d9db28d450571a0882810d1591a2fadc39c6)
-    fonts/fontawesome-webfont.woff2 (48a7d9db28d450571a0882810d1591a2fadc39c6)
-  remote: lodash/lodash
-    dist/lodash.min.js (320ef6f933f1cd1a6673a447142237affea4306d)
+    css/font-awesome.min.css (04dad1e192b129ab09cddcd9b1aefb8b189c8d79)
+    fonts/fontawesome-webfont.eot (04dad1e192b129ab09cddcd9b1aefb8b189c8d79)
+    fonts/fontawesome-webfont.svg (04dad1e192b129ab09cddcd9b1aefb8b189c8d79)
+    fonts/fontawesome-webfont.ttf (04dad1e192b129ab09cddcd9b1aefb8b189c8d79)
+    fonts/fontawesome-webfont.woff (04dad1e192b129ab09cddcd9b1aefb8b189c8d79)
+    fonts/fontawesome-webfont.woff2 (04dad1e192b129ab09cddcd9b1aefb8b189c8d79)
   remote: Reactive-Extensions/RxJS
-    dist/rx.lite.min.js (8fa95ac884181fb6cbff8ce7c1d669ffb190f5e4)
+    dist/rx.lite.min.js (71edc4a9cd827537ec8498e8c77ee38b9ecd417d)
 HTTP
   remote: http://ajax.aspnetcdn.com
     jquery.min.js (/ajax/jQuery/jquery-2.2.1.min.js)
@@ -134,15 +134,20 @@ HTTP
   remote: https://maxcdn.bootstrapcdn.com
     bootstrap.min.css (/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css)
     bootstrap.min.js (/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js)
+  remote: https://raw.githubusercontent.com
+    lodash.min.js (/lodash/lodash/4.17.4/dist/lodash.min.js)
 GROUP Typescript
 
 GITHUB
   remote: borisyankov/DefinitelyTyped
     foundation/foundation.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
     google.analytics/ga.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
+    googlemaps/google.maps.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
     jquery/jquery.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
     jqueryui/jqueryui.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
+    knockout/knockout.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
     lodash/lodash.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
+    mustache/mustache.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
     react/react-addons-create-fragment.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
     react/react-addons-css-transition-group.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
     react/react-addons-linked-state-mixin.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
@@ -162,3 +167,4 @@ GITHUB
     rx/rx.lite.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
     rx/rx.time-lite.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
     signalr/signalr.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
+    yamljs/yamljs.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)

@@ -37,7 +37,6 @@ group Clientside
   github FortAwesome/Font-Awesome fonts/fontawesome-webfont.ttf
   github FortAwesome/Font-Awesome fonts/fontawesome-webfont.woff
   github FortAwesome/Font-Awesome fonts/fontawesome-webfont.woff2
-  github lodash/lodash dist/lodash.min.js
   github Reactive-Extensions/RxJS dist/rx.lite.min.js
   // other possible:
   // danielm/uploader booncon/slippry janl/mustache.js shutterstock/rickshaw
@@ -49,6 +48,7 @@ group Clientside
   http https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js
   http https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css
   http https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js
+  http https://raw.githubusercontent.com/lodash/lodash/4.17.4/dist/lodash.min.js
 
 //Typescript definitions
 group Typescript
@@ -97,4 +97,3 @@ group Build
 //  nuget xunit.abstractions
 //  nuget xunit.runner.visualstudio >= 2.0 version_in_path: true
 //  nuget xunit.runner.console
-//  nuget PhantomJS
