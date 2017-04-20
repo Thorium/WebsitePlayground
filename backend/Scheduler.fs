@@ -6,12 +6,12 @@ open FSharp.Data.Sql
 
 type ScheduledEventType =
 | Once
-| Recurring 
+| Recurring
 
 /// Async timer to perform actions
 let timer eventType interval scheduledAction = async {
     match eventType with
-    | Once -> 
+    | Once ->
         do! interval |> Async.Sleep
         do! scheduledAction()
     | Recurring ->
@@ -20,7 +20,10 @@ let timer eventType interval scheduledAction = async {
             try
                 do! scheduledAction()
             with // if error on recurring action, just log and skip one
-            | e -> Logary.Message.eventError (e.ToString() + "\r\n\r\n"+ System.Diagnostics.StackTrace(1, true).ToString()) |> writeLog
+            | e -> Logary.Message.eventError "Scheduler failure: {err} \r\n\r\n {stack}"
+                   |> Logary.Message.setField "err" (e.ToString())
+                   |> Logary.Message.setField "stack " (System.Diagnostics.StackTrace(1, true).ToString())
+                   |> writeLog
 }
 
 // Basic idea from: http://msdn.microsoft.com/en-us/library/ee370246.aspx

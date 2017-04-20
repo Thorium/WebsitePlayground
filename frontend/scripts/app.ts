@@ -24,8 +24,8 @@ $(function() {
     }
 
     signalhub.hubConnector.done(function () {
-        window.onunload = undefined;
-        window.onbeforeunload = undefined;
+        // window.onunload = undefined;
+        // window.onbeforeunload = undefined;
         // const nav:any = navigator;
         const locale = "en"; // (nav.language || nav.userLanguage).substring(0,2);
         // const htmlBody = $(document.body).html();

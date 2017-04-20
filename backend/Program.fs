@@ -11,6 +11,8 @@ open Hopac
 
 let mutable server = Unchecked.defaultof<IDisposable>
 let mutable log = Unchecked.defaultof<IDisposable>
+let hostName = System.Net.Dns.GetHostName()
+let serverPath = System.Reflection.Assembly.GetExecutingAssembly().Location |> System.IO.Path.GetDirectoryName
 
 let startServer() =
     let fetchLogLevel =
@@ -24,10 +26,12 @@ let startServer() =
         withLogaryManager "WebsitePlayground" (
             withTargets [
                 // See Logary examples for advanced logging.
-                Console.create (Console.empty) "console"
+                LiterateConsole.create (LiterateConsole.empty) "console"
             ] >> withRules [
                 Rule.createForTarget "console" |> Rule.setLevel fetchLogLevel
-            ]
+            ] >> withMiddleware (fun next msg ->
+                  msg |> Message.setContextValue "host" (String hostName) |> Message.setContextValue "path" (String serverPath)
+            )
         ) |> run
     //Scheduler.doStuff()
 
@@ -48,7 +52,6 @@ let startServer() =
     // You probably need adnmin rights to start a web server:
     server <- Microsoft.Owin.Hosting.WebApp.Start<MyWebStartup> options
 
-    let logger = Logging.getCurrentLogger ()
     Message.eventInfo ("Server started.") |> writeLog
 
 let stopServer() =
@@ -65,16 +68,16 @@ type WinService() =
     inherit ServiceBase(ServiceName = "companyweb")
     override x.OnStart(args) = startServer(); base.OnStart(args)
     override x.OnStop() = stopServer(); base.OnStop()
-    override x.Dispose(disposing) = 
+    override x.Dispose(disposing) =
         if disposing then stopServer()
         base.Dispose(true)
 
 [<System.ComponentModel.RunInstaller(true)>]
 type public FSharpServiceInstaller() =
     inherit System.Configuration.Install.Installer()
-    do 
+    do
         new ServiceProcessInstaller(Account = ServiceAccount.LocalSystem) |> base.Installers.Add |> ignore
-        new ServiceInstaller( 
+        new ServiceInstaller(
             DisplayName = "companyweb", ServiceName = "companyweb", StartType = ServiceStartMode.Automatic )
         |> base.Installers.Add |> ignore
 
@@ -82,7 +85,7 @@ type public FSharpServiceInstaller() =
 #else
 [<EntryPoint>]
 #endif
-let main args = 
+let main args =
     if Environment.UserInteractive || Type.GetType ("Mono.Runtime") <> null then
         startServer()
         Message.eventInfo "Press Enter to stop & quit." |> writeLog

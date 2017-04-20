@@ -6,7 +6,7 @@ open FSharp.Data
 open FSharp.Data.Sql
 open FSharp.Data.Sql.Common
 open Microsoft.AspNet.SignalR
-open Microsoft.AspNet.SignalR.Hubs 
+open Microsoft.AspNet.SignalR.Hubs
 open System.Threading.Tasks
 
 type IMessageToClient =  // Server can push data to single or all clients
@@ -16,17 +16,19 @@ type IMessageToClient =  // Server can push data to single or all clients
 let rnd = Random()
 open System.Security.Claims
 open Logary
+let dbContext = dbReadContext()
 
 // Example of queries and real-time communtication
 [<HubName("SignalHub")>]
-type SignalHub() as this = 
+type SignalHub() as this =
     inherit Hub<IMessageToClient>()
 
     override __.OnConnected() =
         let t = base.OnConnected()
-        Message.eventInfo ("Client connected: " + this.Context.ConnectionId) |> writeLog
+        Message.eventInfo "Client connected: {clientId}" |> Message.setField "clientId" this.Context.ConnectionId |> writeLog
         // We could do authentication check here.
         t
+
 
     member __.SearchCompanies (searchparams:SearchObject) =
         let ceoFilter =
@@ -34,35 +36,33 @@ type SignalHub() as this =
             | None -> ""
             | Some(ceo) -> ceo
 
-        async{
-            let! companies = 
+        async {
+            let! companies =
                 query {
-                    for c in dbReadContext().Companyweb.Company do
-                    // join d in dbContext.Companyweb.Stocks on (c.Id = d.ForeignKey)
+                    for c in dbContext.Companyweb.Company do
                     where (
                         c.Founded < searchparams.FoundedBefore
                         && c.Founded > searchparams.FoundedAfter
                         && c.Name =% "%" + searchparams.CompanyName.ToUpper() + "%"
                         && c.Ceo =% "%" + ceoFilter + "%"
                     )
-                    select ({
-                            Id = c.Id;
-                            CompanyName = c.Name; 
-                            Url = c.WebSite;
-                            Image = c.LogoUrl
-                            }) 
-                } |> List.executeQueryAsync
-            this.Clients.Caller.ListCompanies companies |> ignore
+                    select {
+                        CompanyName = c.Name;
+                        Url = c.WebSite;
+                        Image = c.LogoUrl
+                    }
+                } |> Array.executeQueryAsync
+            return companies
         } |> Async.StartAsTask
 
     //[<Authorize(Roles = "loggedin")>]
-    member __.BuyStocks (company:string) (amount:int) = 
+    member __.BuyStocks (company:string) (amount:int) =
         //Signal to all users is as easy as signal to single user:
         this.Clients.All.NotifyDeal ("Announcement to all users: " + (string)amount + " of " + company + " stocks just sold!")
 
 // Example of basic CRUD
 [<HubName("CompanyHub")>]
-type CompanyHub() = 
+type CompanyHub() =
     inherit Hub<IMessageToClient>()
 
     let executeCrud (dbContext:DataContext) itemId actionToEntity =
@@ -82,8 +82,8 @@ type CompanyHub() =
 
     let ``map data from form to database format`` (formData: seq<string*obj>) =
             formData // Add missing fields
-            |> Seq.append [| 
-                    "LastUpdate", DateTimeNow() |> box ; 
+            |> Seq.append [|
+                    "LastUpdate", DateTimeNow() |> box ;
                 |]
             |> Seq.map (
                 fun (key, valu) ->  // Convert some fields
@@ -94,7 +94,7 @@ type CompanyHub() =
                     | _ -> key,valu)
 
 
-    member __.Create (data: seq<string*obj>) = 
+    member __.Create (data: seq<string*obj>) =
       let transaction =
         writeWithDbContextAsync <| fun (dbContext:DataContext) ->
             async {
@@ -103,19 +103,19 @@ type CompanyHub() =
                              |> dbContext.Companyweb.Company.Create
                 do! dbContext.SubmitUpdates2()
                 return entity.ColumnValues
-            } 
+            }
       transaction |> Async.StartAsTask
 
-    member __.Read itemId = 
+    member __.Read itemId =
         executeCrud (dbReadContext()) itemId (fun e -> ())
         |> Async.StartAsTask
 
-    member __.Update itemId data = 
+    member __.Update itemId data =
       writeWithDbContext <| fun (dbContext:DataContext) ->
         executeCrud dbContext itemId (fun e -> data |> ``map data from form to database format`` |> Seq.iter(fun (k,o) -> e.SetColumn(k, o)))
         |> Async.StartAsTask
 
-    member __.Delete itemId = 
+    member __.Delete itemId =
       writeWithDbContext <| fun (dbContext:DataContext) ->
         executeCrud dbContext itemId (fun e -> e.Delete())
         |> Async.StartAsTask

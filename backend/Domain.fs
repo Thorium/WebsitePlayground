@@ -29,6 +29,7 @@ type TypeProviderConnection =
         CaseSensitivityChange = Common.CaseSensitivityChange.ORIGINAL,
         ResolutionPath=Mysqldatapath>
 
+let logger = lazy(Logary.Logging.getCurrentLogger())
 let cstr = System.Configuration.ConfigurationManager.AppSettings.["RuntimeDBConnectionString"]
 let internal createDbReadContext() =
     let rec createCon x =
@@ -37,11 +38,11 @@ let internal createDbReadContext() =
             else TypeProviderConnection.GetDataContext cstr
         with
         | :? System.Data.SqlClient.SqlException as ex when x < 3 ->
-            logSimple (Logary.Logging.getCurrentLogger()) (Logary.Message.eventWarn ("Error connecting SQL, retrying... " + ex.Message))
+            logSimple (logger.Force()) (Logary.Message.eventWarn ("Error connecting SQL, retrying... {msg}") |> Logary.Message.setField "msg" ex.Message)
             System.Threading.Thread.Sleep 50
             createCon (x+1)
         | :? System.Data.SqlClient.SqlException as ex when x < 5 ->
-            logSimple (Logary.Logging.getCurrentLogger()) (Logary.Message.eventWarn ("Error connecting SQL, retrying... " + ex.Message)) 
+            logSimple (logger.Force()) (Logary.Message.eventWarn ("Error connecting SQL, retrying... {msg}") |> Logary.Message.setField "msg" ex.Message)
             System.Threading.Thread.Sleep 1500
             createCon (x+1)
     createCon 0
@@ -55,25 +56,26 @@ let dbReadContext() =
             let itm = lazy(createDbReadContext())
             contextHolder <- itm
         with
-        | e -> logSimple (Logary.Logging.getCurrentLogger()) (Logary.Message.eventError ("SQL connection failed: " + e.Message))
+        | e -> logSimple (logger.Force()) (Logary.Message.eventError ("SQL connection failed: {msg}") |> Logary.Message.setField "msg" e.Message)
     contextHolder.Force()
 
-let logger = Logary.Logging.getCurrentLogger ()
-let writeLog x = logSimple logger x
+let writeLog x = logSimple (logger.Force()) x
 
 let writeWithDbContextManualComplete<'T>() =
     let isMono = Type.GetType ("Mono.Runtime") <> null
     let context = TypeProviderConnection.GetDataContext cstr
     let scope =
         match isMono with
-        | true -> new Transactions.TransactionScope()
+        | true -> Unchecked.defaultof<Transactions.TransactionScope> // new Transactions.TransactionScope()
         | false ->
-            // Mono would fail to compilation, so we have to construct this via reflection:
-            // new Transactions.TransactionScope(Transactions.TransactionScopeAsyncFlowOption.Enabled)
-            let transactionAssembly = System.Reflection.Assembly.GetAssembly typeof<System.Transactions.TransactionScope>
-            let asynctype = transactionAssembly.GetType "System.Transactions.TransactionScopeAsyncFlowOption"
-            let transaction = typeof<System.Transactions.TransactionScope>.GetConstructor [|asynctype|]
-            transaction.Invoke [|1|] :?> System.Transactions.TransactionScope
+            // Note1: On Mono, 4.6.1 or newer is requred for compiling TransactionScopeAsyncFlowOption.
+            // Note2: We should here set also transactionoption isolation level.
+            new Transactions.TransactionScope(System.Transactions.TransactionScopeAsyncFlowOption.Enabled)
+//            new Transactions.TransactionScope(
+//                Transactions.TransactionScopeOption.Required,
+//                new Transactions.TransactionOptions(
+//                    IsolationLevel = Transactions.IsolationLevel.RepeatableRead),
+//                System.Transactions.TransactionScopeAsyncFlowOption.Enabled)
     scope, context
 
 open System.Threading.Tasks
@@ -87,8 +89,10 @@ let writeWithDbContext<'T> (func:TypeProviderConnection.dataContext -> 'T) =
         | false -> ""
     let logmsg act tid =
         let tidm = match String.IsNullOrEmpty tid with | true -> "" | false -> " at trhead " + tid
-        "Transaction " + transId + " " + act + tidm
-            |> Message.eventDebug |> writeLog
+        "Transaction {transId} " + act + " {tidm}"
+        |> Message.eventDebug
+        |> Logary.Message.setField "transId" transId |> Logary.Message.setField "tidm" tidm
+        |> writeLog
     logmsg "started" System.Threading.Thread.CurrentThread.Name
     let res = func context
     match box res with
@@ -128,8 +132,10 @@ let writeWithDbContextAsync<'T> (func:TypeProviderConnection.dataContext -> Asyn
             | false -> ""
         let logmsg act tid =
             let tidm = match String.IsNullOrEmpty tid with | true -> "" | false -> " at trhead " + tid
-            "Transaction " + transId + " " + act + tidm
-            |> Message.eventDebug |> writeLog
+            "Transaction {transId} " + act + " {tidm}"
+            |> Message.eventDebug
+            |> Logary.Message.setField "transId" transId |> Logary.Message.setField "tidm" tidm
+            |> writeLog
         logmsg "started" System.Threading.Thread.CurrentThread.Name
         let! res = func context
         if scope<>null then
@@ -138,7 +144,7 @@ let writeWithDbContextAsync<'T> (func:TypeProviderConnection.dataContext -> Asyn
         return res
     }
 
-FSharp.Data.Sql.Common.QueryEvents.SqlQueryEvent |> Event.add (fun e -> ("Executed SQL:\r\n" + e.ToString()) |> Logary.Message.eventDebug |> writeLog)
+FSharp.Data.Sql.Common.QueryEvents.SqlQueryEvent |> Event.add (fun e -> "Executed SQL: {sql}" |> Logary.Message.eventDebug |> Logary.Message.setField "sql" (e.ToString()) |> writeLog)
 
 let DateTimeString (dt:DateTime) =
     dt.ToString("yyyy-MM-dd HH\:mm\:ss") //temp .NET fix as MySQL.Data.dll is broken: fails without .ToString(...)
@@ -201,11 +207,11 @@ type TypeProviderConnection.dataContext with
   member x.SubmitUpdates2() =
     try x.SubmitUpdatesAsync()
     with
-    | e -> Logary.Message.eventError (e.ToString() + "\r\n\r\n"+ System.Diagnostics.StackTrace(1, true).ToString()) |> writeLog
+    | e -> Logary.Message.eventError "SubmitUpdates2 error {err}" |> Logary.Message.setField "err" (e.ToString() + "\r\n\r\n"+ System.Diagnostics.StackTrace(1, true).ToString()) |> writeLog
            try
                x.ClearUpdates() |> ignore
            with
-           | ex2 -> logSimple logger (Logary.Message.eventError (ex2.ToString()))
+           | ex2 -> logSimple (logger.Force()) (Logary.Message.eventError "SubmitUpdates2 clearing error {err}" |> Logary.Message.setField "err" (ex2.ToString()))
            reraise()
 
 // --- Domain model, system actions -----------------------------
@@ -225,7 +231,6 @@ type SearchObject = {
 
 [<Serializable>]
 type CompanySearchResult = {
-    Id: uint32;
     CompanyName: string;
     Url: string option;
     Image: string option
