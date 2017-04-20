@@ -18,6 +18,7 @@ nuget MySql.Data
 nuget SQLProvider
 nuget Logary
 nuget Kentor.OwinCookieSaver
+nuget FSharp.Core
 
 // Client side, Javascript: (Please use minified, save some build time)
 group Clientside
