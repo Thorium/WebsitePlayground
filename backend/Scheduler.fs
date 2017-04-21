@@ -22,7 +22,7 @@ let timer eventType interval scheduledAction = async {
             with // if error on recurring action, just log and skip one
             | e -> Logary.Message.eventError "Scheduler failure: {err} \r\n\r\n {stack}"
                    |> Logary.Message.setField "err" (e.ToString())
-                   |> Logary.Message.setField "stack " (System.Diagnostics.StackTrace(1, true).ToString())
+                   |> Logary.Message.setField "stack" (System.Diagnostics.StackTrace(1, true).ToString())
                    |> writeLog
 }
 

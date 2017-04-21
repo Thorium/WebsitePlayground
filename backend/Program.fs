@@ -18,7 +18,8 @@ let startServer() =
     let fetchLogLevel =
         match System.Configuration.ConfigurationManager.AppSettings.["LogLevel"].ToString().ToLower() with
         | "error" -> LogLevel.Error
-        | "warn" -> LogLevel.Warn
+        | "warn" | "warning" -> LogLevel.Warn
+        | "info" -> LogLevel.Info
         | "debug" -> LogLevel.Debug
         | _ -> LogLevel.Verbose
 
