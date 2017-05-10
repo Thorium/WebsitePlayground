@@ -6,6 +6,7 @@ nuget FSharp.Data
 nuget Microsoft.AspNet.SignalR.Core
 nuget Microsoft.AspNet.WebApi.OwinSelfHost
 nuget Microsoft.AspNet.Identity.Owin
+nuget Microsoft.Net.Http
 nuget Microsoft.Owin.Cors
 nuget Microsoft.Owin.StaticFiles
 nuget Microsoft.Owin.Diagnostics

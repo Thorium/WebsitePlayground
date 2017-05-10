@@ -42,8 +42,8 @@
 #r @"./../packages/Newtonsoft.Json/lib/net45/Newtonsoft.Json.dll"
 #I @"./../packages/Owin/lib/net40"
 #r @"./../packages/Owin/lib/net40/Owin.dll"
-#I @"./../packages/Logary/lib/net40"
-#r @"./../packages/Logary/lib/net40/Logary.dll"
+#I @"./../packages/Logary/lib/net452"
+#r @"./../packages/Logary/lib/net452/Logary.dll"
 #I @"./../packages/NodaTime/lib/portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1+XamariniOS1"
 #r @"./../packages/NodaTime/lib/portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1+XamariniOS1/NodaTime.dll"
 #I @"./../packages/Hopac/lib/net45"
@@ -51,7 +51,8 @@
 #r @"./../packages/Hopac/lib/net45/Hopac.dll"
 #I @"./../packages/Owin.Compression/lib/net45"
 #r @"./../packages/Owin.Compression/lib/net45/Owin.Compression.dll"
-
+#I @"./../packages/Kentor.OwinCookieSaver/lib/net452"
+#r @"./../packages/Kentor.OwinCookieSaver/lib/net452/Kentor.OwinCookieSaver.dll"
 
 #r @"System.Configuration.dll"
 #r @"System.Configuration.Install.dll"
