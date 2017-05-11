@@ -14,7 +14,7 @@ $(document).ready(function () {
 	if (!signalHub) {
 	   console.log("hub not found");
 	}
-	
+
 	signalHub.client.listCompanies = function (data) {
         const act = signalHub.server.buyStocks;
 		gui_shared.renderAvailableCompanies(data, act);
@@ -29,11 +29,13 @@ $(document).ready(function () {
 	});
 
 	connection.logging = true;
-	hubConnector = connection.start({ transport: 'longPolling' });
+	hubConnector = connection.start().fail(x =>
+                    connection.start({ transport: 'longPolling' }).fail(function(){
+                        console.log('Could not Connect!'); }));
 	hubConnector.done(function () {
         // more functions could be here...
         // signalHub.server.doThings(...);
-    }).fail(function(){ console.log('Could not Connect!'); });
+    });
 
     $(document).foundation();
     gui_shared.renderNavBar("");
@@ -45,7 +47,7 @@ export function mapOptionType(p) {
 		if(fieldValue.indexOf(".") > -1){
             const parts = fieldValue.split('.');
             const parsed = new Date(parts[2], parts[1]-1, parts[0]);
-            return parsed;            
+            return parsed;
         } else if (fieldValue.indexOf("/") > -1){
             const parts = fieldValue.split('/');
             const parsed = new Date(parts[2], parts[1]-1, parts[0]);
@@ -62,13 +64,13 @@ export function mapOptionType(p) {
 export function refreshResultList() {
 	const ms = new Date().getTime() + 86400000;
 	const tomorrow = new Date(ms);
-	const searchObject = { 
+	const searchObject = {
 		FoundedAfter : new Date(0), // "1970-01-01T00:00:00.0000000+03:00"
 		FoundedBefore : tomorrow, // "2015-07-12T15:26:13.7884528+03:00"
 		CompanyName : "",
 		CEOName: null // {"Case":"Nadela"}
 	};
-	
+
 	const keys = Object.keys(searchObject);
 	const params = _.filter(keys, function(c){return ($('#'+c.toLowerCase()).val()!=="");});
 	_.each(params, function(p){ searchObject[p] = mapOptionType(p);});
