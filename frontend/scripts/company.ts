@@ -34,6 +34,7 @@ export function initCompany(locale) {
         $("#profileInfo").text("Create a new company");
 
         $("#createbtn").show();
+        $("#createbtn").off();
         $("#createbtn").click(function () {
             tools.validateForm($("#companyform"), function () {
                 companyHub.server.create(parseFieldFromForm()).done(
@@ -59,12 +60,14 @@ export function initCompany(locale) {
         $("#updatebtn").show();
         $("#deletebtn").show();
 
+        $("#updatebtn").off();
         $("#updatebtn").click(function () {
             tools.validateForm($("#companyform"), function () {
                 companyHub.server.update(compId, parseFieldFromForm()).done(function(d){ alert("Company updated!"); setValuesToForm(d);});
             });
             return false;
         });
+        $("#deletebtn").off();
         $("#deletebtn").click(function () {
             if(confirm("Are you sure?")){
                 companyHub.server.delete(compId).done(function(d){ alert("Deleted!"); document.location.href="company.html"; });

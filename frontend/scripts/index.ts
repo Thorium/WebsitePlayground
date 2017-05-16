@@ -1,6 +1,7 @@
 import tools = require("./tools");
 
 export function initIndex(locale) {
+    $("#search").off();
     $("#search").click(function () {
         // Do search			
         const options = ["companyname", "foundedafter", "foundedbefore", "ceoname"];
@@ -22,7 +23,8 @@ export function initIndex(locale) {
         }
         $( "#moreOptions" ).toggle( "blind", {}, speed );
     }
-    
+
+    $("#toggleMore").off();
     $("#toggleMore").click(function () {
         doToggleMore(100);
         return false;

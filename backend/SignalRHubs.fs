@@ -10,8 +10,8 @@ open Microsoft.AspNet.SignalR.Hubs
 open System.Threading.Tasks
 
 type IMessageToClient =  // Server can push data to single or all clients
-    abstract ListCompanies : seq<CompanySearchResult> -> Task
     abstract NotifyDeal : string -> Task
+    //abstract ListCompanies : seq<CompanySearchResult> -> Task
 
 let rnd = Random()
 open System.Security.Claims
@@ -52,6 +52,10 @@ type SignalHub() as this =
                         Image = c.LogoUrl
                     }
                 } |> Array.executeQueryAsync
+            // Can signal as separate client call:
+            //this.Clients.Caller.ListCompanies hosts |> ignore
+
+            // Or just return from the method:
             return companies
         } |> Async.StartAsTask
 

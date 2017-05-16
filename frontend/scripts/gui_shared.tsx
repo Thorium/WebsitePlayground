@@ -71,11 +71,11 @@ var AvailableCompany = React.createClass<CompanyProps, any>({
                          </span>);
         }
         return (
-              <div className="panel searchresultItem">
+              <div key="resultPanel" className="panel searchresultItem">
                   {logoImage}
-				  <div>
+                  <div>
 	                  <div className="darkgreen desktop-company-name"><h3>{company.CompanyName}</h3>
-					      <span className="boldstyle" style={floatRight}>{webPage}</span>
+                      <span className="boldstyle" style={floatRight}>{webPage}</span>
                       </div>
                       <input type="button" className="button radius" value="Buy 50 stocks!" onClick={this.handleClick} />
                   </div>

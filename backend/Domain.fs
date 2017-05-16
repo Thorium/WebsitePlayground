@@ -1,6 +1,28 @@
 ﻿[<AutoOpen>]
 module Domain
 
+//http://eiriktsarpalis.github.io/typeshape/#/33
+type TaskResponse =
+    abstract Accept : TaskFunc<'R> -> 'R
+and AsyncResponse =
+    abstract Accept : AsyncFunc<'R> -> 'R
+
+and TaskResponse<'T> = { Item : 'T System.Threading.Tasks.Task }
+with interface TaskResponse with
+        member cell.Accept f = f.Invoke<'T> cell
+and AsyncResponse<'T> = { Item : Async<'T> }
+with interface AsyncResponse with
+        member cell.Accept f = f.Invoke<'T> cell
+
+and TaskFunc<'R> = abstract Invoke<'T> : TaskResponse<'T> -> 'R
+and AsyncFunc<'R> = abstract Invoke<'T> : AsyncResponse<'T> -> 'R
+
+let packTask (c : TaskResponse<'T>) = c :> TaskResponse
+let unpackTask (cell : TaskResponse) (f : TaskFunc<'R>) : 'R = cell.Accept f
+let packAsync (c : AsyncResponse<'T>) = c :> AsyncResponse
+let unpackAsync (cell : AsyncResponse) (f : AsyncFunc<'R>) : 'R = cell.Accept f
+
+
 open System
 open System.Linq
 open FSharp.Data
@@ -61,9 +83,9 @@ let dbReadContext() =
 
 let writeLog x = logSimple (logger.Force()) x
 
-let writeWithDbContextManualComplete<'T>() =
-    let isMono = Type.GetType ("Mono.Runtime") <> null
-    let context = TypeProviderConnection.GetDataContext cstr
+let isMono = Type.GetType ("Mono.Runtime") <> null
+
+let inline writeWithDbContextManualComplete() =
     let scope =
         match isMono with
         | true -> Unchecked.defaultof<Transactions.TransactionScope> // new Transactions.TransactionScope()
@@ -76,53 +98,84 @@ let writeWithDbContextManualComplete<'T>() =
 //                new Transactions.TransactionOptions(
 //                    IsolationLevel = Transactions.IsolationLevel.RepeatableRead),
 //                System.Transactions.TransactionScopeAsyncFlowOption.Enabled)
+    let context = TypeProviderConnection.GetDataContext cstr
     scope, context
 
 open System.Threading.Tasks
+open Logary.Logging
 /// Write operations should be wrapped to transaction with this.
-let writeWithDbContext<'T> (func:TypeProviderConnection.dataContext -> 'T) =
+let inline writeWithDbContext (func:TypeProviderConnection.dataContext -> ^T) =
     let transaction, context = writeWithDbContextManualComplete()
-    use scope = transaction
+    let scope = transaction
     let transId =
         match System.Transactions.Transaction.Current <> null && System.Transactions.Transaction.Current.TransactionInformation <> null with
         | true -> System.Transactions.Transaction.Current.TransactionInformation.LocalIdentifier
         | false -> ""
     let logmsg act tid =
         let tidm = match String.IsNullOrEmpty tid with | true -> "" | false -> " at trhead " + tid
-        "Transaction {transId} " + act + " {tidm}"
-        |> Message.eventDebug
-        |> Logary.Message.setField "transId" transId |> Logary.Message.setField "tidm" tidm
+        Logary.Message.eventDebug("Transaction {transId} " + act + " {tidm}") |> Logary.Message.setField "transId" transId |> Logary.Message.setField "tidm" tidm
         |> writeLog
-    logmsg "started" System.Threading.Thread.CurrentThread.Name
+    logmsg "started" (System.Threading.Thread.CurrentThread.ManagedThreadId.ToString())
     let res = func context
     match box res with
     | :? Task as task ->
-        let commit = Action<Task>(fun a ->
-            if scope<>null then
-                try
-                    scope.Complete()
-                    logmsg "completed" System.Threading.Thread.CurrentThread.Name
-                with
-                | :? ObjectDisposedException -> ()
+        let packed = packTask { Item = res }
+
+        let commit = Func<Task,_>(fun a ->
+            let tid = System.Threading.Thread.CurrentThread.ManagedThreadId.ToString()
+            if not isMono then
+                match a.Status with
+                | TaskStatus.RanToCompletion ->
+                    if scope<>null then
+                        try
+                            scope.Complete()
+                            logmsg "completed" tid
+                            scope.Dispose()
+                        with
+                        | _ -> 
+                            logmsg "was disposed" tid
+                            ()
+                | x ->
+                    logmsg "failed" tid
+                    scope.Dispose()
             )
-        let commitTran1 = task.ContinueWith(commit, TaskContinuationOptions.OnlyOnRanToCompletion)
-        let commitTran2 = task.ContinueWith((fun _ ->
-            logmsg "failed" System.Threading.Thread.CurrentThread.Name), TaskContinuationOptions.NotOnRanToCompletion)
-        res
+        let c = task.ContinueWith(commit) :> Task
+
+        let getRes cell =
+            unpackTask cell 
+                { new TaskFunc<'T> with 
+                    member __.Invoke (cell : TaskResponse<_>) =
+                      let t =
+                          async {
+                            let! r = cell.Item |> Async.AwaitTask
+                            do! c |> Async.AwaitTask
+                            return r
+                          } |> Async.StartAsTask
+                      box(t) :?> 'T
+                }
+        
+        let x = getRes packed
+        x
     | item when item <> null && item.GetType().Name = "FSharpAsync`1" ->
         let msg = "Use writeWithDbContextAsync"
         msg |> Logary.Message.eventError |> writeLog
         failwith msg
     | x ->
-        if scope<>null then
-            try
-                scope.Complete()
-                logmsg "completed" System.Threading.Thread.CurrentThread.Name
-            with
-            | :? ObjectDisposedException -> ()
+        let tid = System.Threading.Thread.CurrentThread.ManagedThreadId.ToString()
+        if not isMono then
+            if scope <> null then
+                try
+                    scope.Complete()
+                    logmsg "completed" tid
+                    scope.Dispose()
+
+                with
+                | :? ObjectDisposedException ->
+                logmsg "was disposed" tid
+                ()
         res
 
-let writeWithDbContextAsync<'T> (func:TypeProviderConnection.dataContext -> Async<'T>) =
+let inline writeWithDbContextAsync (func:TypeProviderConnection.dataContext -> Async<'T>) =
     async {
         let transaction, context = writeWithDbContextManualComplete()
         use scope = transaction
@@ -132,15 +185,21 @@ let writeWithDbContextAsync<'T> (func:TypeProviderConnection.dataContext -> Asyn
             | false -> ""
         let logmsg act tid =
             let tidm = match String.IsNullOrEmpty tid with | true -> "" | false -> " at trhead " + tid
-            "Transaction {transId} " + act + " {tidm}"
-            |> Message.eventDebug
-            |> Logary.Message.setField "transId" transId |> Logary.Message.setField "tidm" tidm
+            Logary.Message.eventDebug("Transaction {transId} " + act + " {tidm}") |> Logary.Message.setField "transId" transId |> Logary.Message.setField "tidm" tidm
             |> writeLog
-        logmsg "started" System.Threading.Thread.CurrentThread.Name
+        logmsg "started" (System.Threading.Thread.CurrentThread.ManagedThreadId.ToString())
         let! res = func context
-        if scope<>null then
-            logmsg "completed" System.Threading.Thread.CurrentThread.Name
-            scope.Complete()
+        if not isMono then
+            if scope <> null then
+                let tid = System.Threading.Thread.CurrentThread.ManagedThreadId.ToString()
+                try
+                    scope.Complete()
+                    logmsg "completed" tid
+                    scope.Dispose()
+                with
+                | :? ObjectDisposedException -> 
+                    logmsg "was null" tid
+                    ()
         return res
     }
 
@@ -205,14 +264,25 @@ let getRootedPath (path:string) =
 type TypeProviderConnection.dataContext with
   /// SubmitUpdates() but on error ClearUpdates()
   member x.SubmitUpdates2() =
-    try x.SubmitUpdatesAsync()
-    with
-    | e -> Logary.Message.eventError "SubmitUpdates2 error {err}" |> Logary.Message.setField "err" (e.ToString() + "\r\n\r\n"+ System.Diagnostics.StackTrace(1, true).ToString()) |> writeLog
-           try
-               x.ClearUpdates() |> ignore
-           with
-           | ex2 -> logSimple (logger.Force()) (Logary.Message.eventError "SubmitUpdates2 clearing error {err}" |> Logary.Message.setField "err" (ex2.ToString()))
-           reraise()
+    async {
+        let! res = x.SubmitUpdatesAsync() |> Async.Catch
+        match res with
+        | Choice1Of2 _ -> ()
+        | Choice2Of2 e ->
+            let errormsg = (e.ToString() + "\r\n\r\n"+ System.Diagnostics.StackTrace(1, true).ToString())
+            let entities = x.GetUpdates() |> List.map (fun entity ->
+                let fields = String.Join("\r\n  ", entity.ColumnValues |> Seq.map(fun (c,v) -> match v with null -> c | _ -> c + " " + v.ToString()) |> Seq.toArray)
+                "Item: \r\n" + fields) |> Seq.toArray
+            let ex = new InvalidOperationException(errormsg + "\r\n\r\nDatabase commit failed for entities: " + String.Join("\r\n", entities) + "\r\n", e)
+            Logary.Message.eventError "SubmitUpdates2 error {err}" 
+            |> Logary.Message.setField "err" errormsg 
+            |> writeLog
+            try
+                x.ClearUpdates() |> ignore
+            with
+            | ex2 -> Logary.Message.eventError "SubmitUpdates2 clearing error {err}" |> Logary.Message.setField "err" (ex2.ToString()) |> writeLog
+            return raise ex
+    }
 
 // --- Domain model, system actions -----------------------------
 

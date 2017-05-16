@@ -67,9 +67,14 @@ let stopServer() =
 open System.ServiceProcess
 type WinService() =
     inherit ServiceBase(ServiceName = "companyweb")
-    override x.OnStart(args) = startServer(); base.OnStart(args)
-    override x.OnStop() = stopServer(); base.OnStop()
+    override x.OnStart(args) = 
+        Logary.Message.eventInfo "Starting server" |> writeLog
+        startServer(); base.OnStart(args)
+    override x.OnStop() = 
+        Logary.Message.eventInfo "Stopping server" |> writeLog
+        stopServer(); base.OnStop()
     override x.Dispose(disposing) =
+        Logary.Message.eventInfo "Disposing server" |> writeLog
         if disposing then stopServer()
         base.Dispose(true)
 
@@ -87,11 +92,17 @@ type public FSharpServiceInstaller() =
 [<EntryPoint>]
 #endif
 let main args =
-    if Environment.UserInteractive || Type.GetType ("Mono.Runtime") <> null then
-        startServer()
-        Message.eventInfo "Press Enter to stop & quit." |> writeLog
-        Console.ReadLine() |> ignore
-        stopServer()
-    else
-        ServiceBase.Run [| new WinService() :> ServiceBase |];
+    try
+        if Environment.UserInteractive || Type.GetType ("Mono.Runtime") <> null then
+            startServer()
+            Message.eventInfo "Press Enter to stop & quit." |> writeLog
+            Console.ReadLine() |> ignore
+            stopServer()
+        else
+            ServiceBase.Run [| new WinService() :> ServiceBase |];
+    with
+    | e -> Logary.Message.eventError "Error with webserver {err}" 
+            |> Logary.Message.setField "err" (e.ToString())
+            |> writeLog
+           Console.WriteLine (e.GetBaseException().Message)
     0
