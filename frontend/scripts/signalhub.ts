@@ -15,7 +15,7 @@ $(document).ready(function () {
 	   console.log("hub not found");
 	}
 
-    // Cound be returned from server as separate call of this client function, 
+    // Cound be returned from server as separate call of this client function,
 	// or just data from searchCompanies done-call:
 	// signalHub.client.listCompanies = function (data) {
     //     const act = signalHub.server.buyStocks;
@@ -31,10 +31,9 @@ $(document).ready(function () {
 	});
 
 	connection.logging = true;
-	hubConnector = connection.start().fail(x =>
-                    connection.start({ transport: 'longPolling' }).fail(function(xhr, textStatus, errorThrown){
+	hubConnector = connection.start({ transport: ['webSockets', 'longPolling'] }).fail(function(xhr, textStatus, errorThrown){
                         console.log('Could not Connect!');
-                        console.log('Response: ' + textStatus);}));
+                        console.log('Response: ' + textStatus);});
 	hubConnector.done(function () {
         // more functions could be here...
         // signalHub.server.doThings(...);
@@ -77,7 +76,7 @@ export function refreshResultList() {
 	const keys = Object.keys(searchObject);
 	const params = _.filter(keys, function(c){return ($('#'+c.toLowerCase()).val()!=="");});
 	_.each(params, function(p){ searchObject[p] = mapOptionType(p);});
-	
+
 	signalHub.server.searchCompanies(searchObject).done(function (data) {
 			const act = signalHub.server.buyStocks;
 			gui_shared.renderAvailableCompanies(data, act);
