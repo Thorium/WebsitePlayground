@@ -55,8 +55,8 @@ let cancelAction id =
 
 // Testing:
 (*
-let someAction() = async { Console.WriteLine "hello1" }
-let someAction2() = async { Console.WriteLine "hello2" }
+let someAction() = async { Console.WriteLine "hello1" } |> asyncScheduleErrorHandling
+let someAction2() = async { Console.WriteLine "hello2" } |> asyncScheduleErrorHandling
 
 let jobId1 = scheduleAction ScheduledEventType.Recurring 3000 someAction
 let jobId2 = scheduleAction ScheduledEventType.Recurring 5000 someAction2

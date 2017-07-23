@@ -92,9 +92,9 @@ NUGET
       FSharp.Core (>= 4.1.12 < 4.2)
       Microsoft.Owin (>= 3.1 < 4.0)
       Owin (>= 1.0.0-prerelease <= 1.0)
-    Owin.Security.AesDataProtectorProvider (1.1.1)
+    Owin.Security.AesDataProtectorProvider (1.1.2)
       Microsoft.Owin.Security (>= 3.1)
-    SQLProvider (1.0.57)
+    SQLProvider (1.1.5)
     System.ValueTuple (4.3.1)
 
 GROUP Build

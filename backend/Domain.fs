@@ -321,3 +321,16 @@ let ``compare urlSafe hash`` clear hash =
 let GetUnionCaseName (x:'a) =
     match Microsoft.FSharp.Reflection.FSharpValue.GetUnionFields(x, typeof<'a>) with
     | case, _ -> case.Name
+
+let asyncScheduleErrorHandling res =
+    async {
+        let! r = res |> Async.Catch
+        r |> function
+            | Choice1Of2 x -> x 
+            | Choice2Of2 ex -> 
+                Logary.Message.eventError("Scheduler error {err}") 
+                |> Logary.Message.setField "err" (ex.ToString())
+                |> writeLog
+                //System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(ex).Throw()
+                //failwith "err"
+    }

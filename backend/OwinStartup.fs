@@ -131,8 +131,10 @@ type MyWebStartup() =
         fileServerOptions.DefaultFilesOptions.DefaultFileNames.Add "index.html"
         fileServerOptions.FileSystem <- serverPath
         // fileServerOptions.StaticFileOptions.OnPrepareResponse <- fun r ->
-        //    if r.File.PhysicalPath.Contains(@"\fonts\") then
-        //        r.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", [|"*"|])
+        //   if r.File.PhysicalPath.Contains(@"\fonts\") && (not r.OwinContext.Response.Headers.IsReadOnly) then
+        //       if r.OwinContext.Response.Headers.ContainsKey("Access-Control-Allow-Origin") then
+        //           r.OwinContext.Response.Headers.Remove("Access-Control-Allow-Origin") |> ignore
+        //       r.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", [|"*"|])
         ap.UseFileServer(fileServerOptions) |> ignore
         ()
 

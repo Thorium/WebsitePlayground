@@ -45,7 +45,7 @@ var files = {
              'paket-files/clientside/reactjs/react-bower/react.min.js',
              'paket-files/clientside/reactjs/react-bower/react.js',
              'paket-files/clientside/npmcdn.com/tether.min.js',
-             'paket-files/**/*.js',
+             'paket-files/clientside/**/*.js',
               excludeReact, excludePaketGithubBinaries], // Gulp is intelligent enough to not include same twice
 
     lessstyles: ['frontend/styles/*.less'],
