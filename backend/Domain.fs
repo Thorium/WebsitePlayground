@@ -1,4 +1,4 @@
-﻿[<AutoOpen>]
+[<AutoOpen>]
 module Domain
 
 //http://eiriktsarpalis.github.io/typeshape/#/33
@@ -211,6 +211,19 @@ let DateTimeString (dt:DateTime) =
 let DateTimeNow() =
     DateTimeString System.DateTime.UtcNow
 
+let asyncErrorHandling<'a> (a:Async<'a>) =
+    async {
+        let! res = a |> Async.Catch
+        match res with
+        | Choice1Of2 x -> return x
+        | Choice2Of2 e ->
+            Logary.Message.eventError "Async error: {err} \r\n\r\n stacktrace: {stack}"
+                |> Logary.Message.setField "err" e
+                |> Logary.Message.setField "stack" (System.Diagnostics.StackTrace(1, true).ToString())
+                |> writeLog
+            return raise e
+    }
+
 //let ExecuteSql (query : string) parameters =
 //    async {
 //       use rawSqlConnection = new MySqlConnection(cstr)
@@ -219,6 +232,7 @@ let DateTimeNow() =
 //       use command = new MySqlCommand(query, rawSqlConnection)
 //       parameters |> List.iter(fun (par:string*string) -> command.Parameters.AddWithValue(par) |> ignore)
 //       let! affectedRows = command.ExecuteNonQueryAsync() |> Async.AwaitTask
+//       do! rawSqlConnection.CloseAsync() |> Async.AwaitTask
 //       match affectedRows with
 //       | 0 ->
 //           "ExecuteSql 0 rows affected: " + query |> Logary.Message.eventWarn |> writeLog

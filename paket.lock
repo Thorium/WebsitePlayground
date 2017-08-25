@@ -1,9 +1,8 @@
-FRAMEWORK: >= NET40
+RESTRICTION: >= net40
 NUGET
   remote: https://www.nuget.org/api/v2
     FParsec (1.0.2)
-    FSharp.Core (4.1.12)
-      System.ValueTuple (>= 4.3)
+    FSharp.Core (4.2.3)
     FSharp.Data (2.3.2)
     Hopac (0.3.23)
       FSharp.Core (>= 3.1.2.5)
@@ -27,7 +26,7 @@ NUGET
       Newtonsoft.Json (>= 6.0.4)
       Owin (>= 1.0)
     Microsoft.AspNet.WebApi.Client (5.2.3)
-      Newtonsoft.Json (>= 6.0.4) - framework: >= net45
+      Newtonsoft.Json (>= 6.0.4) - restriction: && (>= net40) (>= portable-net45+win8+wp8+wp81+wpa81)
     Microsoft.AspNet.WebApi.Core (5.2.3)
       Microsoft.AspNet.WebApi.Client (>= 5.2.3)
     Microsoft.AspNet.WebApi.Owin (5.2.3)
@@ -88,20 +87,22 @@ NUGET
     Newtonsoft.Json (10.0.2)
     NodaTime (1.3.4)
     Owin (1.0)
-    Owin.Compression (1.0.15)
-      FSharp.Core (>= 4.1.12 < 4.2)
+    Owin.Compression (1.0.16)
+      FSharp.Core (>= 4.2.1 < 4.3)
       Microsoft.Owin (>= 3.1 < 4.0)
       Owin (>= 1.0.0-prerelease <= 1.0)
     Owin.Security.AesDataProtectorProvider (1.1.2)
       Microsoft.Owin.Security (>= 3.1)
-    SQLProvider (1.1.5)
-    System.ValueTuple (4.3.1)
+    SQLProvider (1.1.7)
 
 GROUP Build
+RESTRICTION: >= net40
 NUGET
   remote: https://www.nuget.org/api/v2
-    FAKE (4.62.5)
-    FSharp.Configuration (1.0.1)
+    FAKE (4.63)
+    FSharp.Configuration (1.3)
+      FSharp.Core (>= 4.0.0.1)
+    FSharp.Core (4.2.3)
 
 GROUP Clientside
 
