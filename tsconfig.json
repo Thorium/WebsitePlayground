@@ -6,16 +6,17 @@
         "noImplicitAny": false,
         "removeComments": true,
         "noLib": false,
+        "skipLibCheck": true,
         "jsx": "react",
         "sourceMap": true,
-         "experimentalDecorators": true,
-         "emitDecoratorMetadata": true
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "traceResolution": false
     },
     "files": [
-        "./**/*.ts",
-        "./**/*.tsx",
+        "./frontend/**/*.ts",
+        "./frontend/**/*.tsx",
         "!./node_modules/**/*.ts",
-        "!./node_modules/**/*.tsx",
-        "!./paket-files/**/*.d.ts"
+        "!./node_modules/**/*.tsx"
     ]
 }

@@ -1,5 +1,6 @@
 import tools = require("./tools");
-interface ICompanyHub extends SignalR { CompanyHub : any; }
+import * as _ from "lodash";
+interface ICompanyHub extends SignalR { CompanyHub: any; }
 
 export function initCompany(locale) {
 	

@@ -1,3 +1,5 @@
+import * as _ from "lodash";
+
 export function emitUrlPathParameters(dict) {
     const keys = Object.keys(dict);
 	function qparam(a, k){ 
@@ -147,7 +149,7 @@ export function parseTuplesToDictionary(listOfItems) {
 
 export function parseTuplesToObject(listOfItems) {
 	let res = {};
-    _.each(listOfItems, function(item) {
+    _.each(listOfItems, function(item:any) {
         res[item.Item1] = item.Item2;
     });
     return res;

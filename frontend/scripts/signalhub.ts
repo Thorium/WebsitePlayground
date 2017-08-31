@@ -1,5 +1,6 @@
 import gui_shared = require("./gui_shared");
-export var signalHub : any = {};
+import * as _ from "lodash";
+export var signalHub: any = {};
 export var hubConnector : any = {};
 
 interface ISignalHub extends SignalR { SignalHub : any; }

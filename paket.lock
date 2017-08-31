@@ -116,20 +116,20 @@ GITHUB
     jquery.signalR.js (0b78d46dab5126e17dc6d88805fc0e480b7c66a0)
     jquery.signalR.min.js (0b78d46dab5126e17dc6d88805fc0e480b7c66a0)
   remote: aFarkas/html5shiv
-    dist/html5shiv.min.js (a3c7567c5f7055f9b76230bbbc79967d0b9f7003)
+    dist/html5shiv.min.js (a6b1be53e3e49f93d6d218f52bb08f6a6f91bada)
   remote: reactjs/react-bower
-    react-dom.min.js (fb585ecef0da6d49b01c8f7621f7a56dee52aab0)
-    react.js (fb585ecef0da6d49b01c8f7621f7a56dee52aab0)
-    react.min.js (fb585ecef0da6d49b01c8f7621f7a56dee52aab0)
+    react-dom.min.js (8ebee1339ca1fc65ce30ed4e34bfb1a8c9f0204e)
+    react.js (8ebee1339ca1fc65ce30ed4e34bfb1a8c9f0204e)
+    react.min.js (8ebee1339ca1fc65ce30ed4e34bfb1a8c9f0204e)
   remote: FortAwesome/Font-Awesome
-    css/font-awesome.min.css (04dad1e192b129ab09cddcd9b1aefb8b189c8d79)
-    fonts/fontawesome-webfont.eot (04dad1e192b129ab09cddcd9b1aefb8b189c8d79)
-    fonts/fontawesome-webfont.svg (04dad1e192b129ab09cddcd9b1aefb8b189c8d79)
-    fonts/fontawesome-webfont.ttf (04dad1e192b129ab09cddcd9b1aefb8b189c8d79)
-    fonts/fontawesome-webfont.woff (04dad1e192b129ab09cddcd9b1aefb8b189c8d79)
-    fonts/fontawesome-webfont.woff2 (04dad1e192b129ab09cddcd9b1aefb8b189c8d79)
+    css/font-awesome.min.css (cef4f1ef8c0ee2b551ce84c975739d55dc80f10f)
+    fonts/fontawesome-webfont.eot (cef4f1ef8c0ee2b551ce84c975739d55dc80f10f)
+    fonts/fontawesome-webfont.svg (cef4f1ef8c0ee2b551ce84c975739d55dc80f10f)
+    fonts/fontawesome-webfont.ttf (cef4f1ef8c0ee2b551ce84c975739d55dc80f10f)
+    fonts/fontawesome-webfont.woff (cef4f1ef8c0ee2b551ce84c975739d55dc80f10f)
+    fonts/fontawesome-webfont.woff2 (cef4f1ef8c0ee2b551ce84c975739d55dc80f10f)
   remote: Reactive-Extensions/RxJS
-    dist/rx.lite.min.js (71edc4a9cd827537ec8498e8c77ee38b9ecd417d)
+    dist/rx.lite.min.js (6770d24307ed4baaecdbb21cfc178c13e459f42f)
 HTTP
   remote: http://ajax.aspnetcdn.com
     jquery.min.js (/ajax/jQuery/jquery-2.2.1.min.js)
@@ -144,35 +144,3 @@ HTTP
     bootstrap.min.js (/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js)
   remote: https://raw.githubusercontent.com
     lodash.min.js (/lodash/lodash/4.17.4/dist/lodash.min.js)
-GROUP Typescript
-
-GITHUB
-  remote: borisyankov/DefinitelyTyped
-    foundation/foundation.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    google.analytics/ga.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    googlemaps/google.maps.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    jquery/jquery.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    jqueryui/jqueryui.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    knockout/knockout.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    lodash/lodash.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    mustache/mustache.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    react/react-addons-create-fragment.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    react/react-addons-css-transition-group.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    react/react-addons-linked-state-mixin.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    react/react-addons-perf.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    react/react-addons-pure-render-mixin.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    react/react-addons-test-utils.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    react/react-addons-transition-group.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    react/react-addons-update.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    react/react-dom.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    react/react-global.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    react/react.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    rx/rx-lite.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    rx/rx.async-lite.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    rx/rx.backpressure-lite.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    rx/rx.binding-lite.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    rx/rx.coincidence-lite.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    rx/rx.lite.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    rx/rx.time-lite.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    signalr/signalr.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)
-    yamljs/yamljs.d.ts (6aff001e47fada0f16768ee435ddcc9eb7c521c1)

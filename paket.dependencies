@@ -29,6 +29,7 @@ group Clientside
   github zurb/bower-foundation css/normalize.css
   github zurb/bower-foundation js/foundation.min.js
   github SignalR/bower-signalr jquery.signalR.js
+  github SignalR/bower-signalr jquery.signalR.min.js
   github aFarkas/html5shiv dist/html5shiv.min.js
   github reactjs/react-bower react.js
   github reactjs/react-bower react.min.js
@@ -51,37 +52,6 @@ group Clientside
   http https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css
   http https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js
   http https://raw.githubusercontent.com/lodash/lodash/4.17.4/dist/lodash.min.js
-
-//Typescript definitions
-group Typescript
-  source https://nuget.org/api/v2
-  github borisyankov/DefinitelyTyped foundation/foundation.d.ts
-  github borisyankov/DefinitelyTyped react/react.d.ts
-  github borisyankov/DefinitelyTyped react/react-dom.d.ts
-  github borisyankov/DefinitelyTyped react/react-addons-create-fragment.d.ts
-  github borisyankov/DefinitelyTyped react/react-addons-css-transition-group.d.ts
-  github borisyankov/DefinitelyTyped react/react-addons-linked-state-mixin.d.ts
-  github borisyankov/DefinitelyTyped react/react-addons-perf.d.ts
-  github borisyankov/DefinitelyTyped react/react-addons-pure-render-mixin.d.ts
-  github borisyankov/DefinitelyTyped react/react-addons-test-utils.d.ts
-  github borisyankov/DefinitelyTyped react/react-addons-transition-group.d.ts
-  github borisyankov/DefinitelyTyped react/react-addons-update.d.ts
-  github borisyankov/DefinitelyTyped react/react-global.d.ts
-  github borisyankov/DefinitelyTyped lodash/lodash.d.ts
-  github borisyankov/DefinitelyTyped jquery/jquery.d.ts
-  github borisyankov/DefinitelyTyped jqueryui/jqueryui.d.ts
-  github borisyankov/DefinitelyTyped signalr/signalr.d.ts
-  github borisyankov/DefinitelyTyped google.analytics/ga.d.ts
-  github borisyankov/DefinitelyTyped rx/rx.lite.d.ts
-  github borisyankov/DefinitelyTyped rx/rx-lite.d.ts
-  github borisyankov/DefinitelyTyped rx/rx.async-lite.d.ts
-  github borisyankov/DefinitelyTyped rx/rx.binding-lite.d.ts
-  github borisyankov/DefinitelyTyped rx/rx.time-lite.d.ts
-  github borisyankov/DefinitelyTyped rx/rx.backpressure-lite.d.ts
-  github borisyankov/DefinitelyTyped rx/rx.coincidence-lite.d.ts
-
-  // github borisyankov/DefinitelyTyped googlemaps/google.maps.d.ts
-  // github borisyankov/DefinitelyTyped mustache/mustache.d.ts
 
 group Build
   source https://nuget.org/api/v2

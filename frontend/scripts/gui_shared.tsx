@@ -1,3 +1,7 @@
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import * as _ from "lodash";
+
 interface NavbarProps { companyId: string; }
 var CompanyWebNavBar = React.createClass<NavbarProps, any>({
   getInitialState: function() {
