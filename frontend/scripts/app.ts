@@ -9,11 +9,16 @@ import results = require('./results');
 
 // Here would be client-side routing and localization of html-content.
 
-if (typeof jQuery === 'undefined') {
-    // ensure script loadings in FireFox.
-    document.write('<script src="js/libs.min.js">\x3C/script>');
-    document.location.reload(false);
-}
+setTimeout(function(){
+    if (typeof jQuery === 'undefined') {
+        // ensure script loadings in FireFox.
+        console.log("JQuery not loaded!");
+        document.write('<script src="js/libs.min.js">\x3C/script>');
+        setTimeout(function(){
+            document.location.reload(false);
+        }, 500);
+    }
+}, 500);
 
 $(function() {
     function doInit(locale) {
