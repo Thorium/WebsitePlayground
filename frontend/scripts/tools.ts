@@ -2,11 +2,11 @@ import * as _ from "lodash";
 
 export function emitUrlPathParameters(dict) {
     const keys = Object.keys(dict);
-	function qparam(a, k){ 
-       if(dict[k]===null) { 
-           return a; 
+	function qparam(a, k){
+       if(dict[k]===null) {
+           return a;
        } else if(dict[k] instanceof Date){
-		   dict[k].setHours(0, -dict[k].getTimezoneOffset(), 0, 0);
+		   dict[k].setHours(dict[k].getHours(), -dict[k].getTimezoneOffset(), 0, 0);
            return a + "/"+k+"/"+encodeURIComponent(dict[k].toISOString());
        } else {
            return a + "/"+k+"/"+encodeURIComponent(dict[k]);
@@ -27,7 +27,7 @@ export function parseUrlPathParameters(url) {
     for (var k = 0;k<items.length/2;k++) {
         res[items[2*k]] = decodeURIComponent(items[2*k+1]);
     }
-    return res; 
+    return res;
 }
 
 var formCache = {};
@@ -41,7 +41,7 @@ export function validateFormWithInvalid(jqForm, callback, invalidcallback) {
             .on('valid.fndtn.abide', function () { onValid(); })
             .on('invalid', function () { onInvalid(); })
             .on('valid', function () { onValid(); })
-            .on('submit', Foundation.utils.debounce(function(e){ 
+            .on('submit', Foundation.utils.debounce(function(e){
                 jqForm.off('submit');
                 formCache[document.location.href + "_" + jqForm.selector] = false;
                 return false;
@@ -54,7 +54,7 @@ export function validateFormWithInvalid(jqForm, callback, invalidcallback) {
 
 const warning = "Please correct invalid fields!";
 export function validateForm(jqForm, callback) {
-    const invalidcallback = function () { /*alert(warning);*/ }; 
+    const invalidcallback = function () { /*alert(warning);*/ };
     return validateFormWithInvalid(jqForm, callback, invalidcallback);
 }
 
@@ -64,9 +64,9 @@ export function validateFormWithMsg(jqForm, callback) {
         const fieldnames = _.reduce(invalid_fields, (acc, f:any) => {
             return  f === null || f.id === null ? acc : acc + ", " + f.id;
         });
-        
-        const message = 
-              fieldnames !== null && fieldnames.toString().length > 0 ? 
+
+        const message =
+              fieldnames !== null && fieldnames.toString().length > 0 ?
               warning + " ("+ fieldnames.toString() + ")" :
               warning;
         alert(message);
@@ -79,23 +79,23 @@ function getItemValue(jQControl){
         return jQControl.prop('checked').toString();
     }else if(jQControl.hasClass('hasDatepicker')){
         let dt = jQControl.datepicker('getDate');
-        if(dt!==null) { dt.setHours(0, -dt.getTimezoneOffset(), 0, 0); }
+        if(dt!==null) { dt.setHours(dt.getHours(), -dt.getTimezoneOffset(), 0, 0); }
         return dt;
     }else if(jQControl.is('span') || jQControl.is('p')){
         return jQControl.html();
     }else{
         return jQControl.val();
-    }    
-} 
+    }
+}
 function setItemValue(jQControl, parval){
     if(jQControl.is(':checkbox') || jQControl.is(':radio')){
-        jQControl.prop('checked', parval === 'true');
+        jQControl.prop('checked', (parval === 'true' || parval === true));
     }else if(jQControl.hasClass('hasDatepicker')){
         jQControl.datepicker("setDate", new Date(parval) );
     }else if(jQControl.is('span') || jQControl.is('p')){
-        jQControl.html(parval); 
+        jQControl.html(parval);
     }else{
-        jQControl.val(parval); 
+        jQControl.val(parval);
     }
 }
 
@@ -120,20 +120,20 @@ export function getFormValuesFrom(form, paramNames:Array<string>) {
 	const params = _.filter(paramNamesf, c => form.find('#'+c).is(":visible") || $('#'+c).attr('type') === 'hidden'
                                            || form.find('#'+c).hasClass("containsInput")
                                            || form.find('#'+c).prop('checked') );
-	_.each(params, p => { 
+	_.each(params, p => {
         res[p] = getItemValue(form.find('#'+p));
     });
 	return res;
 }
 
 export function setValuesToFormName(formIdName, data) {
-    _.each(data, (c:any) => { 
+    _.each(data, (c:any) => {
         setItemValue($('#' + formIdName + ' #'+c.Item1), c.Item2);
     });
 }
 
 export function setValuesToForm(data) {
-    _.each(data, (c:any) => { 
+    _.each(data, (c:any) => {
         setItemValue($('#'+c.Item1), c.Item2);
     });
 }

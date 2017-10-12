@@ -34,7 +34,7 @@ var isRelease = gutil.env.release ? true : false;
 
 var excludeReact = isRelease? "!paket-files/clientside/reactjs/react-bower/react.js" : "!paket-files/clientside/reactjs/react-bower/react.min.js"
 var excludeFoundation = isRelease? "!paket-files/**/foundation.css" : "!paket-files/**/foundation.min.css"
-
+var excludeSignalR = isRelease? "!paket-files/**/jquery.signalR.js" : "!paket-files/**/jquery.signalR.min.js";
 var excludePaketGithubBinaries = "!paket-files/github.com/**/*.*"
 
 var files = {
@@ -46,7 +46,7 @@ var files = {
              'paket-files/clientside/reactjs/react-bower/react.js',
              'paket-files/clientside/npmcdn.com/tether.min.js',
              'paket-files/clientside/**/*.js',
-              excludeReact, excludePaketGithubBinaries], // Gulp is intelligent enough to not include same twice
+              excludeReact, excludeSignalR, excludePaketGithubBinaries], // Gulp is intelligent enough to not include same twice
 
     lessstyles: ['frontend/styles/*.less'],
     sassstyles: ['frontend/styles/*.scss'],
@@ -90,7 +90,7 @@ gulp.task('typeScripts', function () {
 
 function concatJavaScripts(items, target) {
     return gulp.src(items)
-        .pipe(concat(target))
+        .pipe(concat(target, {newLine: ';\n'}))
         .pipe(gulp.dest(files.targetPath + '/js'));
 }
 

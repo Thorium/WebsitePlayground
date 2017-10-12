@@ -21,6 +21,9 @@ setTimeout(function(){
 }, 500);
 
 $(function() {
+    Foundation.global.namespace = '';
+    $(document).off('click.fndtn.magellan');
+
     function doInit(locale) {
         idx.initIndex(locale);
         if(window.location.href.indexOf("/company.html") > 0){ company.initCompany(locale); }
