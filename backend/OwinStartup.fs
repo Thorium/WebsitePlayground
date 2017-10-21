@@ -27,21 +27,24 @@ let serverPath =
 (*
 let corsPolicy = Microsoft.Owin.Cors.CorsOptions(PolicyProvider =
     Microsoft.Owin.Cors.CorsPolicyProvider(PolicyResolver = fun c ->
-        Task.FromResult(
-            let p = System.Web.Cors.CorsPolicy(
-                        AllowAnyHeader = true,
-                        AllowAnyMethod = true,
-                        AllowAnyOrigin = false,
-                        SupportsCredentials = true)
-            p.Origins.Add "http*://*.myserver.com"
-            p.Origins.Add "http*://www.google-analytics.com"
-            p.Origins.Add "http*://maps.googleapis.com"
-            p.Origins.Add "http*://fonts.googleapis.com"
-            p.Origins.Add "http://localhost"
-            if not(String.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings.["ServerAddress"])) then
-                p.Origins.Add System.Configuration.ConfigurationManager.AppSettings.["ServerAddress"]
-            p
-        )))
+        let p = System.Web.Cors.CorsPolicy(
+                    AllowAnyHeader = true,
+                    AllowAnyMethod = true,
+                    AllowAnyOrigin = false,
+                    SupportsCredentials = true)
+        if c.CallCancelled.IsCancellationRequested || p.Headers.IsReadOnly then
+            Task.FromResult(p)
+        else
+            Task.FromResult(
+                p.Origins.Add "http*://*.myserver.com"
+                p.Origins.Add "http*://www.google-analytics.com"
+                p.Origins.Add "http*://maps.googleapis.com"
+                p.Origins.Add "http*://fonts.googleapis.com"
+                p.Origins.Add "http://localhost"
+                if not(String.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings.["ServerAddress"])) then
+                    p.Origins.Add System.Configuration.ConfigurationManager.AppSettings.["ServerAddress"]
+                p
+            )))
 *)
 
 open System.Web.Http.Filters
@@ -131,7 +134,7 @@ type MyWebStartup() =
         fileServerOptions.DefaultFilesOptions.DefaultFileNames.Add "index.html"
         fileServerOptions.FileSystem <- serverPath
         // fileServerOptions.StaticFileOptions.OnPrepareResponse <- fun r ->
-        //   if r.File.PhysicalPath.Contains(@"\fonts\") && (not r.OwinContext.Response.Headers.IsReadOnly) then
+        //   if r.File.PhysicalPath.Contains(@"\fonts\") && (not r.OwinContext.Response.Headers.IsReadOnly) && not(r.OwinContext.Request.CallCancelled.IsCancellationRequested) then
         //       if r.OwinContext.Response.Headers.ContainsKey("Access-Control-Allow-Origin") then
         //           r.OwinContext.Response.Headers.Remove("Access-Control-Allow-Origin") |> ignore
         //       r.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", [|"*"|])
