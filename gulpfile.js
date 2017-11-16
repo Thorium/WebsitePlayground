@@ -31,8 +31,9 @@ var gulp = require('gulp'),
 
 // Set to true for production build. gulp deploy --release ok
 var isRelease = gutil.env.release ? true : false;
+process.env.NODE_ENV = isRelease ? 'production' : 'development';
 
-var excludeReact = isRelease? "!paket-files/clientside/reactjs/react-bower/react.js" : "!paket-files/clientside/reactjs/react-bower/react.min.js"
+var excludeReact = isRelease? "!paket-files/clientside/unpkg.com/react.development.js" : "!paket-files/clientside/unpkg.com/react.production.min.js"
 var excludeFoundation = isRelease? "!paket-files/**/foundation.css" : "!paket-files/**/foundation.min.css"
 var excludeSignalR = isRelease? "!paket-files/**/jquery.signalR.js" : "!paket-files/**/jquery.signalR.min.js";
 var excludePaketGithubBinaries = "!paket-files/github.com/**/*.*"
@@ -42,8 +43,9 @@ var files = {
     typescripts: ['frontend/scripts/*.ts', 'frontend/scripts/*.tsx'],
     jslibs: ['paket-files/clientside/ajax.aspnetcdn.com/jquery.min.js',
              'paket-files/clientside/lodash/lodash/dist/lodash.min.js',
-             'paket-files/clientside/reactjs/react-bower/react.min.js',
-             'paket-files/clientside/reactjs/react-bower/react.js',
+             'paket-files/clientside/cdnjs.cloudflare.com/modernizr.min.js',
+             'paket-files/clientside/unpkg.com/react.production.min.js',
+             'paket-files/clientside/unpkg.com/react.development.js',
              'paket-files/clientside/npmcdn.com/tether.min.js',
              'paket-files/clientside/**/*.js',
               excludeReact, excludeSignalR, excludePaketGithubBinaries], // Gulp is intelligent enough to not include same twice

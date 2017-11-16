@@ -59,6 +59,18 @@ Target "gulp" (fun _ ->
 
 /// Build the server side project
 Target "project" (fun _ ->
+    try
+        FileHelper.Copy
+            "backend/mysqlconnector"
+            [|
+                "packages/MySqlConnector/lib/net46/MySqlConnector.dll";
+                "packages/System.Buffers/lib/netstandard1.1/System.Buffers.dll";
+                "packages/System.Runtime.InteropServices.RuntimeInformation/lib/net45/System.Runtime.InteropServices.RuntimeInformation.dll";
+                "packages/System.Threading.Tasks.Extensions/lib/portable-net45+win8+wp8+wpa81/System.Threading.Tasks.Extensions.dll";
+            |]
+    with
+    | e -> printfn "Couldn't copy MySqlConnector files: %O" e
+
     !! @"./backend/WebsitePlayground.fsproj"
     |> MSBuild "" buildType [codeAnalysis;buildMode] |> ignore
     )

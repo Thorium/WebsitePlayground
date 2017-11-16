@@ -12,14 +12,17 @@ nuget Microsoft.Owin.StaticFiles
 nuget Microsoft.Owin.Diagnostics
 nuget Microsoft.Owin.Security.Facebook
 nuget Microsoft.Owin.Security.Google
+nuget MySqlConnector
 nuget Owin.Compression
 nuget Owin.Security.AesDataProtectorProvider
 nuget MySql.Data
 // nuget System.Reactive
 nuget SQLProvider
 nuget Logary
+nuget Logary.Targets.ApplicationInsights
 nuget Kentor.OwinCookieSaver
 nuget FSharp.Core
+nuget System.Runtime.InteropServices.RuntimeInformation
 
 // Client side, Javascript: (Please use minified, save some build time)
 group Clientside
@@ -31,9 +34,6 @@ group Clientside
   github SignalR/bower-signalr jquery.signalR.js
   github SignalR/bower-signalr jquery.signalR.min.js
   github aFarkas/html5shiv dist/html5shiv.min.js
-  github reactjs/react-bower react.js
-  github reactjs/react-bower react.min.js
-  github reactjs/react-bower react-dom.min.js
   github FortAwesome/Font-Awesome css/font-awesome.min.css
   github FortAwesome/Font-Awesome fonts/fontawesome-webfont.eot
   github FortAwesome/Font-Awesome fonts/fontawesome-webfont.svg
@@ -52,6 +52,10 @@ group Clientside
   http https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css
   http https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js
   http https://raw.githubusercontent.com/lodash/lodash/4.17.4/dist/lodash.min.js
+  http https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js
+  http https://unpkg.com/react@16/umd/react.production.min.js
+  http https://unpkg.com/react-dom@16/umd/react-dom.production.min.js
+  http https://unpkg.com/react@16/umd/react.development.js
 
 group Build
   source https://nuget.org/api/v2

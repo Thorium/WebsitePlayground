@@ -94,7 +94,7 @@ NUGET
       Owin (>= 1.0.0-prerelease <= 1.0)
     Owin.Security.AesDataProtectorProvider (1.1.2)
       Microsoft.Owin.Security (>= 3.1)
-    SQLProvider (1.1.8)
+    SQLProvider (1.1.22)
 
 GROUP Build
 RESTRICTION: >= net40
@@ -118,17 +118,13 @@ GITHUB
     jquery.signalR.min.js (0b78d46dab5126e17dc6d88805fc0e480b7c66a0)
   remote: aFarkas/html5shiv
     dist/html5shiv.min.js (a6b1be53e3e49f93d6d218f52bb08f6a6f91bada)
-  remote: reactjs/react-bower
-    react-dom.min.js (8ebee1339ca1fc65ce30ed4e34bfb1a8c9f0204e)
-    react.js (8ebee1339ca1fc65ce30ed4e34bfb1a8c9f0204e)
-    react.min.js (8ebee1339ca1fc65ce30ed4e34bfb1a8c9f0204e)
   remote: FortAwesome/Font-Awesome
-    css/font-awesome.min.css (cef4f1ef8c0ee2b551ce84c975739d55dc80f10f)
-    fonts/fontawesome-webfont.eot (cef4f1ef8c0ee2b551ce84c975739d55dc80f10f)
-    fonts/fontawesome-webfont.svg (cef4f1ef8c0ee2b551ce84c975739d55dc80f10f)
-    fonts/fontawesome-webfont.ttf (cef4f1ef8c0ee2b551ce84c975739d55dc80f10f)
-    fonts/fontawesome-webfont.woff (cef4f1ef8c0ee2b551ce84c975739d55dc80f10f)
-    fonts/fontawesome-webfont.woff2 (cef4f1ef8c0ee2b551ce84c975739d55dc80f10f)
+    css/font-awesome.min.css (8e8e659341916ad8a551835c43b30395cd90f489)
+    fonts/fontawesome-webfont.eot (8e8e659341916ad8a551835c43b30395cd90f489)
+    fonts/fontawesome-webfont.svg (8e8e659341916ad8a551835c43b30395cd90f489)
+    fonts/fontawesome-webfont.ttf (8e8e659341916ad8a551835c43b30395cd90f489)
+    fonts/fontawesome-webfont.woff (8e8e659341916ad8a551835c43b30395cd90f489)
+    fonts/fontawesome-webfont.woff2 (8e8e659341916ad8a551835c43b30395cd90f489)
   remote: Reactive-Extensions/RxJS
     dist/rx.lite.min.js (6770d24307ed4baaecdbb21cfc178c13e459f42f)
 HTTP
@@ -145,3 +141,9 @@ HTTP
     bootstrap.min.js (/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js)
   remote: https://raw.githubusercontent.com
     lodash.min.js (/lodash/lodash/4.17.4/dist/lodash.min.js)
+  remote: https://cdnjs.cloudflare.com
+    modernizr.min.js (/ajax/libs/modernizr/2.8.3/modernizr.min.js)
+  remote: https://unpkg.com
+    react-dom.production.min.js (/react-dom@16/umd/react-dom.production.min.js)
+    react.development.js (/react@16/umd/react.development.js)
+    react.production.min.js (/react@16/umd/react.production.min.js)

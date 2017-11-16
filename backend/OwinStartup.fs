@@ -1,4 +1,4 @@
-﻿module OwinStart
+module OwinStart
 
 open System
 open System.Net.Http

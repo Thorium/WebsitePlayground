@@ -23,6 +23,8 @@ setTimeout(function(){
 $(function() {
     Foundation.global.namespace = '';
     $(document).off('click.fndtn.magellan');
+    let fn:any = $.fn;
+    fn.bootstrapBtn = fn.button.noConflict();
 
     function doInit(locale) {
         idx.initIndex(locale);
@@ -49,6 +51,10 @@ $(function() {
         $(".pageLoader").hide();
         $(".pageLoaded").show();
         $(document).foundation();
-
+        $(document).off('click.fndtn.magellan');
+        $(".hastip").click(function(){
+            $("<div/>").attr("title", "Help").text($(this).prop("title")).dialog();
+            return false;
+        });
     });
 });
