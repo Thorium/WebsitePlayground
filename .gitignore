@@ -40,3 +40,5 @@ report/
 *.sbr
 obj/
 [Rr]elease*/
+
+backend/mysqlconnector
