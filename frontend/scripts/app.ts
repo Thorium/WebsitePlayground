@@ -23,8 +23,12 @@ setTimeout(function(){
 $(function() {
     Foundation.global.namespace = '';
     $(document).off('click.fndtn.magellan');
-    let fn:any = $.fn;
-    fn.bootstrapBtn = fn.button.noConflict();
+    try{
+        let fn:any = $.fn;
+        fn.bootstrapBtn = fn.button.noConflict();
+    } catch(e) {
+        console.log(e);
+    }
 
     function doInit(locale) {
         idx.initIndex(locale);
@@ -53,7 +57,8 @@ $(function() {
         $(document).foundation();
         $(document).off('click.fndtn.magellan');
         $(".hastip").click(function(){
-            $("<div/>").attr("title", "Help").text($(this).prop("title")).dialog();
+            $("<div/>").attr("title", "Help").text(
+                $(this).prop("title").split('\r\n').join('<br/>').split('\\r\\n').join('<br/>')).dialog();
             return false;
         });
     });

@@ -98,7 +98,9 @@ let inline writeWithDbContextManualComplete() =
 //                new Transactions.TransactionOptions(
 //                    IsolationLevel = Transactions.IsolationLevel.RepeatableRead),
 //                System.Transactions.TransactionScopeAsyncFlowOption.Enabled)
-    let context = TypeProviderConnection.GetDataContext cstr
+    let context =
+        if String.IsNullOrEmpty cstr then TypeProviderConnection.GetDataContext()
+        else TypeProviderConnection.GetDataContext cstr
     scope, context
 
 open System.Threading.Tasks
@@ -132,7 +134,7 @@ let inline writeWithDbContext (func:TypeProviderConnection.dataContext -> ^T) =
                             logmsg "completed" tid
                             scope.Dispose()
                         with
-                        | _ -> 
+                        | _ ->
                             logmsg "was disposed" tid
                             ()
                 | x ->
@@ -142,8 +144,8 @@ let inline writeWithDbContext (func:TypeProviderConnection.dataContext -> ^T) =
         let c = task.ContinueWith(commit) :> Task
 
         let getRes cell =
-            unpackTask cell 
-                { new TaskFunc<'T> with 
+            unpackTask cell
+                { new TaskFunc<'T> with
                     member __.Invoke (cell : TaskResponse<_>) =
                       let t =
                           async {
@@ -153,7 +155,7 @@ let inline writeWithDbContext (func:TypeProviderConnection.dataContext -> ^T) =
                           } |> Async.StartAsTask
                       box(t) :?> 'T
                 }
-        
+
         let x = getRes packed
         x
     | item when item <> null && item.GetType().Name = "FSharpAsync`1" ->
@@ -197,7 +199,7 @@ let inline writeWithDbContextAsync (func:TypeProviderConnection.dataContext -> A
                     logmsg "completed" tid
                     scope.Dispose()
                 with
-                | :? ObjectDisposedException -> 
+                | :? ObjectDisposedException ->
                     logmsg "was null" tid
                     ()
         return res
@@ -288,8 +290,8 @@ type TypeProviderConnection.dataContext with
                 let fields = String.Join("\r\n  ", entity.ColumnValues |> Seq.map(fun (c,v) -> match v with null -> c | _ -> c + " " + v.ToString()) |> Seq.toArray)
                 "Item: \r\n" + fields) |> Seq.toArray
             let ex = new InvalidOperationException(errormsg + "\r\n\r\nDatabase commit failed for entities: " + String.Join("\r\n", entities) + "\r\n", e)
-            Logary.Message.eventError "SubmitUpdates2 error {err}" 
-            |> Logary.Message.setField "err" errormsg 
+            Logary.Message.eventError "SubmitUpdates2 error {err}"
+            |> Logary.Message.setField "err" errormsg
             |> writeLog
             try
                 x.ClearUpdates() |> ignore
@@ -340,10 +342,11 @@ let asyncScheduleErrorHandling res =
     async {
         let! r = res |> Async.Catch
         r |> function
-            | Choice1Of2 x -> x 
-            | Choice2Of2 ex -> 
-                Logary.Message.eventError("Scheduler error {err}") 
+            | Choice1Of2 x -> x
+            | Choice2Of2 ex ->
+                Logary.Message.eventError("Scheduler error {err}, stack {stack}")
                 |> Logary.Message.setField "err" (ex.ToString())
+                |> Logary.Message.setField "stack" (System.Diagnostics.StackTrace(1, true).ToString())
                 |> writeLog
                 //System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(ex).Throw()
                 //failwith "err"

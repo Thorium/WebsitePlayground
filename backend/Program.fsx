@@ -1,15 +1,15 @@
-﻿// You can execute this in the F#-iteractive or run from the command line: fsi Program.fsx 
+﻿// You can execute this in the F#-iteractive or run from the command line: fsi Program.fsx
 // Or on Mono, fsharpi Program.fsx but note: on Mono SignalR is not working from interactive!
 
 #if INTERACTIVE
 #r @"./../packages/FSharp.Data/lib/net40/FSharp.Data.dll"
-#r @"./../packages/SQLProvider/lib/FSharp.Data.SqlProvider.dll"
+#r @"./../packages/SQLProvider/lib/net451/FSharp.Data.SqlProvider.dll"
 #r @"./../packages/MySql.Data/lib/net40/MySql.Data.dll"
 
 // OWIN and SignalR-packages:
 #I @"./../packages/Microsoft.AspNet.SignalR.Core/lib/net45"
 #r @"./../packages/Microsoft.AspNet.SignalR.Core/lib/net45/Microsoft.AspNet.SignalR.Core.dll"
-#I @"./../packages/Microsoft.Owin/lib/net45" 
+#I @"./../packages/Microsoft.Owin/lib/net45"
 #r @"./../packages/Microsoft.Owin/lib/net45/Microsoft.Owin.dll"
 #I @"./../packages/Microsoft.Owin.Security/lib/net45"
 #r @"./../packages/Microsoft.Owin.Security/lib/net45/Microsoft.Owin.Security.dll"
@@ -49,8 +49,8 @@
 #I @"./../packages/Hopac/lib/net45"
 #r @"./../packages/Hopac/lib/net45/Hopac.Core.dll"
 #r @"./../packages/Hopac/lib/net45/Hopac.dll"
-#I @"./../packages/Owin.Compression/lib/net45"
-#r @"./../packages/Owin.Compression/lib/net45/Owin.Compression.dll"
+#I @"./../packages/Owin.Compression/lib/net452"
+#r @"./../packages/Owin.Compression/lib/net452/Owin.Compression.dll"
 #I @"./../packages/Kentor.OwinCookieSaver/lib/net452"
 #r @"./../packages/Kentor.OwinCookieSaver/lib/net452/Kentor.OwinCookieSaver.dll"
 
@@ -71,7 +71,7 @@ open System.Threading.Tasks
 open MySql.Data.MySqlClient
 open System.Security.Claims
 open Microsoft.AspNet.SignalR
-open Microsoft.AspNet.SignalR.Hubs 
+open Microsoft.AspNet.SignalR.Hubs
 open System.Threading.Tasks
 open Logary
 
@@ -81,7 +81,7 @@ open Logary
 #load "OwinStartup.fs"
 #load "Program.fs"
 let logger = Logary.Logging.getCurrentLogger ()
-try 
+try
     MyApp.main [||] |> ignore
 with
     | e -> Logary.Message.eventError (e.Message) |> writeLog

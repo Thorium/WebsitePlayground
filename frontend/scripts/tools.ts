@@ -84,7 +84,8 @@ function getItemValue(jQControl){
     }else if(jQControl.is('span') || jQControl.is('p')){
         return jQControl.html();
     }else{
-        return jQControl.val();
+        let x = jQControl.val();
+        return (x !== undefined && x !== null && (typeof x === 'string' || x instanceof String))? x.trim() : x;
     }
 }
 function setItemValue(jQControl, parval){
