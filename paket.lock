@@ -119,7 +119,7 @@ NUGET
       Owin (>= 1.0) - restriction: >= net452
     Owin.Security.AesDataProtectorProvider (1.1.2)
       Microsoft.Owin.Security (>= 3.1)
-    SQLProvider (1.1.25)
+    SQLProvider (1.1.35)
     System.Buffers (4.4) - restriction: || (&& (>= net40) (< net45) (>= netstandard1.3) (< netstandard2.0)) (&& (>= net40) (< net45) (>= netstandard2.0)) (&& (>= net45) (< netstandard1.3)) (>= net46)
       System.Diagnostics.Debug (>= 4.3) - restriction: && (>= net40) (>= netstandard1.1) (< netstandard2.0)
       System.Diagnostics.Tracing (>= 4.3) - restriction: && (>= net40) (>= netstandard1.1) (< netstandard2.0)
@@ -210,12 +210,12 @@ GITHUB
   remote: aFarkas/html5shiv
     dist/html5shiv.min.js (a6b1be53e3e49f93d6d218f52bb08f6a6f91bada)
   remote: FortAwesome/Font-Awesome
-    css/font-awesome.min.css (8e8e659341916ad8a551835c43b30395cd90f489)
-    fonts/fontawesome-webfont.eot (8e8e659341916ad8a551835c43b30395cd90f489)
-    fonts/fontawesome-webfont.svg (8e8e659341916ad8a551835c43b30395cd90f489)
-    fonts/fontawesome-webfont.ttf (8e8e659341916ad8a551835c43b30395cd90f489)
-    fonts/fontawesome-webfont.woff (8e8e659341916ad8a551835c43b30395cd90f489)
-    fonts/fontawesome-webfont.woff2 (8e8e659341916ad8a551835c43b30395cd90f489)
+    css/font-awesome.min.css (bdfa9823c8b1e25a5c822f6c719ec0e38ead7f71)
+    fonts/fontawesome-webfont.eot (bdfa9823c8b1e25a5c822f6c719ec0e38ead7f71)
+    fonts/fontawesome-webfont.svg (bdfa9823c8b1e25a5c822f6c719ec0e38ead7f71)
+    fonts/fontawesome-webfont.ttf (bdfa9823c8b1e25a5c822f6c719ec0e38ead7f71)
+    fonts/fontawesome-webfont.woff (bdfa9823c8b1e25a5c822f6c719ec0e38ead7f71)
+    fonts/fontawesome-webfont.woff2 (bdfa9823c8b1e25a5c822f6c719ec0e38ead7f71)
   remote: Reactive-Extensions/RxJS
     dist/rx.lite.min.js (6770d24307ed4baaecdbb21cfc178c13e459f42f)
 HTTP

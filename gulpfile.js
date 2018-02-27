@@ -54,6 +54,7 @@ var files = {
     sassstyles: ['frontend/styles/*.scss'],
     csslibs: ['paket-files/**/*.css', excludeFoundation, excludePaketGithubBinaries],
     htmls: ['frontend/**/*.html', '!frontend/dist/**/*.html'],
+    txts: ['frontend/**/*.txt', '!frontend/dist/**/*.txt'],
     statics: ['frontend/*.ico'],
     fonts: ['paket-files/**/*font*.svg',
         'frontend/fonts/*.*',
@@ -172,7 +173,11 @@ gulp.task('htmls', function () {
                .pipe(gulpif(isRelease, htmlmin({collapseWhitespace: true})))
                .pipe(gulp.dest(files.targetPath));
 });
-gulp.task('deployStatic', ['htmls', 'fonts', 'jqueryImages', 'images', 'statics']);
+gulp.task('txts', function () {
+    return gulp.src(files.txts)
+               .pipe(gulp.dest(files.targetPath));
+});
+gulp.task('deployStatic', ['htmls', 'txts', 'fonts', 'jqueryImages', 'images', 'statics']);
 
 
 // Watch Files For Changes

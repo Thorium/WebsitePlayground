@@ -34,12 +34,12 @@ group Clientside
   github SignalR/bower-signalr jquery.signalR.js
   github SignalR/bower-signalr jquery.signalR.min.js
   github aFarkas/html5shiv dist/html5shiv.min.js
-  github FortAwesome/Font-Awesome css/font-awesome.min.css
-  github FortAwesome/Font-Awesome fonts/fontawesome-webfont.eot
-  github FortAwesome/Font-Awesome fonts/fontawesome-webfont.svg
-  github FortAwesome/Font-Awesome fonts/fontawesome-webfont.ttf
-  github FortAwesome/Font-Awesome fonts/fontawesome-webfont.woff
-  github FortAwesome/Font-Awesome fonts/fontawesome-webfont.woff2
+  github FortAwesome/Font-Awesome:fa-4 css/font-awesome.min.css
+  github FortAwesome/Font-Awesome:fa-4 fonts/fontawesome-webfont.eot
+  github FortAwesome/Font-Awesome:fa-4 fonts/fontawesome-webfont.svg
+  github FortAwesome/Font-Awesome:fa-4 fonts/fontawesome-webfont.ttf
+  github FortAwesome/Font-Awesome:fa-4 fonts/fontawesome-webfont.woff
+  github FortAwesome/Font-Awesome:fa-4 fonts/fontawesome-webfont.woff2
   github Reactive-Extensions/RxJS dist/rx.lite.min.js
   // other possible:
   // danielm/uploader booncon/slippry janl/mustache.js shutterstock/rickshaw
