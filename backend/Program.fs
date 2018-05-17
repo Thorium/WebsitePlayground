@@ -15,6 +15,9 @@ let hostName = System.Net.Dns.GetHostName()
 let serverPath = System.Reflection.Assembly.GetExecutingAssembly().Location |> System.IO.Path.GetDirectoryName
 
 let startServer() =
+
+    System.Net.ServicePointManager.SecurityProtocol <- System.Net.SecurityProtocolType.Tls12 ||| System.Net.SecurityProtocolType.Tls11
+
     let fetchLogLevel =
         match System.Configuration.ConfigurationManager.AppSettings.["LogLevel"].ToString().ToLower() with
         | "error" -> LogLevel.Error
@@ -67,10 +70,10 @@ let stopServer() =
 open System.ServiceProcess
 type WinService() =
     inherit ServiceBase(ServiceName = "companyweb")
-    override x.OnStart(args) = 
+    override x.OnStart(args) =
         Logary.Message.eventInfo "Starting server" |> writeLog
         startServer(); base.OnStart(args)
-    override x.OnStop() = 
+    override x.OnStop() =
         Logary.Message.eventInfo "Stopping server" |> writeLog
         stopServer(); base.OnStop()
     override x.Dispose(disposing) =
@@ -101,7 +104,7 @@ let main args =
         else
             ServiceBase.Run [| new WinService() :> ServiceBase |];
     with
-    | e -> Logary.Message.eventError "Error with webserver {err}" 
+    | e -> Logary.Message.eventError "Error with webserver {err}"
             |> Logary.Message.setField "err" (e.ToString())
             |> writeLog
            Console.WriteLine (e.GetBaseException().Message)

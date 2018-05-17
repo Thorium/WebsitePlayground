@@ -25,7 +25,9 @@ $(function() {
     $(document).off('click.fndtn.magellan');
     try{
         let fn:any = $.fn;
-        fn.bootstrapBtn = fn.button.noConflict();
+        if (fn.button.noConflict) {
+            fn.bootstrapBtn = fn.button.noConflict();
+        }
     } catch(e) {
         console.log(e);
     }
