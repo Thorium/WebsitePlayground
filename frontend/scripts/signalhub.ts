@@ -16,6 +16,14 @@ $(document).ready(function () {
 	   console.log("hub not found");
 	}
 
+    if($.connection.hub.disconnected!==undefined){
+       $.connection.hub.disconnected(function() {
+          setTimeout(function() {
+              $.connection.hub.start();
+          }, 5000); // Restart connection after 5 seconds.
+       });
+    }
+
     // Cound be returned from server as separate call of this client function,
 	// or just data from searchCompanies done-call:
 	// signalHub.client.listCompanies = function (data) {
