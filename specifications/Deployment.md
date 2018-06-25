@@ -90,6 +90,9 @@ If you have problems, you may miss somethig from the path. Try running the follo
 Installers should add paths. But if not, In Windows the path is modified from:
 Control Panel -> System -> Advanced System Settings -> Advanced -> Environment Variables -> PATH. Do not replace the existing one, just add with semicolon separated the new ones.
 
+On Node.Js errors (e.g. node-gyp / not compatible with VS2017 / etc): Remove Node.js (Windows: from Control Panel) and
+install version 6.11.2 of Node.Js from https://nodejs.org/dist/v6.11.2/
+
 ##### How to run on a different database? #####
 
 - There are some other options for databases on folder `backend/sql/other`: MS-SQL script files or SQLite database file. You could also use PostgreSQL, Oracle or MsAccess but then you have to do your own database by looking the simple database structure provided.
