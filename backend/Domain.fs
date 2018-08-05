@@ -322,6 +322,12 @@ type CompanySearchResult = {
     Image: string option
 }
 
+module Async =
+  /// Async.Start with timeout in seconds
+  let StartWithTimeout (timeoutSecs:int) (computation:Async<unit>) =
+    let c = new System.Threading.CancellationTokenSource(timeoutSecs*1000)
+    Async.Start(computation, cancellationToken = c.Token)
+
 // --- Common functions -----------------------------
 
 let ``calculate SHA256 hash`` : string -> string =

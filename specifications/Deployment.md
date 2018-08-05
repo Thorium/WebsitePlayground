@@ -35,6 +35,7 @@
    (Install Visual Studio Code (https://code.visualstudio.com/) TypeScript editor, for *.ts and *.tsx files)
 
 2. If you install to Mac/Linux, install F# (and Mono). Here are the instructions:
+   - [Windows](http://fsharp.org/use/windows/)
    - [Linux](http://fsharp.org/use/linux/)
    - [Mac](http://fsharp.org/use/mac/)
    
