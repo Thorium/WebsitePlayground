@@ -92,7 +92,7 @@ function setItemValue(jQControl, parval){
     if(jQControl.is(':checkbox') || jQControl.is(':radio')){
         jQControl.prop('checked', (parval === 'true' || parval === true));
     }else if(jQControl.hasClass('hasDatepicker')){
-        jQControl.datepicker("setDate", new Date(parval) );
+        jQControl.datepicker("setDate", parval == null ? '' : new Date(parval) );
     }else if(jQControl.is('span') || jQControl.is('p')){
         jQControl.html(parval);
     }else{
@@ -162,7 +162,7 @@ export function parseFieldsFromForm(form){
    const values = getFormValuesFrom(form, ids);
    const keys = Object.keys(values);
    const tupleArray = _.map(keys, k => {
-       return k.indexOf("Date")>-1 ?
+       return k.indexOf("Date")>-1 && values[k] != null ?
            { Item1: k, Item2: new Date(values[k])} :
            { Item1: k, Item2: values[k]};});
 

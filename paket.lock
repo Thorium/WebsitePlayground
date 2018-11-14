@@ -3,7 +3,7 @@ NUGET
   remote: https://www.nuget.org/api/v2
     FParsec (1.0.3)
       FSharp.Core (>= 4.0.0.1)
-    FSharp.Core (4.3.4)
+    FSharp.Core (4.5.2)
     FSharp.Data (2.4.5)
     Hopac (0.3.23)
       FSharp.Core (>= 3.1.2.5) - restriction: && (>= net40) (< netstandard1.6)
@@ -110,13 +110,13 @@ NUGET
     Newtonsoft.Json (11.0.1)
     NodaTime (1.3.4)
     Owin (1.0)
-    Owin.Compression (1.0.20)
-      FSharp.Core (>= 4.3.4 < 4.4) - restriction: || (&& (>= net40) (>= netstandard2.0)) (>= net452)
+    Owin.Compression (1.0.21)
+      FSharp.Core (>= 4.5 < 5.0) - restriction: || (&& (>= net40) (>= netstandard2.0)) (>= net452)
       Microsoft.Owin (>= 4.0 < 5.0) - restriction: >= net452
       Owin (>= 1.0) - restriction: >= net452
     Owin.Security.AesDataProtectorProvider (1.1.2)
       Microsoft.Owin.Security (>= 3.1)
-    SQLProvider (1.1.48)
+    SQLProvider (1.1.50)
     System.Buffers (4.4) - restriction: || (&& (>= net40) (< net45) (>= netstandard1.3) (< netstandard2.0)) (&& (>= net40) (< net45) (>= netstandard2.0)) (&& (>= net45) (< netstandard1.3)) (>= net46)
       System.Diagnostics.Debug (>= 4.3) - restriction: && (>= net40) (>= netstandard1.1) (< netstandard2.0)
       System.Diagnostics.Tracing (>= 4.3) - restriction: && (>= net40) (>= netstandard1.1) (< netstandard2.0)
@@ -191,7 +191,7 @@ NUGET
     FAKE (4.64.6)
     FSharp.Configuration (1.4)
       FSharp.Core (>= 4.0.0.1)
-    FSharp.Core (4.3.4)
+    FSharp.Core (4.5.2)
 
 GROUP Clientside
 

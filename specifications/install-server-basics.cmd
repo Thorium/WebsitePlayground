@@ -9,6 +9,7 @@ choco install 7zip.commandline -y
 
 echo Installing .NET
 choco install dotnet4.6 -y
+choco install dotnet4.7.2 -y
 choco install visualfsharptools -y
 
 rem open http ports

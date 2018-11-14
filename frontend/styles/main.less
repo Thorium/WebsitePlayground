@@ -237,3 +237,18 @@ meta.foundation-data-attribute-namespace {
     color:darkgray;
     cursor: help;
 }
+
+@media print {
+    a[href]:after {
+       display: none;
+       visibility: hidden;
+    }
+    .f-dropdown{
+        display: none;
+        visibility: hidden;
+        a[href]:after {
+            display: none;
+            visibility: hidden;
+        }
+    }
+ }
