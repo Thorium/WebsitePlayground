@@ -8,9 +8,20 @@ interface ISignalHub extends SignalR { SignalHub : any; }
 $(document).ready(function () {
 
 	// SignalR Hub:
-	$.connection.hub.url = "/signalr";
+    if($.connection!==undefined){
+        $.connection.hub.url = "/signalr";
+    } else {
+        setTimeout(function() {
+            if($.connection===undefined){
+                $.connection.hub.url = "/signalr";
+                signalHub = (<ISignalHub> $.connection).SignalHub;
+            }
+        }, 2000);
+    }
     const con = <ISignalHub>$.connection;
-	signalHub = con.SignalHub; // Hub class
+    if(conn !== undefined){ 
+        signalHub = conn.SignalHub; //Hub class
+    }
 	const connection = !signalHub?$.hubConnection():$.connection.hub;
 	if (!signalHub) {
 	   console.log("hub not found");

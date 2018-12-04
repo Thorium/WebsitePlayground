@@ -281,6 +281,8 @@ type TypeProviderConnection.dataContext with
   /// SubmitUpdates() but on error ClearUpdates()
   member x.SubmitUpdates2() =
     async {
+        let sqlList = ResizeArray<FSharp.Data.Sql.Common.QueryEvents.SqlEventData>()
+        use o = FSharp.Data.Sql.Common.QueryEvents.SqlQueryEvent |> Observable.subscribe(fun e -> sqlList.Add e)
         let! res = x.SubmitUpdatesAsync() |> Async.Catch
         match res with
         | Choice1Of2 _ -> ()
@@ -293,6 +295,9 @@ type TypeProviderConnection.dataContext with
             Logary.Message.eventError "SubmitUpdates2 error {err}"
             |> Logary.Message.setField "err" errormsg
             |> writeLog
+            sqlList |> Seq.iter(fun e ->
+                writeLog (Logary.Message.eventError "SQL executed when error" |> Logary.Message.setField "sql" (e.ToString()))
+            )
             try
                 x.ClearUpdates() |> ignore
             with
