@@ -52,6 +52,7 @@ var files = {
 
     lessstyles: ['frontend/styles/*.less'],
     sassstyles: ['frontend/styles/*.scss'],
+    cssstyles: ['frontend/styles/*.css'],
     csslibs: ['paket-files/**/*.css', excludeFoundation, excludePaketGithubBinaries],
     htmls: ['frontend/**/*.html', '!frontend/dist/**/*.html'],
     txts: ['frontend/**/*.txt', '!frontend/dist/**/*.txt'],
@@ -121,7 +122,11 @@ function minifystyles(target) {
 	  .pipe(sass()).on('error', errorHandler('Sass'))
       .pipe(autoprefixer('last 2 version'));
 
-    return gulpMerge(sassfile, lessfile)
+	var cssfile = gulp.src(files.cssstyles)
+	  .pipe(gulpif(!isRelease, sourcemaps.init()))
+      .pipe(autoprefixer('last 2 version'));
+	  
+    return gulpMerge(cssfile, gulpMerge(lessfile, sassfile))
       .pipe(concat(target+'.css'))
       .pipe(rename({suffix: '.min'}))
       .pipe(mincss())

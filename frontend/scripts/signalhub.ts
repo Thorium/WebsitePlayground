@@ -19,8 +19,8 @@ $(document).ready(function () {
         }, 2000);
     }
     const con = <ISignalHub>$.connection;
-    if(conn !== undefined){ 
-        signalHub = conn.SignalHub; //Hub class
+    if(con !== undefined){ 
+        signalHub = con.SignalHub; // Hub class
     }
 	const connection = !signalHub?$.hubConnection():$.connection.hub;
 	if (!signalHub) {

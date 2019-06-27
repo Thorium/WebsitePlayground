@@ -2,7 +2,7 @@
 // Or on Mono, fsharpi Program.fsx but note: on Mono SignalR is not working from interactive!
 
 #if INTERACTIVE
-#r @"./../packages/FSharp.Data/lib/net40/FSharp.Data.dll"
+#r @"./../packages/FSharp.Data/lib/net45/FSharp.Data.dll"
 #r @"./../packages/SQLProvider/lib/net451/FSharp.Data.SqlProvider.dll"
 #r @"./../packages/MySql.Data/lib/net40/MySql.Data.dll"
 
