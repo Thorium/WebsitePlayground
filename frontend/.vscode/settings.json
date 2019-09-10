@@ -1,6 +1,15 @@
 // Place your settings in this file to overwrite default and user settings.
 {
+	"editor.fontFamily": "Fira Code",
+	"editor.fontLigatures": true,
+    "files.encoding": "utf8",
 	"files.exclude": {
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/.vs": true,
+        ".paket": true,
+        "**/bin": true,
+        "**/obj": true,
 		"**/dist": true,
 		"**/node_modules": true,
 		"**/packages": true,
