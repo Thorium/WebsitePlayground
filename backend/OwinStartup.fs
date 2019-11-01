@@ -119,6 +119,8 @@ type MyWebStartup() =
         |> fun app -> app.MapSignalR(hubConfig) |> ignore
 
         // REST Web Api if needed:
+        // Note: If parameter name is "param" as here, then it's referenced with only value in uri: /value/
+        // otherwise you need an attribute [<FromUri>]x and it's referenced with ?x=...
         //use httpConfig = new HttpConfiguration()
         //httpConfig.Filters.Add(LogExceptionAttribute())
         //httpConfig.Routes.MapHttpRoute("MyApi", "api/{controller}/{param}") |> ignore // "api/my" -> MyController
