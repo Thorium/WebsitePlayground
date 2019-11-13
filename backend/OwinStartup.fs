@@ -40,7 +40,12 @@ let corsPolicy = Microsoft.Owin.Cors.CorsOptions(PolicyProvider =
                 p.Origins.Add "http*://www.google-analytics.com"
                 p.Origins.Add "http*://maps.googleapis.com"
                 p.Origins.Add "http*://fonts.googleapis.com"
+#if DEBUG
                 p.Origins.Add "http://localhost"
+                p.Origins.Add "ws*://localhost"
+                p.Origins.Add "http://localhost:7050"
+                p.Origins.Add "ws*://localhost:7050"
+#endif
                 if not(String.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings.["ServerAddress"])) then
                     p.Origins.Add System.Configuration.ConfigurationManager.AppSettings.["ServerAddress"]
                 p
