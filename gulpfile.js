@@ -54,7 +54,7 @@ var files = {
     sassstyles: ['frontend/styles/*.scss'],
     cssstyles: ['frontend/styles/*.css'],
     csslibs: ['paket-files/**/*.css', excludeFoundation, excludePaketGithubBinaries],
-    htmls: ['frontend/**/*.html', '!frontend/dist/**/*.html'],
+    htmls: ['frontend/**/*.html', '!frontend/dist/**/*.html', 'frontend/**/*sitemap*.x*', '!frontend/**/*sitemap*.x*'],
     txts: ['frontend/**/*.txt', '!frontend/dist/**/*.txt'],
     statics: ['frontend/*.ico'],
     fonts: ['paket-files/**/*font*.svg',
