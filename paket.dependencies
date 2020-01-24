@@ -31,8 +31,8 @@ group Clientside
   github zurb/bower-foundation css/foundation.min.css
   github zurb/bower-foundation css/normalize.css
   github zurb/bower-foundation js/foundation.min.js
-  github SignalR/bower-signalr jquery.signalR.js
-  github SignalR/bower-signalr jquery.signalR.min.js
+  //github SignalR/bower-signalr jquery.signalR.js
+  //github SignalR/bower-signalr jquery.signalR.min.js
   github aFarkas/html5shiv dist/html5shiv.min.js
   github FortAwesome/Font-Awesome:fa-4 css/font-awesome.min.css
   github FortAwesome/Font-Awesome:fa-4 fonts/fontawesome-webfont.eot
@@ -45,6 +45,8 @@ group Clientside
   // other possible:
   // danielm/uploader booncon/slippry janl/mustache.js shutterstock/rickshaw
 
+  http https://cdn.jsdelivr.net/npm/signalr@2.4.1/jquery.signalR.js jquery.signalR.js
+  http https://cdn.jsdelivr.net/npm/signalr@2.4.1/jquery.signalR.min.js jquery.signalR.min.js
   http https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.4.min.js jquery.min.js
   http https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.4.min.map jquery.min.map
   http https://code.jquery.com/ui/1.12.1/jquery-ui.min.js
@@ -52,7 +54,7 @@ group Clientside
   http https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js
   http https://ajax.aspnetcdn.com/ajax/bootstrap/4.0.0/css/bootstrap.min.css
   http https://ajax.aspnetcdn.com/ajax/bootstrap/4.0.0/bootstrap.min.js
-  http https://raw.githubusercontent.com/lodash/lodash/4.17.5/dist/lodash.min.js
+  http https://raw.githubusercontent.com/lodash/lodash/4.17.15/dist/lodash.min.js
   http https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js
   http https://unpkg.com/react@16/umd/react.production.min.js
   http https://unpkg.com/react-dom@16/umd/react-dom.production.min.js
