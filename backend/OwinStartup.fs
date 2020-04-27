@@ -98,6 +98,17 @@ type LoggingPipelineModule() =
             Logary.Message.eventDebug("<= Invoking " + context.Invocation.Hub + "." + context.Invocation.Method) |> writeLog
             base.OnBeforeOutgoing context
 
+/// Direct linking url-routing,
+/// redirect aliases: /company/ -> /company.html
+type RedirectRoutingController() as this =
+    inherit ApiController() 
+    let createRedirectResponse uri =
+        let response = this.Request.CreateResponse System.Net.HttpStatusCode.Redirect
+        response.Headers.Location <- Uri(this.Request.RequestUri.GetLeftPart(UriPartial.Authority) + "/" + uri)
+        response
+    [<Route("company"); HttpGet; System.Web.Http.Description.ApiExplorerSettings(IgnoreApi = true)>] member __.RedirectToCompany() = createRedirectResponse "company.html"
+    [<Route("results"); HttpGet; System.Web.Http.Description.ApiExplorerSettings(IgnoreApi = true)>] member __.RedirectToResults() = createRedirectResponse "results.html"
+
 type MyWebStartup() =
 
     member __.Configuration(ap:Owin.IAppBuilder) =
@@ -160,13 +171,16 @@ type MyWebStartup() =
         //SignalR:
         |> fun app -> app.MapSignalR(hubConfig) |> ignore
 
+        use httpConfig = new HttpConfiguration()
+        httpConfig.Filters.Add(LogExceptionAttribute())
+
         // REST Web Api if needed:
         // Note: If parameter name is "param" as here, then it's referenced with only value in uri: /value/
         // otherwise you need an attribute [<FromUri>]x and it's referenced with ?x=...
-        //use httpConfig = new HttpConfiguration()
-        //httpConfig.Filters.Add(LogExceptionAttribute())
         //httpConfig.Routes.MapHttpRoute("MyApi", "api/{controller}/{param}") |> ignore // "api/my" -> MyController
-        //ap.UseWebApi(httpConfig) |> ignore
+
+        ap.UseWebApi(httpConfig) |> ignore
+        httpConfig.MapHttpAttributeRoutes()
 
         // Google and Facebook authentications would be here...
         //ap.UseFacebookAuthentication(..)
@@ -183,6 +197,7 @@ type MyWebStartup() =
         //           r.OwinContext.Response.Headers.Remove("Access-Control-Allow-Origin") |> ignore
         //       r.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", [|"*"|])
         ap.UseFileServer(fileServerOptions) |> ignore
+        httpConfig.EnsureInitialized()
         ()
 
 [<assembly: Microsoft.Owin.OwinStartup(typeof<MyWebStartup>)>]
