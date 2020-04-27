@@ -19,6 +19,12 @@ open System.IO
 let displayErrors = ConfigurationManager.AppSettings.["WebServerDebug"].ToString().ToLower() = "true"
 let hubConfig = Microsoft.AspNet.SignalR.HubConfiguration(EnableDetailedErrors = displayErrors, EnableJavaScriptProxies = true)
 
+let domainForwarding =
+    if String.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings.["DomainForwarding"]) ||
+       String.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings.["ServerAddress"]) then None
+    else Some(System.Configuration.ConfigurationManager.AppSettings.["DomainForwarding"].ToString().
+                Replace("http:", "https:"), System.Configuration.ConfigurationManager.AppSettings.["DomainForwarding"].ToString().ToLower())
+ 
 let serverPath =
     let path = ConfigurationManager.AppSettings.["WebServerFolder"].ToString() |> getRootedPath
     if not(Directory.Exists path) then Directory.CreateDirectory (path) |> ignore
@@ -95,6 +101,37 @@ type LoggingPipelineModule() =
 type MyWebStartup() =
 
     member __.Configuration(ap:Owin.IAppBuilder) =
+    
+//#if !DEBUG
+//        // Force SSL
+//        ap.Use(fun (context:IOwinContext) (next: Func<Task>) ->
+//            async {
+//                if context.Request.IsSecure || context.Request.Uri.Host = "localhost" || not(context.Request.Uri.IsDefaultPort) then
+//                    do! next.Invoke() |> Async.AwaitIAsyncResult |> Async.Ignore
+//                else
+//                    let uri =
+//                        Uri.UriSchemeHttps + Uri.SchemeDelimiter +
+//                        context.Request.Uri.GetComponents(UriComponents.AbsoluteUri &&& ~~~UriComponents.Scheme, UriFormat.SafeUnescaped)
+//                    context.Response.Redirect (uri.Replace("://www.", "://"))
+//            } |> Async.StartAsTask :> Task
+//        ) |> ignore
+//#endif
+
+        match domainForwarding with
+        | None -> ()
+        | Some (fromUri, toUri) ->
+            ap.Use(fun (context:IOwinContext) (next: Func<Task>) ->
+                async {
+                    let uri =
+                        Uri.UriSchemeHttps + Uri.SchemeDelimiter +
+                        context.Request.Uri.GetComponents(UriComponents.AbsoluteUri &&& ~~~UriComponents.Scheme, UriFormat.SafeUnescaped)
+                    if uri.Contains(fromUri) && uri.Contains(".html") then
+                        context.Response.Redirect (uri.Replace(fromUri, toUri))
+                    else
+                        do! next.Invoke() |> Async.AwaitIAsyncResult |> Async.Ignore
+                } |> Async.StartAsTask :> Task
+            ) |> ignore
+
         if Type.GetType ("Mono.Runtime") <> null then
            //Workaround for Mono incompatibility https://katanaproject.codeplex.com/workitem/438
            let (sux, httpListener) = ap.Properties.TryGetValue(typeof<HttpListener>.FullName)
