@@ -125,6 +125,13 @@ If you do backend modifications, you have to run `build` on a way or another: Th
 IDE (e.g. Visual Studio), or you can run `build project` from command line. If you want to build the full package
 in release mode instead of development, you would execute `build package Configuration=Release`
 
+Namespaces:
+
+- Domain - Main business domain and logics
+- Scheduler - Scheduled maintenance tasks
+- SignalHubs - Business logics communication to frontend
+- OwinStart - Web-server and WebAPI
+
 #### Debugging Backend ####
 
 If you want to debug the system, you can just attach your debugger to the backend webserver executable process
