@@ -94,7 +94,7 @@ var AvailableCompaniesList = React.createClass<CompaniesProps, any>({
       var buyTheseStocks = this.props.buyStocks;
       var companies = {};
       if(this.props.companies !== null && this.props.companies.length !== 0){
-          companies = _.map(this.props.companies, function(company, idx) {
+          companies = _.map(this.props.companies, function(company, idx:number) {
               return (<AvailableCompany key={idx} company={company} buyStocks={buyTheseStocks} />);
           });
       } else {

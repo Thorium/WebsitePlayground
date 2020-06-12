@@ -111,7 +111,7 @@ export function getFormValues(paramNames:Array<string>) {
                                            || $('#'+c).hasClass("containsInput")
                                            || $('#'+c).prop('checked') );
 
-	_.each(params, p => { res[p] = getItemValue($('#'+p)); });
+	_.each(params, (p:string) => { res[p] = getItemValue($('#'+p)); });
 	return res;
 }
 
@@ -121,7 +121,7 @@ export function getFormValuesFrom(form, paramNames:Array<string>) {
 	const params = _.filter(paramNamesf, c => form.find('#'+c).is(":visible") || $('#'+c).attr('type') === 'hidden'
                                            || form.find('#'+c).hasClass("containsInput")
                                            || form.find('#'+c).prop('checked') );
-	_.each(params, p => {
+	_.each(params, (p:string) => {
         res[p] = getItemValue(form.find('#'+p));
     });
 	return res;
