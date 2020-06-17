@@ -3,18 +3,21 @@ import * as ReactDOM from "react-dom";
 import * as _ from "lodash";
 
 interface NavbarProps { companyId: string; }
-var CompanyWebNavBar = React.createClass<NavbarProps, any>({
-  getInitialState: function() {
-    return {menuOn: false};
-  },
-  handleClick: function(event) {
+class CompanyWebNavBar extends React.Component<NavbarProps, any> {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);        
+    this.getLink = this.getLink.bind(this);       
+    this.state = {menuOn: false};
+  }
+  handleClick () {
     this.setState({menuOn: !this.state.menuOn});
     return false;
-  },
-  getLink: function (itm) {
+  }
+  getLink (itm) {
       return itm + ".html";
-  },
-  render: function() {
+  }
+  render () {
     var menutoggle = [];
     var menubar = [];
 
@@ -54,18 +57,22 @@ var CompanyWebNavBar = React.createClass<NavbarProps, any>({
 	  </div>
     );
   }
-});
+};
 
 interface CompanyProps { key: any; company: any; buyStocks: any; }
-var AvailableCompany = React.createClass<CompanyProps, any>({
-    handleClick: function(event) {
+class AvailableCompany extends React.Component<CompanyProps, any> {
+    constructor(props) {
+      super(props);
+      this.handleClick = this.handleClick.bind(this);        
+    }
+    handleClick () {
         this.props.buyStocks(this.props.company.CompanyName, 50);
-    },
-    render: function() {
+    }
+    render () {
         var logoImage = [];
         var webPage = [];
         var company = this.props.company;
-        var floatRight = {"float":"right"};
+        const floatRight: React.CSSProperties = {"float":"right"};
         if(company.Image!==null){
             logoImage.push(<a className="th" key={company.Id} href={company.Image.Fields}><img src={company.Image.Fields} /></a>);
         }
@@ -86,11 +93,11 @@ var AvailableCompany = React.createClass<CompanyProps, any>({
               </div>
         );
   }
-});
+};
 
 interface CompaniesProps { companies: Array<any>; buyStocks: any; }
-var AvailableCompaniesList = React.createClass<CompaniesProps, any>({
-  render: function() {
+class AvailableCompaniesList extends React.Component<CompaniesProps, any> {
+  render () {
       var buyTheseStocks = this.props.buyStocks;
       var companies = {};
       if(this.props.companies !== null && this.props.companies.length !== 0){
@@ -102,18 +109,23 @@ var AvailableCompaniesList = React.createClass<CompaniesProps, any>({
       }
       return (<div>{companies}</div>);
   }
-});
+};
 
 export function renderAvailableCompanies(theCompanies, buyStocks) {
-  ReactDOM.render(
-    <AvailableCompaniesList companies={theCompanies} buyStocks={buyStocks} />,
-    document.getElementById('companies')
-  );
+  let mount = document.getElementById('companies');
+  if(mount!==null){
+    ReactDOM.unmountComponentAtNode(mount);
+    ReactDOM.render(
+      <AvailableCompaniesList companies={theCompanies} buyStocks={buyStocks} />,
+      mount
+    );
+  }
 }
 
 export function renderNavBar(companyId) {
   var navbard = document.getElementById('navbar');
   if(navbard!==null){
+    ReactDOM.unmountComponentAtNode(navbard);
     ReactDOM.render(
       <CompanyWebNavBar companyId={companyId} />,
       navbard

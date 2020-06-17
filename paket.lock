@@ -4,7 +4,8 @@ NUGET
     FParsec (1.0.3)
       FSharp.Core (>= 4.0.0.1)
     FSharp.Core (4.7)
-    FSharp.Data (2.4.5)
+    FSharp.Data (3.3.3)
+      FSharp.Core (>= 4.0.0.1) - restriction: >= net45
     Hopac (0.3.23)
       FSharp.Core (>= 3.1.2.5) - restriction: && (>= net40) (< netstandard1.6)
       FSharp.Core (>= 4.0.1.7-alpha) - restriction: && (>= net40) (>= netstandard1.6)
@@ -113,7 +114,7 @@ NUGET
       Owin (>= 1.0) - restriction: >= net452
     Owin.Security.AesDataProtectorProvider (1.1.2)
       Microsoft.Owin.Security (>= 3.1)
-    SQLProvider (1.1.76)
+    SQLProvider (1.1.91)
     System.Buffers (4.4) - restriction: || (&& (>= net40) (< net45) (>= netstandard1.3) (< netstandard2.0)) (&& (>= net40) (< net45) (>= netstandard2.0)) (&& (>= net45) (< netstandard1.3)) (>= net46)
       System.Diagnostics.Debug (>= 4.3) - restriction: && (>= net40) (>= netstandard1.1) (< netstandard2.0)
       System.Diagnostics.Tracing (>= 4.3) - restriction: && (>= net40) (>= netstandard1.1) (< netstandard2.0)
