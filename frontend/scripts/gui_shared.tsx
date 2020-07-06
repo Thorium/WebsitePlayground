@@ -59,33 +59,33 @@ class CompanyWebNavBar extends React.Component<NavbarProps, any> {
   }
 };
 
-interface CompanyProps { key: any; company: any; buyStocks: any; }
+interface CompanyProps { key: any; company: any; conn: any; }
 class AvailableCompany extends React.Component<CompanyProps, any> {
     constructor(props) {
       super(props);
       this.handleClick = this.handleClick.bind(this);        
     }
     handleClick () {
-        this.props.buyStocks(this.props.company.CompanyName, 50);
+        this.props.conn.invoke("BuyStocks", this.props.company.companyName, 50);
     }
     render () {
         var logoImage = [];
         var webPage = [];
         var company = this.props.company;
         const floatRight: React.CSSProperties = {"float":"right"};
-        if(company.Image!==null){
-            logoImage.push(<a className="th" key={company.Id} href={company.Image.Fields}><img src={company.Image.Fields} /></a>);
+        if(company.image!==null){
+            logoImage.push(<a className="th" key={"img"+company.Id} href={company.image.value}><img src={company.image.value} /></a>);
         }
-        if(company.Url!==null){
-            webPage.push(<span key={company.Url.Fields}>Website:
-                           <a href={company.Url.Fields} target="_blank">{company.Url.Fields}</a>
+        if(company.url!==null){
+            webPage.push(<span key={"url"+company.url.value}>Website:
+                           <a href={company.url.value} target="_blank">{company.url.value}</a>
                          </span>);
         }
         return (
               <div key="resultPanel" className="panel searchresultItem">
                   {logoImage}
                   <div>
-	                  <div className="darkgreen desktop-company-name"><h3>{company.CompanyName}</h3>
+	                  <div className="darkgreen desktop-company-name"><h3>{company.companyName}</h3>
                       <span className="boldstyle" style={floatRight}>{webPage}</span>
                       </div>
                       <input type="button" className="button radius" value="Buy 50 stocks!" onClick={this.handleClick} />
@@ -95,14 +95,14 @@ class AvailableCompany extends React.Component<CompanyProps, any> {
   }
 };
 
-interface CompaniesProps { companies: Array<any>; buyStocks: any; }
+interface CompaniesProps { companies: Array<any>; con: any; }
 class AvailableCompaniesList extends React.Component<CompaniesProps, any> {
   render () {
-      var buyTheseStocks = this.props.buyStocks;
+      var conn = this.props.con;
       var companies = {};
       if(this.props.companies !== null && this.props.companies.length !== 0){
           companies = _.map(this.props.companies, function(company, idx:number) {
-              return (<AvailableCompany key={idx} company={company} buyStocks={buyTheseStocks} />);
+              return (<AvailableCompany key={idx} company={company} conn={conn} />);
           });
       } else {
           companies = "No companies found.";
@@ -111,12 +111,12 @@ class AvailableCompaniesList extends React.Component<CompaniesProps, any> {
   }
 };
 
-export function renderAvailableCompanies(theCompanies, buyStocks) {
+export function renderAvailableCompanies(theCompanies, con) {
   let mount = document.getElementById('companies');
   if(mount!==null){
     ReactDOM.unmountComponentAtNode(mount);
     ReactDOM.render(
-      <AvailableCompaniesList companies={theCompanies} buyStocks={buyStocks} />,
+      <AvailableCompaniesList companies={theCompanies} con={con} />,
       mount
     );
   }

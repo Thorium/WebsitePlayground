@@ -1,6 +1,6 @@
 import tools = require("./tools");
 import * as _ from "lodash";
-interface ICompanyHub extends SignalR { CompanyHub: any; }
+import * as signalR from "@microsoft/signalr";
 
 export function initCompany(locale) {
 	
@@ -11,11 +11,14 @@ export function initCompany(locale) {
 
     const parsed = tools.parseUrlPathParameters(window.location.href);
 
-    const conn = <ICompanyHub> $.connection;
-    const companyHub = conn.CompanyHub; // Hub class
-    
+    const companyConnection = new signalR.HubConnectionBuilder()
+        .withUrl("/companyhub")
+        .withAutomaticReconnect([0, 0, 10000])
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
+
     function setValuesToForm(data) {
-        _.each(data, function(c:any){ $('#'+c.Item1).val(c.Item2); });
+        _.each(data, function(c:any){ $('#'+c.item1).val(c.item2); });
     }
     
     function parseFieldFromForm(){
@@ -23,57 +26,60 @@ export function initCompany(locale) {
        const ids = _.map(nonbuttons, function(i) { return i.id;});
        const values = tools.getFormValues(ids);
        const keys = Object.keys(values);
-       const tupleArray = _.map(keys, function(k) { return { Item1: k, Item2: values[k]};});
+       const tupleArray = _.map(keys, function(k) { return { item1: k, item2: values[k]};});
        // debugger;
        return tupleArray;
     }
     
     const compId = parsed.item;
-    
-    if(compId===undefined || compId === "undefined"){
-
-        $("#profileInfo").text("Create a new company");
-
-        $("#createbtn").show();
-        $("#createbtn").off();
-        $("#createbtn").click(function () {
-            tools.validateForm($("#companyform"), function () {
-                companyHub.server.create(parseFieldFromForm()).done(
-                    function(data){ 
-                        const id = _.filter(data, function(i:any){return i.Item1==="Id";});
-                        const idval = _.map(id, function(i:any){return i.Item2;});
-                        document.location.href = "company.html?i=" + idval[0] + "#/item/" + idval[0];
-                    });
-            });
-            return false;
-        });
+    companyConnection.start().then(function(){
         
-    }else {
-        $("#profileInfo").text("Update company");
+        if(compId===undefined || compId === "undefined"){
 
-        companyHub.server.read(compId).done(data => {
-            setValuesToForm(data);
-            const stempdate = $("#Founded").val().split("T")[0];
-            $("#Founded").val(stempdate);
-            return false;
-        });
+            $("#profileInfo").text("Create a new company");
 
-        $("#updatebtn").show();
-        $("#deletebtn").show();
-
-        $("#updatebtn").off();
-        $("#updatebtn").click(function () {
-            tools.validateForm($("#companyform"), function () {
-                companyHub.server.update(compId, parseFieldFromForm()).done(function(d){ alert("Company updated!"); setValuesToForm(d);});
+            $("#createbtn").show();
+            $("#createbtn").off();
+            $("#createbtn").click(function () {
+                tools.validateForm($("#companyform"), function () {
+                    companyConnection.invoke("Create", parseFieldFromForm()).then(
+                        function(data){ 
+                            const id = _.filter(data, function(i:any){return i.item1==="Id";});
+                            const idval = _.map(id, function(i:any){return i.item2;});
+                            document.location.href = "company.html?i=" + idval[0] + "#/item/" + idval[0];
+                        });
+                });
+                return false;
             });
-            return false;
-        });
-        $("#deletebtn").off();
-        $("#deletebtn").click(function () {
-            if(confirm("Are you sure?")){
-                companyHub.server.delete(compId).done(function(d){ alert("Deleted!"); document.location.href="company.html"; });
-            }
-            return false;
-        });	
-    }
+            
+        }else {
+            $("#profileInfo").text("Update company");
+            companyConnection.invoke("Read", parseInt(compId, 10)).then(data => {
+                setValuesToForm(data);
+                const stempdate = $("#Founded").val().split("T")[0];
+                $("#Founded").val(stempdate);
+                return false;
+            });
+
+            $("#updatebtn").show();
+            $("#deletebtn").show();
+
+            $("#updatebtn").off();
+            $("#updatebtn").click(function () {
+                tools.validateForm($("#companyform"), function () {
+                    companyConnection.invoke("Update", parseInt(compId, 10), parseFieldFromForm())
+                        .then(function(d){ alert("Company updated!"); setValuesToForm(d);});
+                });
+                return false;
+            });
+            $("#deletebtn").off();
+            $("#deletebtn").click(function () {
+                if(confirm("Are you sure?")){
+                    companyConnection.invoke("Delete", parseInt(compId, 10)).then(
+                        function(d){ alert("Deleted!"); document.location.href="company.html"; });
+                }
+                return false;
+            });	
+        }
+    });
 }

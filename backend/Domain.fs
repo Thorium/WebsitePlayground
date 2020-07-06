@@ -31,7 +31,7 @@ open FSharp.Data.Sql
 open System.Data.SqlClient
 open System.Threading.Tasks
 
-open MySql.Data.MySqlClient
+//open MySql.Data.MySqlClient
 open Hopac
 open Logary
 open Logary.Logger
@@ -40,7 +40,9 @@ open Logary.Logger
 
 
 [<Literal>]
-let Mysqldatapath = __SOURCE_DIRECTORY__ + @"/../packages/MySql.Data/lib/net45/"
+let Mysqldatapath = __SOURCE_DIRECTORY__ + @"/mysqlconnector"
+//let Mysqldatapath = __SOURCE_DIRECTORY__ + @"/../packages/server/MySqlConnector/lib/netcoreapp3.0"
+
 type TypeProviderConnection =
     SqlDataProvider< // Supports: MS SQL Server, SQLite, PostgreSQL, Oracle, MySQL (MariaDB), ODBC and MS Access
         ConnectionString = @"server = localhost; database = companyweb; uid = webuser;pwd = p4ssw0rd",
@@ -51,7 +53,8 @@ type TypeProviderConnection =
         CaseSensitivityChange = Common.CaseSensitivityChange.ORIGINAL,
         ResolutionPath=Mysqldatapath>
 
-let logger = lazy(Logary.Logging.getCurrentLogger())
+let logger = //lazy(Logary.Logging.getCurrentLogger())
+             lazy(Logary.Log.create "Websiteplayground")
 let cstr = System.Configuration.ConfigurationManager.AppSettings.["RuntimeDBConnectionString"]
 let internal createDbReadContext() =
     let rec createCon x =
@@ -104,7 +107,7 @@ let inline writeWithDbContextManualComplete() =
     scope, context
 
 open System.Threading.Tasks
-open Logary.Logging
+
 /// Write operations should be wrapped to transaction with this.
 let inline writeWithDbContext (func:TypeProviderConnection.dataContext -> ^T) =
     let transaction, context = writeWithDbContextManualComplete()

@@ -3,34 +3,9 @@
 kill `pgrep gulp` > /dev/null 2>&1
 if test "$OS" = "Windows_NT"
 then
-  # use .Net
-
-  .paket/paket.bootstrapper.exe
-  exit_code=$?
-  if [ $exit_code -ne 0 ]; then
-  	exit $exit_code
-  fi
-
-  .paket/paket.exe restore
-  exit_code=$?
-  if [ $exit_code -ne 0 ]; then
-  	exit $exit_code
-  fi
-  
-  packages/build/FAKE/tools/FAKE.exe $@ --fsiargs -d:MONO build.fsx "parallel-jobs=4" npmrestore
+  cmd /C build.cmd
 else
-  # use mono
-  mono .paket/paket.bootstrapper.exe
-  exit_code=$?
-  if [ $exit_code -ne 0 ]; then
-  	exit $exit_code
-  fi
-
-  mono .paket/paket.exe restore
-  exit_code=$?
-  if [ $exit_code -ne 0 ]; then
-  	exit $exit_code
-  fi
-
-  mono packages/build/FAKE/tools/FAKE.exe $@ --fsiargs -d:MONO build.fsx "parallel-jobs=4" npmrestore
+  dotnet tool restore
+  dotnet paket restore
+  dotnet fake run build.fsx $@ "parallel-jobs=4" npmrestore
 fi

@@ -1,38 +1,32 @@
+version 5.241.2
 source https://www.nuget.org/api/v2
-framework >= 4.0
 
-// Server side, F# .NET:
-nuget FSharp.Data
-nuget Microsoft.AspNet.SignalR.Core
-nuget Microsoft.AspNet.WebApi.OwinSelfHost
-nuget Microsoft.AspNet.Identity.Owin
-nuget Microsoft.Net.Http
-nuget Microsoft.Owin.Cors
-nuget Microsoft.Owin.StaticFiles
-nuget Microsoft.Owin.Diagnostics
-nuget Microsoft.Owin.Security.Facebook
-nuget Microsoft.Owin.Security.Google
-nuget MySqlConnector
-nuget Owin.Compression
-nuget Owin.Security.AesDataProtectorProvider
-nuget MySql.Data
-// nuget System.Reactive
-nuget SQLProvider
-nuget Logary
-nuget Logary.Targets.ApplicationInsights
-nuget Kentor.OwinCookieSaver
-nuget FSharp.Core
-nuget System.Runtime.InteropServices.RuntimeInformation
+nuget Microsoft.AspNetCore.SignalR
+group Server
+    source https://api.nuget.org/v3/index.json
+    framework: netcoreapp3.0
 
-// Client side, Javascript: (Please use minified, save some build time)
+    nuget FSharp.Core
+    nuget FSharp.Data
+    nuget Logary
+    nuget Logary.Targets.ApplicationInsights
+    nuget Saturn
+    nuget Microsoft.AspNetCore.Authentication.JwtBearer 3.1.5 // pin for netcoreapp31
+    nuget Microsoft.AspNetCore.SignalR
+    nuget Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson
+    nuget MySqlConnector
+    nuget SQLProvider
+    nuget System.Configuration.ConfigurationManager
+    nuget System.ServiceProcess.ServiceController
+    nuget Thoth.Json.Giraffe
+    
 group Clientside
-  source https://nuget.org/api/v2
+    source https://api.nuget.org/v3/index.json
+    framework: netstandard2.0
   github zurb/bower-foundation css/foundation.css
   github zurb/bower-foundation css/foundation.min.css
   github zurb/bower-foundation css/normalize.css
   github zurb/bower-foundation js/foundation.min.js
-  //github SignalR/bower-signalr jquery.signalR.js
-  //github SignalR/bower-signalr jquery.signalR.min.js
   github aFarkas/html5shiv dist/html5shiv.min.js
   github FortAwesome/Font-Awesome:fa-4 css/font-awesome.min.css
   github FortAwesome/Font-Awesome:fa-4 fonts/fontawesome-webfont.eot
@@ -44,9 +38,8 @@ group Clientside
   github furf/jquery-ui-touch-punch jquery.ui.touch-punch.min.js
   // other possible:
   // danielm/uploader booncon/slippry janl/mustache.js shutterstock/rickshaw
-
-  http https://cdn.jsdelivr.net/npm/signalr@2.4.1/jquery.signalR.js jquery.signalR.js
-  http https://cdn.jsdelivr.net/npm/signalr@2.4.1/jquery.signalR.min.js jquery.signalR.min.js
+  http https://cdn.jsdelivr.net/npm/@microsoft/signalr@3.1.5/dist/browser/signalr.js signalr.js
+  http https://cdn.jsdelivr.net/npm/@microsoft/signalr@3.1.5/dist/browser/signalr.min.js signalr.min.js
   http https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.4.min.js jquery.min.js
   http https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.4.min.map jquery.min.map
   http https://code.jquery.com/ui/1.12.1/jquery-ui.min.js
@@ -61,10 +54,16 @@ group Clientside
   http https://unpkg.com/react@16/umd/react.development.js
 
 group Build
-  source https://nuget.org/api/v2
-  framework >= 4.0
-  nuget FAKE
-  nuget FSharp.Configuration
+    source https://api.nuget.org/v3/index.json
+    framework: netstandard2.0
+    storage: none
+
+    nuget FSharp.Configuration
+    nuget FSharp.Core
+    nuget Fake.Core.ReleaseNotes
+    nuget Fake.Core.Target
+    nuget Fake.DotNet.Cli
+    nuget Fake.IO.FileSystem
 
 // Testing frameworks:
 //group Test

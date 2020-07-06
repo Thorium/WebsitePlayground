@@ -1,11 +1,11 @@
 
 import './tools';
 import './gui_shared';
-import signalhub = require("./signalhub");
 
 import idx = require('./index');
 import company = require('./company');
 import results = require('./results');
+import * as signalR from "@microsoft/signalr";
 
 // Here would be client-side routing and localization of html-content.
 
@@ -38,8 +38,14 @@ $(function() {
         if(window.location.href.indexOf("/results.html") > 0){ results.initResults(locale); }
         $(document).foundation();
     }
+        
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/signalhub")
+        .withAutomaticReconnect([0, 0, 10000])
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
 
-    signalhub.hubConnector.done(function () {
+    connection.start().then(function () {
         // window.onunload = undefined;
         // window.onbeforeunload = undefined;
         // const nav:any = navigator;
