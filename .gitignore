@@ -15,6 +15,11 @@ lib/
 paket-files/
 report/
 .vs/
+.fable/
+.idea/
+*.orig
+*.DotSettings.user
+.ionide/
 .fake/
 [Tt]humbs.db
 *.obj
