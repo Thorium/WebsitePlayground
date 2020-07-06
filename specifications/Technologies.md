@@ -97,9 +97,9 @@ We use F# Data type providers to avoid complex O/R-mappings and domain models:
 - [SQLProvider](https://github.com/fsprojects/SQLProvider)
 - [FSharp.Data.SqlClient](http://fsprojects.github.io/FSharp.Data.SqlClient/)
 
-### OWIN ###
+### Saturn / Giraffe ###
 
-[Open Web Interface for .NET](http://owin.org/) is just a way to create a lightweight web-server.
+[Saturn](https://saturnframework.org/) is just a lightweight wrapper over [Giraffe](https://github.com/giraffe-fsharp/Giraffe) and Kestrel, a lightweight web-server.
 
 ### SignalR ###
 
