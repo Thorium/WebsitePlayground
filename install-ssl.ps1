@@ -14,8 +14,8 @@ $httpPortToOpen = 80
 $httpsPortToOpen = 443
 
 if (6 -eq $args.count) {
-   $httpPortToOpen = $args[4]
-   $httpsPortToOpen = $args[5]
+   $httpPortsToOpen = $args[4].Split("_") # HTTP Ports to open. Can be an underscore separated list of ports
+   $httpsPortsToOpen = $args[5].Split("_") # HTTPS ports to open. Can be an underscore separated list of ports
 }
 
 # Save current directory
@@ -142,8 +142,16 @@ catch {
 }
 
 #Open Windows firewall ports
-netsh advfirewall firewall add rule name="Open Port HTTP" dir=in action=allow protocol=TCP localport=$httpPortToOpen
-netsh advfirewall firewall add rule name="Open Port HTTPS" dir=in action=allow protocol=TCP localport=$httpsPortToOpen
+Foreach ($httpPortToOpen in $httpPortsToOpen)
+{
+ netsh advfirewall firewall add rule name="Open Port HTTP $httpPortToOpen" dir=in action=allow protocol=TCP localport=$httpPortToOpen
+}
+Foreach ($httpsPortToOpen in $httpsPortsToOpen)
+{
+ netsh advfirewall firewall add rule name="Open Port HTTPS $httpsPortToOpen" dir=in action=allow protocol=TCP localport=$httpsPortToOpen
+}
+
+
 
 #Install SSL cert for web hosting
 try {
@@ -157,4 +165,7 @@ catch {
 $Thumbprint = (Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object {$_.Subject -match $domainName.Replace("*", "")}).Thumbprint
 Write-Host -Object "SSL Thumbprint is: $Thumbprint"
 $newId = '{'+[guid]::NewGuid().ToString()+'}'
-netsh http add sslcert ipport=0.0.0.0:$httpsPortToOpen certhash=$Thumbprint appid=$newId
+Foreach ($httpsPortToOpen in $httpsPortsToOpen)
+{
+ netsh http add sslcert ipport=0.0.0.0:$httpsPortToOpen certhash=$Thumbprint appid=$newId
+}
