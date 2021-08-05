@@ -8,8 +8,15 @@ if (0 -eq $args.count) {
 }
 $azSubscriptionId = $args[0] # 'Azure Subscription id'
 $resourceGroupName = $args[1] # 'Azure resource group name'
-$domainName = $args[2] # '*.mydomain.com'
+$domainName = $args[2] # e.g. 'mydomain.com' or '*.mydomain.com'
 $contactEmail = $args[3] # 'asdf@mailinator.com'
+$httpPortToOpen = 80
+$httpsPortToOpen = 443
+
+if (6 -eq $args.count) {
+   $httpPortToOpen = $args[4]
+   $httpsPortToOpen = $args[5]
+}
 
 # Save current directory
 pushd
@@ -115,8 +122,8 @@ $taskDescription = "Try to renew the SSL certificate from Let's Encrypt using Po
 # Don't use on-the-hour to avoid peak Let's Encrypt traffic times
 $taskTriggerAM = New-ScheduledTaskTrigger -Daily -At 3:42AM  
 $taskTriggerPM = New-ScheduledTaskTrigger -Daily -At 3:42PM
-$taskNameAM = "Renew SSL AM"
-$taskNamePM = "Renew SSL PM"
+$taskNameAM = "Renew SSL AM - $domainName".Replace("*", "")
+$taskNamePM = "Renew SSL PM - $domainName".Replace("*", "")
 
 # Make sure renewal task is run as current user, whether logged in or not
 # Current user must be used as renewal details are encrypted under their account
@@ -135,8 +142,8 @@ catch {
 }
 
 #Open Windows firewall ports
-netsh advfirewall firewall add rule name="Open Port HTTP" dir=in action=allow protocol=TCP localport=80
-netsh advfirewall firewall add rule name="Open Port HTTPS" dir=in action=allow protocol=TCP localport=443
+netsh advfirewall firewall add rule name="Open Port HTTP" dir=in action=allow protocol=TCP localport=$httpPortToOpen
+netsh advfirewall firewall add rule name="Open Port HTTPS" dir=in action=allow protocol=TCP localport=$httpsPortToOpen
 
 #Install SSL cert for web hosting
 try {
@@ -150,4 +157,4 @@ catch {
 $Thumbprint = (Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object {$_.Subject -match $domainName.Replace("*", "")}).Thumbprint
 Write-Host -Object "SSL Thumbprint is: $Thumbprint"
 $newId = '{'+[guid]::NewGuid().ToString()+'}'
-netsh http add sslcert ipport=0.0.0.0:443 certhash=$Thumbprint appid=$newId
+netsh http add sslcert ipport=0.0.0.0:$httpsPortToOpen certhash=$Thumbprint appid=$newId
