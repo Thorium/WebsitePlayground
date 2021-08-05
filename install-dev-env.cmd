@@ -25,7 +25,8 @@ echo  Now run: install-dev-env.cmd essentials
 
 goto end
 :essentials
-%ALLUSERSPROFILE%\chocolatey\bin\cinst chocolatey.config -y --pre
+rem %ALLUSERSPROFILE%\chocolatey\bin\cinst chocolatey.config -y --pre
+%ALLUSERSPROFILE%\chocolatey\bin\cinst chocolatey.config -y
 %ProgramFiles%\nodejs\npm install -g npm
 %ProgramFiles%\nodejs\npm install -g gulp jshint eslint
 "%ProgramFiles%\Microsoft VS Code\Code" --install-extension Ionide.ionide-fsharp
