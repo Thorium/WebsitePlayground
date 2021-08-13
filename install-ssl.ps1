@@ -151,21 +151,27 @@ Foreach ($httpsPortToOpen in $httpsPortsToOpen)
  netsh advfirewall firewall add rule name="Open Port HTTPS $httpsPortToOpen" dir=in action=allow protocol=TCP localport=$httpsPortToOpen
 }
 
-
-
 #Install SSL cert for web hosting
-try {
- netsh http delete sslcert ipport=0.0.0.0:443
-}
-catch {
-  Write-Host "Old cert not removed."
-  Write-Host $_
-}
-
 $Thumbprint = (Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object {$_.Subject -match $domainName.Replace("*", "")}).Thumbprint
-Write-Host -Object "SSL Thumbprint is: $Thumbprint"
-$newId = '{'+[guid]::NewGuid().ToString()+'}'
-Foreach ($httpsPortToOpen in $httpsPortsToOpen)
+if ($Thumbprint.length -gt 2)
 {
- netsh http add sslcert ipport=0.0.0.0:$httpsPortToOpen certhash=$Thumbprint appid=$newId
+    Foreach ($httpsPortToOpen in $httpsPortsToOpen)
+    {
+        try {
+         netsh http delete sslcert ipport=0.0.0.0:$httpsPortToOpen
+        }
+        catch {
+          Write-Host "Old cert not removed."
+          Write-Host $_
+        }
+    }
+
+    Write-Host -Object "SSL Thumbprint is: $Thumbprint"
+    $newId = '{'+[guid]::NewGuid().ToString()+'}'
+    Foreach ($httpsPortToOpen in $httpsPortsToOpen)
+    {
+     netsh http add sslcert ipport=0.0.0.0:$httpsPortToOpen certhash=$Thumbprint appid=$newId
+    }
+} else {
+    Write-Host "SSL cert Thumbprint not found."
 }
