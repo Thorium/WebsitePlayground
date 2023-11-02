@@ -1,4 +1,4 @@
-﻿module Scheduler
+module Scheduler
 
 open System
 open System.Threading
@@ -9,7 +9,7 @@ type ScheduledEventType =
 | Recurring
 
 /// Async timer to perform actions
-let timer eventType interval scheduledAction = async {
+let timer eventType (interval:int) scheduledAction = async {
     match eventType with
     | Once ->
         do! interval |> Async.Sleep

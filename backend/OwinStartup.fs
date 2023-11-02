@@ -88,7 +88,7 @@ type LoggingPipelineModule() =
 
         override __.OnBeforeIncoming context =
             let msg =Logary.Message.eventDebug("=> Invoking " + context.MethodDescriptor.Hub.Name + "." + context.MethodDescriptor.Name)
-            if context.Hub <> null && context.Hub.Context <> null && context.Hub.Context.ConnectionId <> null then
+            if not(isNull context.Hub || isNull context.Hub.Context || isNull context.Hub.Context.ConnectionId) then
                 msg |> Logary.Message.setField "clientId" context.Hub.Context.ConnectionId |> writeLog
             else
                 msg |> writeLog
@@ -143,7 +143,7 @@ type MyWebStartup() =
                 } |> Async.StartAsTask :> Task
             ) |> ignore
 
-        if Type.GetType ("Mono.Runtime") <> null then
+        if not (isNull (Type.GetType "Mono.Runtime")) then
            //Workaround for Mono incompatibility https://katanaproject.codeplex.com/workitem/438
            let (sux, httpListener) = ap.Properties.TryGetValue(typeof<HttpListener>.FullName)
            try
@@ -160,7 +160,7 @@ type MyWebStartup() =
         |> fun app -> ap.UseKentorOwinCookieSaver()
         |> fun app -> app.UseCompressionModule(
                         { OwinCompression.DefaultCompressionSettings with
-                            CacheExpireTime = Some (DateTimeOffset.Now.AddSeconds 30.) })
+                            CacheExpireTime = ValueSome (DateTimeOffset.Now.AddSeconds 30.) })
 
         //Allow cross domain
         |> fun app ->

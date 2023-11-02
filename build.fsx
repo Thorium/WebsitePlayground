@@ -2,8 +2,9 @@
 // FAKE build script
 // --------------------------------------------------------------------------------------
 
-#I @"./packages/build/FAKE/tools"
-#r @"./packages/build/FAKE/tools/FakeLib.dll"
+#I @"./packages/build/Fake/tools"
+#r @"FakeLib.dll"
+#r @"Fake.SQL.dll"
 #r @"System.IO.Compression.dll"
 #r @"System.IO.Compression.FileSystem.dll"
 
@@ -42,7 +43,7 @@ Target "npm" (fun _ ->
     | :? System.ComponentModel.Win32Exception -> 
        printf "\r\n\r\nNPM and Gulp global install failed."
        runShell("npm","install npm")
-    runShell("npm","install")
+    runShell("npm","install --legacy-peer-deps")
 )
 /// Client side gulp-tasks
 Target "gulp" (fun _ ->
@@ -70,9 +71,8 @@ Target "project" (fun _ ->
             |]
     with
     | e -> printfn "Couldn't copy MySqlConnector files: %O" e
+    DotNetCli.Build (fun p -> {p with Project = "backend/WebsitePlayground.fsproj"})
 
-    !! @"./backend/WebsitePlayground.fsproj"
-    |> MSBuild "" buildType [codeAnalysis;buildMode] |> ignore
     )
 
 /// Build all

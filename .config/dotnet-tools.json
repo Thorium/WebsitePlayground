@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "paket": {
+      "version": "7.2.1",
+      "commands": [
+        "paket"
+      ]
+    },
+    "dotnet-fsharplint": {
+      "version": "0.21.3",
+      "commands": [
+        "dotnet-fsharplint"
+      ]
+    }
+  }
+}

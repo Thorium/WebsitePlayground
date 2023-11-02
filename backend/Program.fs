@@ -1,4 +1,4 @@
-﻿module MyApp
+module MyApp
 
 open System
 open SignalRHubs
@@ -96,7 +96,7 @@ type public FSharpServiceInstaller() =
 #endif
 let main args =
     try
-        if Environment.UserInteractive || Type.GetType ("Mono.Runtime") <> null then
+        if Environment.UserInteractive || not(isNull (Type.GetType "Mono.Runtime")) then
             startServer()
             Message.eventInfo "Press Enter to stop & quit." |> writeLog
             Console.ReadLine() |> ignore

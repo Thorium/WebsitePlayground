@@ -1,4 +1,4 @@
-﻿// --- Communication to client --------------------------------c----
+// --- Communication to client --------------------------------c----
 module SignalRHubs
 
 open System
@@ -36,7 +36,7 @@ type SignalHub() as this =
             | None -> ""
             | Some(ceo) -> ceo
 
-        async {
+        task {
             let! companies =
                 query {
                     for c in dbContext.Companyweb.Company do
@@ -57,7 +57,7 @@ type SignalHub() as this =
 
             // Or just return from the method:
             return companies
-        } |> Async.StartAsTask
+        }
 
     //[<Authorize(Roles = "loggedin")>]
     member __.BuyStocks (company:string) (amount:int) =
@@ -70,7 +70,7 @@ type CompanyHub() =
     inherit Hub<IMessageToClient>()
 
     let executeCrud (dbContext:DataContext) itemId actionToEntity =
-        async {
+        task {
             let! fetched =
                 query {
                     for u in dbContext.Companyweb.Company do
@@ -112,16 +112,15 @@ type CompanyHub() =
 
     member __.Read itemId =
         executeCrud (dbReadContext()) itemId (fun e -> ())
-        |> Async.StartAsTask
+        
 
     member __.Update itemId data =
       writeWithDbContext <| fun (dbContext:DataContext) ->
         executeCrud dbContext itemId (fun e -> data |> ``map data from form to database format`` |> Seq.iter(fun (k,o) -> e.SetColumn(k, o)))
-        |> Async.StartAsTask
+        
 
     member __.Delete itemId =
       writeWithDbContext <| fun (dbContext:DataContext) ->
         executeCrud dbContext itemId (fun e -> e.Delete())
-        |> Async.StartAsTask
 
 

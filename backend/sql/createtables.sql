@@ -1,4 +1,4 @@
-DROP DATABASE companyweb;
+DROP DATABASE IF EXISTS companyweb;
 CREATE DATABASE companyweb DEFAULT CHARACTER SET utf8 ;;
 
 USE companyweb;

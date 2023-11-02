@@ -46,7 +46,7 @@ type TypeProviderConnection =
         ConnectionString = @"server = localhost; database = companyweb; uid = webuser;pwd = p4ssw0rd",
         DatabaseVendor = Common.DatabaseProviderTypes.MYSQL,
         IndividualsAmount=1000,
-        UseOptionTypes=true,
+        UseOptionTypes=FSharp.Data.Sql.Common.NullableColumnType.VALUE_OPTION,
         Owner="companyweb",
         CaseSensitivityChange = Common.CaseSensitivityChange.ORIGINAL,
         ResolutionPath=Mysqldatapath>
@@ -56,7 +56,7 @@ let cstr = System.Configuration.ConfigurationManager.AppSettings.["RuntimeDBConn
 let internal createDbReadContext() =
     let rec createCon x =
         try
-            if cstr = null then TypeProviderConnection.GetDataContext()
+            if isNull cstr then TypeProviderConnection.GetDataContext()
             else TypeProviderConnection.GetDataContext cstr
         with
         | :? System.Data.SqlClient.SqlException as ex when x < 3 ->
@@ -73,7 +73,7 @@ type DataContext = TypeProviderConnection.dataContext
 
 let mutable internal contextHolder = Unchecked.defaultof<Lazy<DataContext>>
 let dbReadContext() =
-    if contextHolder = null || not (contextHolder.IsValueCreated) then
+    if isNull contextHolder || not (contextHolder.IsValueCreated) then
         try
             let itm = lazy(createDbReadContext())
             contextHolder <- itm
@@ -83,7 +83,7 @@ let dbReadContext() =
 
 let writeLog x = logSimple (logger.Force()) x
 
-let isMono = Type.GetType ("Mono.Runtime") <> null
+let isMono = not(isNull (Type.GetType "Mono.Runtime"))
 
 let inline writeWithDbContextManualComplete() =
     let scope =
@@ -110,7 +110,7 @@ let inline writeWithDbContext (func:TypeProviderConnection.dataContext -> ^T) =
     let transaction, context = writeWithDbContextManualComplete()
     let scope = transaction
     let transId =
-        match System.Transactions.Transaction.Current <> null && System.Transactions.Transaction.Current.TransactionInformation <> null with
+        match not (isNull System.Transactions.Transaction.Current || isNull System.Transactions.Transaction.Current.TransactionInformation) with
         | true -> System.Transactions.Transaction.Current.TransactionInformation.LocalIdentifier
         | false -> ""
     let logmsg act tid =
@@ -158,14 +158,14 @@ let inline writeWithDbContext (func:TypeProviderConnection.dataContext -> ^T) =
 
         let x = getRes packed
         x
-    | item when item <> null && item.GetType().Name = "FSharpAsync`1" ->
+    | item when (not (isNull item)) && item.GetType().Name = "FSharpAsync`1" ->
         let msg = "Use writeWithDbContextAsync"
         msg |> Logary.Message.eventError |> writeLog
         failwith msg
     | x ->
         let tid = System.Threading.Thread.CurrentThread.ManagedThreadId.ToString()
         if not isMono then
-            if scope <> null then
+            if not (isNull scope) then
                 try
                     scope.Complete()
                     logmsg "completed" tid
@@ -182,7 +182,7 @@ let inline writeWithDbContextAsync (func:TypeProviderConnection.dataContext -> A
         let transaction, context = writeWithDbContextManualComplete()
         use scope = transaction
         let transId =
-            match System.Transactions.Transaction.Current <> null && System.Transactions.Transaction.Current.TransactionInformation <> null with
+            match not (isNull System.Transactions.Transaction.Current || isNull System.Transactions.Transaction.Current.TransactionInformation) with
             | true -> System.Transactions.Transaction.Current.TransactionInformation.LocalIdentifier
             | false -> ""
         let logmsg act tid =
@@ -192,7 +192,7 @@ let inline writeWithDbContextAsync (func:TypeProviderConnection.dataContext -> A
         logmsg "started" (System.Threading.Thread.CurrentThread.ManagedThreadId.ToString())
         let! res = func context
         if not isMono then
-            if scope <> null then
+            if not (isNull scope) then
                 let tid = System.Threading.Thread.CurrentThread.ManagedThreadId.ToString()
                 try
                     scope.Complete()
@@ -205,7 +205,7 @@ let inline writeWithDbContextAsync (func:TypeProviderConnection.dataContext -> A
         return res
     }
 
-FSharp.Data.Sql.Common.QueryEvents.SqlQueryEvent |> Event.add (fun e -> "Executed SQL: {sql}" |> Logary.Message.eventDebug |> Logary.Message.setField "sql" (e.ToString()) |> writeLog)
+FSharp.Data.Sql.Common.QueryEvents.SqlQueryEvent |> Event.add (fun e -> "Executed SQL: {sql}" |> Logary.Message.eventDebug |> Logary.Message.setField "sql" ( e.ToString()) |> writeLog) //Even better would be: e.ToRawSqlWithParamInfo
 
 let DateTimeString (dt:DateTime) =
     dt.ToString("yyyy-MM-dd HH\:mm\:ss") //temp .NET fix as MySQL.Data.dll is broken: fails without .ToString(...)
@@ -282,8 +282,8 @@ type TypeProviderConnection.dataContext with
   member x.SubmitUpdates2() =
     async {
         let sqlList = System.Collections.Concurrent.ConcurrentBag<FSharp.Data.Sql.Common.QueryEvents.SqlEventData>()
-        use o = FSharp.Data.Sql.Common.QueryEvents.SqlQueryEvent |> Observable.subscribe(fun e -> sqlList.Add e)
-        let! res = x.SubmitUpdatesAsync() |> Async.Catch
+        use o = FSharp.Data.Sql.Common.QueryEvents.SqlQueryEvent |> Observable.subscribe sqlList.Add
+        let! res = x.SubmitUpdatesAsync() |> Async.AwaitTask |> Async.Catch
         match res with
         | Choice1Of2 _ -> ()
         | Choice2Of2 e ->
@@ -323,8 +323,8 @@ type SearchObject = {
 [<Serializable>]
 type CompanySearchResult = {
     CompanyName: string;
-    Url: string option;
-    Image: string option
+    Url: string voption;
+    Image: string voption
 }
 
 module Async =
