@@ -1,5 +1,5 @@
 version 5.241.2
-source https://www.nuget.org/api/v2
+source https://api.nuget.org/v3/index.json
 
 nuget Microsoft.AspNetCore.SignalR
 group Server
@@ -8,6 +8,8 @@ group Server
 
     nuget FSharp.Core
     nuget FSharp.Data
+    nuget Microsoft.Data.SqlClient 5.1.2
+    nuget Owin.Compression
     nuget Logary
     nuget Logary.Targets.ApplicationInsights
     nuget Saturn
@@ -19,7 +21,7 @@ group Server
     nuget System.Configuration.ConfigurationManager
     nuget System.ServiceProcess.ServiceController
     nuget Thoth.Json.Giraffe
-    
+
 group Clientside
     source https://api.nuget.org/v3/index.json
     framework: netstandard2.0
@@ -28,26 +30,26 @@ group Clientside
   github zurb/bower-foundation css/normalize.css
   github zurb/bower-foundation js/foundation.min.js
   github aFarkas/html5shiv dist/html5shiv.min.js
-  github FortAwesome/Font-Awesome:fa-4 css/font-awesome.min.css
-  github FortAwesome/Font-Awesome:fa-4 fonts/fontawesome-webfont.eot
-  github FortAwesome/Font-Awesome:fa-4 fonts/fontawesome-webfont.svg
-  github FortAwesome/Font-Awesome:fa-4 fonts/fontawesome-webfont.ttf
-  github FortAwesome/Font-Awesome:fa-4 fonts/fontawesome-webfont.woff
-  github FortAwesome/Font-Awesome:fa-4 fonts/fontawesome-webfont.woff2
+  github FortAwesome/Font-Awesome:4.x css/font-awesome.min.css
+  github FortAwesome/Font-Awesome:4.x fonts/fontawesome-webfont.eot
+  github FortAwesome/Font-Awesome:4.x fonts/fontawesome-webfont.svg
+  github FortAwesome/Font-Awesome:4.x fonts/fontawesome-webfont.ttf
+  github FortAwesome/Font-Awesome:4.x fonts/fontawesome-webfont.woff
+  github FortAwesome/Font-Awesome:4.x fonts/fontawesome-webfont.woff2
   github Reactive-Extensions/RxJS dist/rx.lite.min.js
   github furf/jquery-ui-touch-punch jquery.ui.touch-punch.min.js
   // other possible:
   // danielm/uploader booncon/slippry janl/mustache.js shutterstock/rickshaw
-  http https://cdn.jsdelivr.net/npm/@microsoft/signalr@3.1.5/dist/browser/signalr.js signalr.js
-  http https://cdn.jsdelivr.net/npm/@microsoft/signalr@3.1.5/dist/browser/signalr.min.js signalr.min.js
+  http https://cdn.jsdelivr.net/npm/@microsoft/signalr@7.0.12/dist/browser/signalr.js signalr.js
+  http https://cdn.jsdelivr.net/npm/@microsoft/signalr@7.0.12/dist/browser/signalr.min.js signalr.min.js
   http https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.4.min.js jquery.min.js
   http https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.4.min.map jquery.min.map
   http https://code.jquery.com/ui/1.12.1/jquery-ui.min.js
   http https://code.jquery.com/ui/1.12.1/themes/sunny/jquery-ui.min.css
   http https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js
-  http https://ajax.aspnetcdn.com/ajax/bootstrap/4.0.0/css/bootstrap.min.css
-  http https://ajax.aspnetcdn.com/ajax/bootstrap/4.0.0/bootstrap.min.js
-  http https://raw.githubusercontent.com/lodash/lodash/4.17.15/dist/lodash.min.js
+  http https://ajax.aspnetcdn.com/ajax/bootstrap/5.2.3/css/bootstrap.min.css
+  http https://ajax.aspnetcdn.com/ajax/bootstrap/5.2.3/bootstrap.min.js
+  http https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js
   http https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js
   http https://unpkg.com/react@16/umd/react.production.min.js
   http https://unpkg.com/react-dom@16/umd/react-dom.production.min.js
@@ -67,7 +69,7 @@ group Build
 
 // Testing frameworks:
 //group Test
-//  source https://nuget.org/api/v2
+//  https://api.nuget.org/v3/index.json
 //  framework >= 4.0
 //
 //  nuget canopy

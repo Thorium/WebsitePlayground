@@ -1,9 +1,9 @@
 #r "paket: groupref build //"
-#load "./.fake/build.fsx/intellisense.fsx"
+//#load "docs/CLI.fs"
 
 #if !FAKE
-#r "netstandard"
-#r "Facades/netstandard" // https://github.com/ionide/ionide-vscode-fsharp/issues/839#issuecomment-396296095
+#load "./.fake/build.fsx/intellisense.fsx"
+#r "netstandard" // Temp fix for https://github.com/fsharp/FAKE/issues/1985
 #endif
 
 #r @"System.IO.Compression.dll"
@@ -18,7 +18,7 @@ open System.IO
 open System.Diagnostics
 open System.IO.Compression
 
-Target.initEnvironment ()
+//Target.initEnvironment ()
 
 let environVarOrDefault varName defaultValue =
     try
@@ -55,7 +55,7 @@ let runShell = fun (command,args) ->
         printf "\r\n\r\nFailed: %s\r\n" command
         reraise ()
 
-Target.create "npm" (fun _ ->
+Fake.Core.Target.create "npm" (fun _ ->
     let npm = ProcessUtils.tryFindFileOnPath "npm" 
     if npm.IsNone then failwith "npm not found" else
     try
@@ -65,10 +65,10 @@ Target.create "npm" (fun _ ->
     | :? System.ComponentModel.Win32Exception -> 
        printf "\r\n\r\nNPM and Gulp global install failed."
        Shell.Exec(npm.Value,"install npm") |> ignore
-    Shell.Exec(npm.Value,"install") |> ignore
+    Shell.Exec(npm.Value,"install --legacy-peer-deps") |> ignore
 )
 /// Client side gulp-tasks
-Target.create "gulp" (fun _ ->
+Fake.Core.Target.create "gulp" (fun _ ->
     let gulp = ProcessUtils.tryFindFileOnPath "gulp" 
     if gulp.IsNone then failwith "gulp not found" else
     try
@@ -83,7 +83,7 @@ Target.create "gulp" (fun _ ->
 )
 
 /// Build the server side project
-Target.create "project" (fun _ ->
+Fake.Core.Target.create "project" (fun _ ->
     try
         Fake.IO.Shell.copyFiles
             "backend/mysqlconnector"
@@ -94,18 +94,17 @@ Target.create "project" (fun _ ->
             |]
     with
     | e -> printfn "Couldn't copy MySqlConnector files: %O" e
-
     Fake.DotNet.DotNet.exec id "build" ("./backend -c " + (snd buildMode)) |> ignore
-    
+
     )
 
 /// Build all
-Target.create "all" (fun _ ->
+Fake.Core.Target.create "all" (fun _ ->
     printfn @"To start server, run: run.cmd (or sh ./run.sh with OSX/Linux)"
     )
 
 /// Try to start the SQL server
-Target.create "startsql" (fun _ -> 
+Fake.Core.Target.create "startsql" (fun _ -> 
     try
        runShell("mysql.server","start")
     with
@@ -115,7 +114,7 @@ Target.create "startsql" (fun _ ->
     )
 
 /// Reinstall the database.
-Target.create "database" (fun _ -> 
+Fake.Core.Target.create "database" (fun _ -> 
     //Note: mysql should be in Path.
     let path = Path.Combine("backend", "sql", "createtables.sql")
     try
@@ -129,10 +128,10 @@ Target.create "database" (fun _ ->
         reraise ())
 
 /// Refresh the demo data for the database 
-Target.create "demodata" (fun _ ->
+Fake.Core.Target.create "demodata" (fun _ ->
     let path = Path.Combine("backend", "sql", "createdemodata.sql")
     runShell("mysql","-u webuser -pp4ssw0rd companyweb -e \"source " + path + "\" --abort-source-on-error"))
-Target.create "package" ( fun _ ->
+Fake.Core.Target.create "package" ( fun _ ->
     
     let tag = "Packaged-" + DateTime.Now.ToString("yyyy-MM-dd-HH.mm.ss")
     let resolvePath p = System.IO.Path.Combine [|__SOURCE_DIRECTORY__; p|]
@@ -154,7 +153,7 @@ Target.create "package" ( fun _ ->
     //Fake.Git.Branches.tag "" tag
 )
 
-Target.create "start" ( fun _ ->
+Fake.Core.Target.create "start" ( fun _ ->
     if snd(buildMode)="Release" || snd(buildMode)="release" then
         let frontendDistPath = Path.Combine [| __SOURCE_DIRECTORY__; "frontend"; "dist" |]
         let backendBinPath = Path.Combine [| __SOURCE_DIRECTORY__; "backend"; "bin" |]
@@ -179,4 +178,4 @@ Target.create "start" ( fun _ ->
 "all"
   ==> "package"
 
-Target.runOrDefaultWithArguments "all"
+Fake.Core.Target.runOrDefaultWithArguments "all"

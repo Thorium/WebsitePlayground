@@ -1,11 +1,12 @@
 group Server
-    FSharp.Core
-    Saturn
-    Thoth.Json.Giraffe
-	Logary
-	Logary.Targets.ApplicationInsights
-    Microsoft.AspNetCore.SignalR
-    Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson
-	MySqlConnector
-	Newtonsoft.Json
-	SQLProvider
+FSharp.Core
+Saturn
+Thoth.Json.Giraffe
+Logary
+Logary.Targets.ApplicationInsights
+Microsoft.AspNetCore.SignalR
+Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson
+MySqlConnector
+Newtonsoft.Json
+SQLProvider
+Microsoft.Data.SqlClient

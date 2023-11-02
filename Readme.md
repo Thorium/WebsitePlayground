@@ -29,3 +29,5 @@ Documentation:
 There are two screens: 1) You can search companies. 2) CRUD-operations for companies.
 
 ![](specifications/ui.jpg)
+
+If you want to run on .NET Core, try the [netstandard branch](https://github.com/Thorium/WebsitePlayground/tree/netstandard).

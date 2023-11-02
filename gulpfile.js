@@ -43,7 +43,7 @@ var files = {
     targetPath: 'frontend/dist',
     typescripts: ['frontend/scripts/*.ts', 'frontend/scripts/*.tsx'],
     jslibs: ['paket-files/clientside/ajax.aspnetcdn.com/jquery.min.js',
-             'paket-files/clientside/raw.githubusercontent.com/lodash.min.js',
+             'paket-files/clientside/cdn.jsdelivr.net/lodash.min.js',
              'paket-files/clientside/cdnjs.cloudflare.com/modernizr.min.js',
               includeReact,
              'paket-files/clientside/npmcdn.com/tether.min.js',
@@ -125,7 +125,7 @@ function minifystyles(target) {
 	var cssfile = gulp.src(files.cssstyles)
 	  .pipe(gulpif(!isRelease, sourcemaps.init()))
       .pipe(autoprefixer('last 2 version'));
-	  
+
     return gulpMerge(cssfile, lessfile) //gulpMerge(lessfile, sassfile))
       .pipe(concat(target+'.css'))
       .pipe(rename({suffix: '.min'}))
