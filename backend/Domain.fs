@@ -275,7 +275,7 @@ let getRootedPath (path:string) =
             System.Reflection.Assembly.GetExecutingAssembly().Location
             |> Path.GetDirectoryName
 #endif
-        Path.Combine(basePath, parsed)
+        Path.Combine(basePath, parsed) |> Path.GetFullPath
 
 type TypeProviderConnection.dataContext with
   /// SubmitUpdates() but on error ClearUpdates()
@@ -337,7 +337,7 @@ module Async =
 
 let ``calculate SHA256 hash`` : string -> string =
     System.Text.Encoding.UTF8.GetBytes
-    >> System.Security.Cryptography.SHA256Managed.Create().ComputeHash
+    >> System.Security.Cryptography.SHA256.Create().ComputeHash
     >> Convert.ToBase64String
 
 let ``compare urlSafe hash`` clear hash =
