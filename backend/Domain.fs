@@ -41,10 +41,12 @@ open Logary.Logger
 
 [<Literal>]
 let Mysqldatapath = __SOURCE_DIRECTORY__ + @"/../packages/MySql.Data/lib/net45/"
+[<Literal>]
+let databseType = Common.DatabaseProviderTypes.MYSQL
 type TypeProviderConnection =
     SqlDataProvider< // Supports: MS SQL Server, SQLite, PostgreSQL, Oracle, MySQL (MariaDB), ODBC and MS Access
         ConnectionString = @"server = localhost; database = companyweb; uid = webuser;pwd = p4ssw0rd",
-        DatabaseVendor = Common.DatabaseProviderTypes.MYSQL,
+        DatabaseVendor = databseType,
         IndividualsAmount=1000,
         UseOptionTypes=FSharp.Data.Sql.Common.NullableColumnType.VALUE_OPTION,
         Owner="companyweb",
