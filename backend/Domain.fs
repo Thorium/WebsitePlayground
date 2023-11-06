@@ -40,18 +40,19 @@ open Logary.Logger
 
 
 [<Literal>]
-let Mysqldatapath = __SOURCE_DIRECTORY__ + @"/../packages/MySql.Data/lib/net45/"
+let databseType = Common.DatabaseProviderTypes.MSSQLSERVER_SSDT
 [<Literal>]
-let databseType = Common.DatabaseProviderTypes.MYSQL
+let dacpacPath = __SOURCE_DIRECTORY__ + @"/../database/bin/database.dacpac"
 type TypeProviderConnection =
     SqlDataProvider< // Supports: MS SQL Server, SQLite, PostgreSQL, Oracle, MySQL (MariaDB), ODBC and MS Access
-        ConnectionString = @"server = localhost; database = companyweb; uid = webuser;pwd = p4ssw0rd",
+        ConnectionString = @"Data Source=localhost;Initial Catalog=companyweb; Integrated Security=True;TrustServerCertificate=True",
         DatabaseVendor = databseType,
+        SsdtPath = dacpacPath,
         IndividualsAmount=1000,
         UseOptionTypes=FSharp.Data.Sql.Common.NullableColumnType.VALUE_OPTION,
         Owner="companyweb",
-        CaseSensitivityChange = Common.CaseSensitivityChange.ORIGINAL,
-        ResolutionPath=Mysqldatapath>
+        CaseSensitivityChange = Common.CaseSensitivityChange.ORIGINAL
+        >
 
 let logger = lazy(Logary.Logging.getCurrentLogger())
 let cstr = System.Configuration.ConfigurationManager.AppSettings.["RuntimeDBConnectionString"]
