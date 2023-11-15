@@ -65,9 +65,11 @@ Target "project" (fun _ ->
             "backend/mysqlconnector"
             [|
                 "packages/MySqlConnector/lib/net46/MySqlConnector.dll";
-                "packages/System.Buffers/lib/netstandard1.1/System.Buffers.dll";
-                "packages/System.Runtime.InteropServices.RuntimeInformation/lib/net45/System.Runtime.InteropServices.RuntimeInformation.dll";
+                //"packages/MySqlConnector/lib/net471/MySqlConnector.dll";
+                "packages/System.Buffers/lib/netstandard2.0/System.Buffers.dll";
+                "packages/System.Memory/lib/net461/System.Memory.dll";
                 "packages/System.Threading.Tasks.Extensions/lib/portable-net45+win8+wp8+wpa81/System.Threading.Tasks.Extensions.dll";
+                "packages/System.Diagnostics.DiagnosticSource/lib/net462/System.Diagnostics.DiagnosticSource.dll";
             |]
     with
     | e -> printfn "Couldn't copy MySqlConnector files: %O" e

@@ -13,13 +13,15 @@ nuget Microsoft.Owin.StaticFiles
 nuget Microsoft.Owin.Diagnostics
 nuget Microsoft.Owin.Security.Facebook
 nuget Microsoft.Owin.Security.Google
-nuget MySqlConnector
+nuget MysqlConnector 0.36 // PR: https://github.com/mysql-net/MySqlConnector/pull/1394
 nuget Owin.Compression
 nuget Owin.Security.AesDataProtectorProvider
 nuget MySql.Data
 // nuget System.Reactive
 nuget SQLProvider
-nuget Logary
+nuget Logary < 5
+nuget Hopac < 0.4
+nuget NodaTime = 1.3.4 // just for logary 4 compatibility
 nuget Logary.Targets.ApplicationInsights
 nuget Kentor.OwinCookieSaver
 nuget FSharp.Core

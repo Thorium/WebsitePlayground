@@ -40,7 +40,9 @@ open Logary.Logger
 
 
 [<Literal>]
-let Mysqldatapath = __SOURCE_DIRECTORY__ + @"/../packages/MySql.Data/lib/net45/"
+let mysqldatapath =  __SOURCE_DIRECTORY__ + @"/backend/mysqlconnector/"
+//let mysqldatapath = __SOURCE_DIRECTORY__ + @"/../packages/MySql.Data/lib/net462/"
+
 [<Literal>]
 let databseType = Common.DatabaseProviderTypes.MYSQL
 type TypeProviderConnection =
@@ -51,7 +53,7 @@ type TypeProviderConnection =
         UseOptionTypes=FSharp.Data.Sql.Common.NullableColumnType.VALUE_OPTION,
         Owner="companyweb",
         CaseSensitivityChange = Common.CaseSensitivityChange.ORIGINAL,
-        ResolutionPath=Mysqldatapath>
+        ResolutionPath=mysqldatapath>
 
 let logger = lazy(Logary.Logging.getCurrentLogger())
 let cstr = System.Configuration.ConfigurationManager.AppSettings.["RuntimeDBConnectionString"]
