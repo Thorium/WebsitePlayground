@@ -63,7 +63,20 @@
     <Folder Include="Security\" />
   </ItemGroup>
   <ItemGroup>
+    <PostDeploy Include="post_deployment.sql" />
+    <SqlCmdVariable Include="DeployDemoData">
+      <DefaultValue>False</DefaultValue>
+      <Value>$(SqlCmdVar__1)</Value>
+    </SqlCmdVariable>
+  </ItemGroup>
+  <ItemGroup>
     <Build Include="Companyweb\Tables\company.sql" />
     <Build Include="Security\Companyweb.sql" />
+    <None Include="createdemodata-mssql.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="createuser-mssql.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

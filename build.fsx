@@ -10,6 +10,7 @@
 
 open Fake
 open Fake.Git
+open Fake.SQL
 open Fake.ReleaseNotesHelper
 open System
 open System.IO
@@ -21,10 +22,12 @@ let verbosity = MSBuildVerbosity.Minimal
 let codeAnalysis = "RunCodeAnalysis","false"
 let buildMode = "Configuration", getBuildParamOrDefault "Configuration" "Debug"
 let buildType = match snd(buildMode) with | "Release" -> "Rebuild" | _ -> "Build"
+let ``database connection string`` = "Data Source=localhost; Initial Catalog=Companyweb; Integrated Security=True;"
+let sqlpackagePath = "packages/build/Microsoft.Data.Tools.MsBuild/lib/net46/sqlpackage.exe"
 
 let runShell = fun (command,args) ->
     try
-        let P = Process.Start(command, args);
+        let P = Process.Start(command, (args : string));
         if (P = null) then (
             printf "\r\n\r\nFailed: %s\r\n" command
         )
@@ -60,17 +63,7 @@ Target "gulp" (fun _ ->
 
 /// Build the server side project
 Target "project" (fun _ ->
-    try
-        FileHelper.Copy
-            "backend/mysqlconnector"
-            [|
-                "packages/MySqlConnector/lib/net46/MySqlConnector.dll";
-                "packages/System.Buffers/lib/netstandard1.1/System.Buffers.dll";
-                "packages/System.Runtime.InteropServices.RuntimeInformation/lib/net45/System.Runtime.InteropServices.RuntimeInformation.dll";
-                "packages/System.Threading.Tasks.Extensions/lib/portable-net45+win8+wp8+wpa81/System.Threading.Tasks.Extensions.dll";
-            |]
-    with
-    | e -> printfn "Couldn't copy MySqlConnector files: %O" e
+    DotNetCli.Build (fun p -> {p with Project = "database/database.fsproj"})
     DotNetCli.Build (fun p -> {p with Project = "backend/WebsitePlayground.fsproj"})
 
     )
@@ -83,7 +76,8 @@ Target "all" (fun _ ->
 /// Try to start the SQL server
 Target "startsql" (fun _ -> 
     try
-       runShell("mysql.server","start")
+       //runShell("mysql.server","start")
+       ()
     with
       | :? System.ComponentModel.Win32Exception
       | :? System.NullReferenceException
@@ -92,22 +86,35 @@ Target "startsql" (fun _ ->
 
 /// Reinstall the database.
 Target "database" (fun _ -> 
-    //Note: mysql should be in Path.
-    let path = Path.Combine("backend", "sql", "createtables.sql")
-    try
-       runShell("mysql","-u webuser -pp4ssw0rd -e \"source " + path + "\" --abort-source-on-error")
-    with
-      | _ -> 
-        let info = @"MySQL has to be in PATH. e.g in Windows: set path=%path%;""c:\Program Files\MariaDB 10.0\bin\"""
-        printfn "%s" info
-        printfn "And have you created the database user?"
-        printfn "mysql -u root -pPassword -e \"source backend\sql\createuser.sql\""
-        reraise ())
+    DotNetCli.Build (fun p -> {p with Project = "database/database.fsproj"})
+    let dacpacpath = ("database" @@ "bin")
+    let dacpac = !!(dacpacpath @@ "*.dacpac") |> Seq.head
+    let profile =
+        let profileName = getBuildParamOrDefault "PublishProfile" "False"
+        sprintf "database/%s.publish.xml" profileName
 
-/// Refresh the demo data for the database 
+    let deployData =
+        let demodata = bool.Parse (getBuildParamOrDefault "CreateDemoData" "False")
+        if demodata
+        then "/v:DeployDemoData=True"
+        else "/v:DeployDemoData=False"
+
+    let result =
+        execProcess (fun info ->
+            info.FileName <- sqlpackagePath
+            info.WorkingDirectory <- "./"
+            info.Arguments <- (sprintf "/Action:Publish %s /SourceFile:%s /Profile:%s" deployData dacpac profile)
+        ) System.TimeSpan.MaxValue
+
+    if result
+    then ()
+    else failwithf "An error occured running dacpac publish"
+)
 Target "demodata" (fun _ ->
-    let path = Path.Combine("backend", "sql", "createdemodata.sql")
-    runShell("mysql","-u webuser -pp4ssw0rd companyweb -e \"source " + path + "\" --abort-source-on-error"))
+    let SqlServerData = ``database connection string`` |> getServerInfo
+    let path = Path.Combine(buildDir, "backend", "sql", "createdemodata_mssql.sql")
+    SqlServer.runScript SqlServerData path
+)
 Target "package" ( fun _ ->
     
     let tag = "Packaged-" + DateTime.Now.ToString("yyyy-MM-dd-HH.mm.ss")

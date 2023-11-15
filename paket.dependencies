@@ -66,6 +66,7 @@ group Build
   framework >= 4.0
   nuget FAKE
   nuget FSharp.Configuration
+  nuget Microsoft.Data.Tools.MsBuild
 
 // Testing frameworks:
 //group Test

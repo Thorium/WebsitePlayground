@@ -1,0 +1,50 @@
+<Project Sdk="MSBuild.Sdk.SqlProj/2.0.0">
+ <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <SuppressTSqlWarnings>71558,71502</SuppressTSqlWarnings>
+    <SqlServerVersion>SqlAzure</SqlServerVersion>
+    <BundledNETCoreAppTargetFrameworkVersion>6.0</BundledNETCoreAppTargetFrameworkVersion>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+ </PropertyGroup>
+ <PropertyGroup>
+  <SchemaVersion>2.0</SchemaVersion>
+  <ProjectVersion>4.1</ProjectVersion>
+  <ProjectGuid>{3fcd15c9-8660-4a8e-b326-e9d254835884}</ProjectGuid>
+  <DSP>Microsoft.Data.Tools.Schema.Sql.Sql160DatabaseSchemaProvider</DSP>
+  <OutputType>Database</OutputType>
+  <IgnorePermissions>True</IgnorePermissions>
+  <IgnoreUserSettingsObjects>True</IgnoreUserSettingsObjects>
+  <IgnoreLoginSids>True</IgnoreLoginSids>
+  <IgnoreRoleMembership>True</IgnoreRoleMembership>
+  <IgnoreUserLoginMappings>True</IgnoreUserLoginMappings>
+  <ValidateCasingOnIdentifiers>False</ValidateCasingOnIdentifiers>
+  <ExcludeObjectTypes>Users,Logins,RoleMembership,ServerRoleMembership,Permissions,Assemblies</ExcludeObjectTypes>
+  <TreatVerificationErrorsAsWarnings>True</TreatVerificationErrorsAsWarnings>
+  <OutputPath>..\bin\</OutputPath>
+  <AssemblyName>database</AssemblyName>
+ </PropertyGroup>
+ <ItemGroup>
+  <Content Include="..\..\database\Security\**\*.sql" />
+  <Content Include="..\..\database\Companyweb\**\*.sql" />
+ </ItemGroup>
+ <ItemGroup>
+   <Content Remove="..\createdemodata-mssql.sql" />
+   <Content Remove="..\createuser-mssql.sql" />
+   <Content Remove="..\post_deployment.sql" />
+ </ItemGroup>
+ <ItemGroup>
+   <None Include="..\createdemodata-mssql.sql">
+     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+   </None>
+   <None Include="..\createuser-mssql.sql">
+     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+   </None>
+   <None Include="..\post_deployment.sql">
+     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+   </None>
+ </ItemGroup>
+ <ItemGroup>
+  <SqlCmdVariable Include="DeployDemoData" />
+ </ItemGroup>
+</Project>
