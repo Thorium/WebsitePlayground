@@ -3,12 +3,12 @@
   <Import Project="..\netfx.props" />
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>WebsitePlayground</RootNamespace>
     <AssemblyName>WebsitePlayground</AssemblyName>
     <TargetFrameworkVersion Condition="'$(TargetFramework)' == 'net48'">v4.8</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFSharpCoreVersion>7.0.0.0</TargetFSharpCoreVersion>
+    <TargetFSharpCoreVersion>8.0.0.0</TargetFSharpCoreVersion>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <OutputPath>bin\</OutputPath>
