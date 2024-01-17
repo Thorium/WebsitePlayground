@@ -1,11 +1,10 @@
-#r "paket: groupref build //"
-//#load "docs/CLI.fs"
+// --------------------------------------------------------------------------------------
+// FAKE build script
+// --------------------------------------------------------------------------------------
 
-#if !FAKE
-#load "./.fake/build.fsx/intellisense.fsx"
-#r "netstandard" // Temp fix for https://github.com/fsharp/FAKE/issues/1985
-#endif
-
+#I @"./packages/build/FAKE/tools"
+#r @"FakeLib.dll"
+#r @"Fake.SQL.dll"
 #r @"System.IO.Compression.dll"
 #r @"System.IO.Compression.FileSystem.dll"
 

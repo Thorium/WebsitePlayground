@@ -1,19 +1,16 @@
-version 5.241.2
-source https://api.nuget.org/v3/index.json
 
-nuget Microsoft.AspNetCore.SignalR
 group Server
     source https://api.nuget.org/v3/index.json
-    framework: netcoreapp3.0
+    framework: netcoreapp3.0, netstandard2.0, netstandard2.1, net6.0, net8.0
 
     nuget FSharp.Core
     nuget FSharp.Data
-    nuget Microsoft.Data.SqlClient 5.1.2
+    nuget Microsoft.Data.SqlClient
     nuget Owin.Compression
     nuget Logary
     nuget Logary.Targets.ApplicationInsights
     nuget Saturn
-    nuget Microsoft.AspNetCore.Authentication.JwtBearer 3.1.5 // pin for netcoreapp31
+    nuget Microsoft.AspNetCore.Authentication.JwtBearer
     nuget Microsoft.AspNetCore.SignalR
     nuget Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson
     nuget MySqlConnector
@@ -23,8 +20,7 @@ group Server
     nuget Thoth.Json.Giraffe
 
 group Clientside
-    source https://api.nuget.org/v3/index.json
-    framework: netstandard2.0
+  source https://api.nuget.org/v3/index.json
   github zurb/bower-foundation css/foundation.css
   github zurb/bower-foundation css/foundation.min.css
   github zurb/bower-foundation css/normalize.css
@@ -56,21 +52,13 @@ group Clientside
   http https://unpkg.com/react@16/umd/react.development.js
 
 group Build
-    source https://api.nuget.org/v3/index.json
-    framework: netstandard2.0
-    storage: none
-
-    nuget FSharp.Configuration
-    nuget FSharp.Core
-    nuget Fake.Core.ReleaseNotes
-    nuget Fake.Core.Target
-    nuget Fake.DotNet.Cli
-    nuget Fake.IO.FileSystem
+  source https://api.nuget.org/v3/index.json
+  nuget FAKE
+  nuget FSharp.Configuration
 
 // Testing frameworks:
 //group Test
 //  https://api.nuget.org/v3/index.json
-//  framework >= 4.0
 //
 //  nuget canopy
 //  nuget FsUnit.xUnit
