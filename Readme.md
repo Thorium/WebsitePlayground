@@ -2,7 +2,7 @@
 
 # Website-playground #
 
-This is yet another template for web-sites (aka. playing with some technologies).
+This is yet another template for web-sites (a.k.a. playing with some technologies).
 What are the key points:
 
 - The same web-server works on Mac / Windows / Ubuntu.
@@ -14,9 +14,9 @@ What are the key points:
 Technology-stack:
 
 - General: Git, Markdown
-- SQL-Server: SQLProvider supports any: MS-SQL/Postgres/Oracle/MySql/MariaDB/SQLite/MS-Access. Instructions for MariaDB is included, MySql should work as well. Also some for SQLite database and MS-SQL scripts if you want to use those.
+- SQL-Server: SQLProvider supports any: MS-SQL/Postgres/Oracle/MySql/MariaDB/SQLite/MS-Access. Instructions for MariaDB are included; MySql should work as well. Also, some for SQLite database and MS-SQL scripts if you want to use those.
 - Backend: F# (FSharp), Paket, TypeProviders, OWIN, SignalR (WebSockets/Long-Polling), Logary
-- Frontend: Gulp, React.js, Less/Sass, Bootstrap or Foundation.css, FontAwesome, Lodash, jQuery / jQuery-UI, TypeScript / ES6. Demo site is Foundation but infra supports Bootstrap notation as well.
+- Frontend: Gulp, React.js, Less/Sass, Bootstrap or Foundation.css, FontAwesome, Lodash, jQuery / jQuery-UI, TypeScript / ES6. The demo site is Foundation, but infra supports Bootstrap notation as well.
 - Maybe in the future: Crossroads.js, Rx/Rx.Js, FsUnit.xUnit, Canopy 
 
 Documentation:
@@ -26,7 +26,7 @@ Documentation:
 - [General developer instructions](specifications/Development.md)
 
 
-There are two screens: 1) You can search companies. 2) CRUD-operations for companies.
+There are two screens: 1) You can search for companies. 2) CRUD-operations for companies.
 
 ![](specifications/ui.jpg)
 
