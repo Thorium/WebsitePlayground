@@ -29,29 +29,11 @@ type SignalHub() as this =
         // We could do authentication check here.
         t
 
-
     member __.SearchCompanies (searchparams:SearchObject) =
-        let ceoFilter =
-            match searchparams.CEOName with
-            | None -> ""
-            | Some(ceo) -> ceo
-
         task {
             let! companies =
-                query {
-                    for c in dbContext.Companyweb.Company do
-                    where (
-                        c.Founded < searchparams.FoundedBefore
-                        && c.Founded > searchparams.FoundedAfter
-                        && c.Name =% "%" + searchparams.CompanyName.ToUpper() + "%"
-                        && c.Ceo =% "%" + ceoFilter + "%"
-                    )
-                    select {
-                        CompanyName = c.Name;
-                        Url = c.WebSite;
-                        Image = c.LogoUrl
-                    }
-                } |> Array.executeQueryAsync
+                Logics.executeSearch (dbReadContext()) searchparams
+
             // Can signal as separate client call:
             //this.Clients.Caller.ListCompanies hosts |> ignore
 
@@ -69,21 +51,6 @@ type SignalHub() as this =
 type CompanyHub() =
     inherit Hub<IMessageToClient>()
 
-    let executeCrud (dbContext:DataContext) itemId actionToEntity =
-        task {
-            let! fetched =
-                query {
-                    for u in dbContext.Companyweb.Company do
-                    where (u.Id = itemId)
-                } |> Seq.tryHeadAsync
-            match fetched with
-            | Some entity ->
-                entity |> actionToEntity
-                do! dbContext.SubmitUpdates2 ()
-                return entity.ColumnValues
-            | None -> return Seq.empty
-        }
-
     let ``map data from form to database format`` (formData: seq<string*obj>) =
             formData // Add missing fields
             |> Seq.append [|
@@ -100,27 +67,32 @@ type CompanyHub() =
 
     member __.Create (data: seq<string*obj>) =
       let transaction =
-        writeWithDbContextAsync <| fun (dbContext:DataContext) ->
+        writeWithDbContextAsync <| fun (dbContext:WriteDataContext) ->
             async {
                 let entity = data
                              |> ``map data from form to database format``
+                                // Avoid un-typed Create and prefer rather storngly typed:
+                                // dbContext.Companyweb.Company.``Create(CEO, Founded, LastUpdate, Name)``("CEO", DateTime(2000,01,01), DateTime.UtcNow, "Mr Hietanen")
                              |> dbContext.Companyweb.Company.Create
+
                 do! dbContext.SubmitUpdates2()
                 return entity.ColumnValues
             }
       transaction |> Async.StartAsTask
 
     member __.Read itemId =
-        executeCrud (dbReadContext()) itemId (fun e -> ())
-        
+        query {
+            for u in dbReadContext().Companyweb.Company do
+            where (u.Id = itemId)
+        } |> Seq.tryHeadAsync
 
     member __.Update itemId data =
-      writeWithDbContext <| fun (dbContext:DataContext) ->
-        executeCrud dbContext itemId (fun e -> data |> ``map data from form to database format`` |> Seq.iter(fun (k,o) -> e.SetColumn(k, o)))
+      writeWithDbContext <| fun (dbContext:WriteDataContext) ->
+        Logics.executeCrud dbContext itemId (fun e -> data |> ``map data from form to database format`` |> Seq.iter(fun (k,o) -> e.SetColumn(k, o)))
         
 
     member __.Delete itemId =
-      writeWithDbContext <| fun (dbContext:DataContext) ->
-        executeCrud dbContext itemId (fun e -> e.Delete())
+      writeWithDbContext <| fun (dbContext:WriteDataContext) ->
+        Logics.executeCrud dbContext itemId (fun e -> e.Delete())
 
 

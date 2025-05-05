@@ -60,8 +60,8 @@ let cstr = System.Configuration.ConfigurationManager.AppSettings.["RuntimeDBConn
 let internal createDbReadContext() =
     let rec createCon x =
         try
-            if isNull cstr then TypeProviderConnection.GetDataContext()
-            else TypeProviderConnection.GetDataContext cstr
+            if isNull cstr then TypeProviderConnection.GetReadOnlyDataContext()
+            else TypeProviderConnection.GetReadOnlyDataContext cstr
         with
         | :? System.Data.SqlClient.SqlException as ex when x < 3 ->
             logSimple (logger.Force()) (Logary.Message.eventWarn ("Error connecting SQL, retrying... {msg}") |> Logary.Message.setField "msg" ex.Message)
@@ -73,9 +73,18 @@ let internal createDbReadContext() =
             createCon (x+1)
     createCon 0
 
-type DataContext = TypeProviderConnection.dataContext
+type ReadDataContext = TypeProviderConnection.readDataContext
+type WriteDataContext = TypeProviderConnection.dataContext
 
-let mutable internal contextHolder = Unchecked.defaultof<Lazy<DataContext>>
+/// ContextHolderMarker is needed here for unit-tests to work
+type ContextHolderMarker = interface end
+let mutable internal createNewContext = true
+let mutable internal contextHolder = Unchecked.defaultof<Lazy<ReadDataContext>>
+/// DataContext which generates a new connection if the connection has failed.
+/// This is for read-only use, not submitting transactions or database modifications.
+/// If you want to write, create a new transaction via writeWithDbContext or writeWithDbContextAsync
+/// If you want to do read-only operation inside transaction, use existing connection with .AsReadOnly() instead.
+/// This context doesn't have access to Stored Procedures.
 let dbReadContext() =
     if isNull contextHolder || not (contextHolder.IsValueCreated) then
         try
@@ -89,6 +98,18 @@ let writeLog x = logSimple (logger.Force()) x
 
 let isMono = not(isNull (Type.GetType "Mono.Runtime"))
 
+/// Creating a database transaction.
+/// All the database-operations commit to one transaction, so that no SQL-clauses are executed by other parties/processes while that transaction is happening.
+/// The settings are compromize of data-consistency vs performance (via locking the database too much).
+/// There are a few settings to significantly affect the above:
+/// - TransactionScopeOption: What if you have nested transactions, transaction within a transaction?
+///      + The default value is "Required" which means if there is no transaction, create a new one, but if there is already one, then join that one.
+///        This will ensure data-consistency by always having a transaction, but trying to avoid dead-locks by not letting transactions wait for each other.
+/// - IsolationLevel: Will the transaction lock the database resources on read and write (Serializable) locking the database from other users meanwhile the process is on?
+///      + The default is ReadCommitted, which means the data is eventually consistent: Meanwhile transaction is on, letting others read old data that was valid but not data
+///        that is written in this transaction.
+/// - TransactionScopeAsyncFlowOption: Since .NET 451, there has been this option, that if a transaction changes the thread (e.g. via async operation),
+///        then span the transaction to continue in the new thread as well. This is related to async operations, see: https://fsprojects.github.io/SQLProvider/core/async.html
 let inline writeWithDbContextManualComplete() =
     let scope =
         match isMono with
@@ -110,6 +131,7 @@ let inline writeWithDbContextManualComplete() =
 open System.Threading.Tasks
 open Logary.Logging
 /// Write operations should be wrapped to transaction with this.
+/// Try to avoid transactions taking possibly seconds.
 let inline writeWithDbContext (func:TypeProviderConnection.dataContext -> ^T) =
     let transaction, context = writeWithDbContextManualComplete()
     let scope = transaction
@@ -181,6 +203,8 @@ let inline writeWithDbContext (func:TypeProviderConnection.dataContext -> ^T) =
                 ()
         res
 
+/// Async write operations should be wrapped into a transaction with this.
+/// Try to avoid transactions taking possibly seconds.
 let inline writeWithDbContextAsync (func:TypeProviderConnection.dataContext -> Async<'T>) =
     async {
         let transaction, context = writeWithDbContextManualComplete()

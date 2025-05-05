@@ -11,6 +11,8 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "database", "..\database\fsp
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "WebsitePlaygroundUI", "..\frontend\WebsitePlaygroundUI.esproj", "{274D76EC-DCB1-E7F3-C01A-2742111AC6C3}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "UnitTests", "..\UnitTests\UnitTests.fsproj", "{FE9AF481-E5B2-4DA7-860E-03AD4BFD1841}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{3FCD15C9-8660-4A8E-B326-E9D254835883}.Release|Any CPU.Build.0 = Release|Any CPU
 		{274D76EC-DCB1-E7F3-C01A-2742111AC6C3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{274D76EC-DCB1-E7F3-C01A-2742111AC6C3}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{FE9AF481-E5B2-4DA7-860E-03AD4BFD1841}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE9AF481-E5B2-4DA7-860E-03AD4BFD1841}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE9AF481-E5B2-4DA7-860E-03AD4BFD1841}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE9AF481-E5B2-4DA7-860E-03AD4BFD1841}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

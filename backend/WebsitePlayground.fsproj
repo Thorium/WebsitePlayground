@@ -46,6 +46,7 @@
   -->
   <ItemGroup>
     <Compile Include="Domain.fs" />
+    <Compile Include="Logics.fs" />
     <Compile Include="Scheduler.fs" />
     <Compile Include="SignalRHubs.fs" />
     <Compile Include="OwinStartup.fs" />

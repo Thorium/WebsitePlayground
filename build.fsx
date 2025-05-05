@@ -161,6 +161,13 @@ Target.create "project" (fun _ ->
 
     )
 
+// Build the server side project
+Target.create "test" (fun _ ->
+    DotNet.build idx "UnitTests/UnitTests.fsproj"
+    DotNet.test id "UnitTests/UnitTests.fsproj"
+    ()
+    )
+
 // Build all
 Target.create "all" (fun _ ->
     printfn @"To start server, run: run.cmd (or sh ./run.sh with OSX/Linux)"
@@ -264,6 +271,7 @@ Target.create "" (fun _ -> ())
   ==> "database"
   ==> "demodata"
   ==> "project"
+  ==> "test"
   ==> "all"
 
 "all"
