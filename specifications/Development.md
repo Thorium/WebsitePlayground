@@ -146,8 +146,8 @@ file in production. These values are accessible from the source code via `Config
 ##### Creating SignalR API Method ####
 
 To add a SignalR class member, it's usually better to explicitly state the input parameters, e.g.:
-`member __.MyMethod(input:string, input2:int) =`. Even F# is usually able to know the results, but the problem may
-occur if you are trying to expose too many generic parameters from the SignalR API.
+`member __.MyMethod(input:string, input2:int) =`. F# is usually able to know the results, but a problem may
+occur if you are trying to expose too generic parameters from the SignalR API.
 
 SignalR supports `Task<...>` output parameter for asynchrony. 
 This means that if you use F# `async { ... }` you have to convert F# `Async<...>` to `Task<...>` like this:

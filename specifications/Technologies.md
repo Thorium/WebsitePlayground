@@ -119,8 +119,6 @@ As on the server side, **SignalR** is also used on the client side. It makes it 
 
 ### Fonts ###
 
-The current font has to be changed...
-
 Fonts can be found from the [Google font site](https://www.google.com/fonts) and they can be converted to required formats via [FontSquirrel](http://www.fontsquirrel.com/tools/webfont-generator).
 
 ### Gulp ###
@@ -223,8 +221,11 @@ Other useful components:
 - Chart-library: [Rickshaw](https://github.com/shutterstock/rickshaw)
 - Maps: [Google Maps] (https://developers.google.com/maps/documentation/javascript/)
 
+If you write more than 100 lines of JavaScript/TypeScript, it's a mess.
 If you want to avoid pure JavaScript (or ES6) coding, then you should probably use one of these:
 
-- [FunScript](http://funscript.info/)
+- [Fable](https://fable.io/)
 - [ClojureScript + React.JS](http://reagent-project.github.io/)
 - [Elm](http://elm-lang.org/)
+
+Calling TypeScript from Fable, and calling Fable functions from TypeScript should be a trivial "one-line" integration.

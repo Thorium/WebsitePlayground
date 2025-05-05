@@ -27,6 +27,8 @@ open System
 open System.Linq
 open FSharp.Data
 open FSharp.Data.Sql
+//open FSharp.Data.Sql.MySql
+open FSharp.Data.Sql.MySqlConnector
 
 open System.Data.SqlClient
 open System.Threading.Tasks

@@ -5,6 +5,10 @@ VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "WebsitePlayground", "WebsitePlayground.fsproj", "{A20FA1A8-372A-49C5-902B-9532CB2822A1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "WebsitePlaygroundUI", "..\frontend\WebsitePlaygroundUI.esproj", "{274D76EC-DCB1-E7F3-C01A-2742111AC6C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,12 @@ Global
 		{A20FA1A8-372A-49C5-902B-9532CB2822A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A20FA1A8-372A-49C5-902B-9532CB2822A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A20FA1A8-372A-49C5-902B-9532CB2822A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{274D76EC-DCB1-E7F3-C01A-2742111AC6C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{274D76EC-DCB1-E7F3-C01A-2742111AC6C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{274D76EC-DCB1-E7F3-C01A-2742111AC6C3}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{274D76EC-DCB1-E7F3-C01A-2742111AC6C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{274D76EC-DCB1-E7F3-C01A-2742111AC6C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{274D76EC-DCB1-E7F3-C01A-2742111AC6C3}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
