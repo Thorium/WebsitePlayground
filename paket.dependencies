@@ -81,10 +81,16 @@ group Build
   nuget Microsoft.Data.Tools.MsBuild
 
 // Testing frameworks:
-//group Test
-//  https://api.nuget.org/v3/index.json
-//  framework >= 4.0
-//
+group Test
+  source https://api.nuget.org/v3/index.json
+
+  nuget coverlet.collector 6.0.4
+  nuget Microsoft.NET.Test.Sdk 17.13.0
+  nuget NUnit 4.3.2
+  nuget NUnit.Analyzers 4.7.0
+  nuget NUnit3TestAdapter 5.0.0
+
+// Other useful components:
 //  nuget canopy
 //  nuget FsUnit.xUnit
 //  nuget xunit.core
