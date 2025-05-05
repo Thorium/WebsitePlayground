@@ -27,11 +27,11 @@ open System
 open System.Linq
 open FSharp.Data
 open FSharp.Data.Sql
+open FSharp.Data.Sql.MsSql
 
 open System.Data.SqlClient
 open System.Threading.Tasks
 
-open MySql.Data.MySqlClient
 open Hopac
 open Logary
 open Logary.Logger
@@ -40,13 +40,14 @@ open Logary.Logger
 
 
 [<Literal>]
-let databseType = Common.DatabaseProviderTypes.MSSQLSERVER_SSDT
+let databaseType = Common.DatabaseProviderTypes.MSSQLSERVER_SSDT
+
 [<Literal>]
 let dacpacPath = __SOURCE_DIRECTORY__ + @"/../database/bin/database.dacpac"
 type TypeProviderConnection =
     SqlDataProvider< // Supports: MS SQL Server, SQLite, PostgreSQL, Oracle, MySQL (MariaDB), ODBC and MS Access
         ConnectionString = @"Data Source=localhost;Initial Catalog=companyweb; Integrated Security=True;TrustServerCertificate=True",
-        DatabaseVendor = databseType,
+        DatabaseVendor = databaseType,
         SsdtPath = dacpacPath,
         IndividualsAmount=1000,
         UseOptionTypes=FSharp.Data.Sql.Common.NullableColumnType.VALUE_OPTION,
@@ -228,25 +229,6 @@ let asyncErrorHandling<'a> (a:Async<'a>) =
                 |> writeLog
             return raise e
     }
-
-//let ExecuteSql (query : string) parameters =
-//    async {
-//       use rawSqlConnection = new MySqlConnection(cstr)
-//       do! rawSqlConnection.OpenAsync() |> Async.AwaitTask
-////       Message.eventInfo (query) |> writeLog
-//       use command = new MySqlCommand(query, rawSqlConnection)
-//       parameters |> List.iter(fun (par:string*string) -> command.Parameters.AddWithValue(par) |> ignore)
-//       let! affectedRows = command.ExecuteNonQueryAsync() |> Async.AwaitTask
-//       do! rawSqlConnection.CloseAsync() |> Async.AwaitTask
-//       match affectedRows with
-//       | 0 ->
-//           "ExecuteSql 0 rows affected: " + query |> Logary.Message.eventWarn |> writeLog
-//           ()
-//       | x ->
-//           //"ExecuteSql " + x + " rows affected: " + query |> Logary.Message.eventWarn |> writeLog
-//           ()
-//    }
-
 
 type Data.Common.DbDataReader with
     member reader.CollectItems(collectfunc) =

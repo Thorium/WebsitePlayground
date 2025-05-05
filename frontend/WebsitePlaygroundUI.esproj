@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/1.0.1738743">
+  <PropertyGroup>
+    <PackageJsonDirectory>$(MSBuildProjectDirectory)\..\</PackageJsonDirectory>
+    <StartupCommandWorkingDirectory>$(MSBuildProjectDirectory)\..\</StartupCommandWorkingDirectory>
+    <!-- Folder where production build objects will be placed -->
+    <BuildOutputFolder>$(MSBuildProjectDirectory)\dist</BuildOutputFolder>
+    <ShouldRunNpmInstall>false</ShouldRunNpmInstall>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="dist\**" />
+    <TypeScriptConfiguration Remove="dist\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.npmrc">
+      <Link>.npmrc</Link>
+    </None>
+    <None Include="..\gulpfile.js">
+      <Link>gulpfile.js</Link>
+    </None>
+    <None Include="..\package-lock.json">
+      <Link>package-lock.json</Link>
+    </None>
+    <None Include="..\package.json">
+      <Link>package.json</Link>
+    </None>
+  </ItemGroup>
+</Project>

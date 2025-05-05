@@ -1,10 +1,11 @@
-<Project Sdk="MSBuild.Sdk.SqlProj/2.0.0">
+<Project Sdk="MSBuild.Sdk.SqlProj/3.1.2">
  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <SuppressTSqlWarnings>71558,71502</SuppressTSqlWarnings>
     <SqlServerVersion>SqlAzure</SqlServerVersion>
-    <BundledNETCoreAppTargetFrameworkVersion>6.0</BundledNETCoreAppTargetFrameworkVersion>
+    <BundledNETCoreAppTargetFrameworkVersion>8.0</BundledNETCoreAppTargetFrameworkVersion>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
     <TargetDatabaseSet>True</TargetDatabaseSet>
  </PropertyGroup>
  <PropertyGroup>
@@ -23,6 +24,7 @@
   <TreatVerificationErrorsAsWarnings>True</TreatVerificationErrorsAsWarnings>
   <OutputPath>..\bin\</OutputPath>
   <AssemblyName>database</AssemblyName>
+  <!--RunSqlCodeAnalysis>True</RunSqlCodeAnalysis-->
  </PropertyGroup>
  <ItemGroup>
   <Content Include="..\..\database\Security\**\*.sql" />
