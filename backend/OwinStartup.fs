@@ -157,7 +157,6 @@ type MyWebStartup() =
 
         //OWIN Component registrations here...
         ap.UseErrorPage(new ErrorPageOptions(ShowExceptionDetails = displayErrors))
-        |> fun app -> ap.UseKentorOwinCookieSaver()
         |> fun app -> app.UseCompressionModule(
                         { OwinCompression.DefaultCompressionSettings with
                             CacheExpireTime = ValueSome (DateTimeOffset.Now.AddSeconds 30.) })

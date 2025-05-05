@@ -2,12 +2,12 @@ FSharp.Core
 FSharp.Data
 Logary
 Logary.Targets.ApplicationInsights
-Kentor.OwinCookieSaver
 Microsoft.AspNet.SignalR.Core
 Microsoft.AspNet.WebApi.OwinSelfHost
 Microsoft.Owin.Cors
 Microsoft.Owin.StaticFiles
 Microsoft.Owin.Diagnostics
+Microsoft.Owin.Host.SystemWeb
 Microsoft.Owin.Security.Cookies
 Microsoft.Owin.Security.Facebook
 Microsoft.Owin.Security.Google
@@ -15,4 +15,5 @@ MySqlConnector
 Newtonsoft.Json
 Owin.Compression
 Owin.Security.AesDataProtectorProvider
-SQLProvider
+SQLProvider.MySqlConnector
+SQLProvider.MySql

@@ -31,7 +31,7 @@ open FSharp.Data.Sql
 open System.Data.SqlClient
 open System.Threading.Tasks
 
-open MySql.Data.MySqlClient
+//open MySql.Data.MySqlClient
 open Hopac
 open Logary
 open Logary.Logger
@@ -40,15 +40,15 @@ open Logary.Logger
 
 
 [<Literal>]
-let mysqldatapath =  __SOURCE_DIRECTORY__ + @"/backend/mysqlconnector/"
+let mysqldatapath = __SOURCE_DIRECTORY__ + @"/backend/mysqlconnector/"
 //let mysqldatapath = __SOURCE_DIRECTORY__ + @"/../packages/MySql.Data/lib/net462/"
 
 [<Literal>]
-let databseType = Common.DatabaseProviderTypes.MYSQL
+let databaseType = Common.DatabaseProviderTypes.MYSQL
 type TypeProviderConnection =
     SqlDataProvider< // Supports: MS SQL Server, SQLite, PostgreSQL, Oracle, MySQL (MariaDB), ODBC and MS Access
         ConnectionString = @"server = localhost; database = companyweb; uid = webuser;pwd = p4ssw0rd",
-        DatabaseVendor = databseType,
+        DatabaseVendor = databaseType,
         IndividualsAmount=1000,
         UseOptionTypes=FSharp.Data.Sql.Common.NullableColumnType.VALUE_OPTION,
         Owner="companyweb",

@@ -11,7 +11,8 @@
         "sourceMap": true,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "traceResolution": false
+        "traceResolution": false,
+        "allowJs": true
     },
     "files": [
         "./frontend/**/*.ts",

@@ -1,5 +1,5 @@
 
-import './tools';
+import tools = require('./tools');
 import './gui_shared';
 import signalhub = require("./signalhub");
 
@@ -15,13 +15,17 @@ setTimeout(function(){
         console.log("JQuery not loaded!");
         document.write('<script src="js/libs.min.js">\x3C/script>');
         setTimeout(function(){
-            document.location.reload(false);
+            document.location.reload();
         }, 500);
     }
 }, 500);
 
 $(function() {
-    Foundation.global.namespace = '';
+    try{
+        Foundation.global.namespace = '';
+    } catch(e) {
+        console.log(e);
+    }
     $(document).off('click.fndtn.magellan');
     try{
         let fn:any = $.fn;
