@@ -600,14 +600,14 @@ NUGET
       FSharp.Core (>= 8.0.301)
       Newtonsoft.Json (>= 13.0.1)
       System.Memory (>= 4.6.3)
-    SQLProvider.MsSql (1.5.3)
+    SQLProvider.MsSql (1.5.6)
       FSharp.Core (>= 8.0.301)
       Microsoft.Data.SqlClient (>= 5.2.2)
       Newtonsoft.Json (>= 13.0.1)
       System.Data.SqlClient (>= 4.9)
       System.Memory (>= 4.6.3)
       System.Text.Json (>= 9.0.4)
-    System.Buffers (4.6.1) - restriction: || (&& (>= monoandroid) (< netstandard1.3) (>= netstandard2.1)) (&& (>= monotouch) (>= netstandard2.1)) (>= net462) (&& (< net6.0) (>= netcoreapp3.0) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< net6.0) (>= netstandard2.1)) (&& (< net6.0) (>= xamarinios)) (&& (< net6.0) (>= xamarinmac)) (&& (< net8.0) (>= xamarinios)) (&& (< net8.0) (>= xamarinmac)) (&& (< netcoreapp2.0) (>= netstandard2.1)) (&& (>= netcoreapp3.0) (< netstandard2.1) (< xamarintvos) (< xamarinwatchos)) (>= netstandard2.0) (&& (< netstandard2.1) (>= xamarinios)) (&& (< netstandard2.1) (>= xamarinmac))
+    System.Buffers (4.6.1) - restriction: || (&& (>= monoandroid) (< netstandard1.3) (>= netstandard2.1)) (&& (>= monotouch) (>= netstandard2.1)) (>= net462) (&& (< net6.0) (>= netcoreapp3.0) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< net6.0) (>= netstandard2.1) (>= xamarintvos)) (&& (< net6.0) (>= netstandard2.1) (>= xamarinwatchos)) (&& (< net6.0) (>= xamarinios)) (&& (< net6.0) (>= xamarinmac)) (&& (< net8.0) (>= xamarinios)) (&& (< net8.0) (>= xamarinmac)) (&& (< netcoreapp2.0) (>= netstandard2.1)) (&& (>= netcoreapp3.0) (< netstandard2.1) (< xamarintvos) (< xamarinwatchos)) (>= netstandard2.0) (&& (< netstandard2.1) (>= xamarinios)) (&& (< netstandard2.1) (>= xamarinmac))
     System.ClientModel (1.4) - restriction: >= netstandard2.0
       Microsoft.Extensions.Logging.Abstractions (>= 8.0.3) - restriction: >= netstandard2.0
       System.Diagnostics.DiagnosticSource (>= 8.0.1) - restriction: && (< net6.0) (>= netstandard2.0)
