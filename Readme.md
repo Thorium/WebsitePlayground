@@ -1,12 +1,12 @@
 
 
-# Website-playground #
+# Website-playground (net48-ssdt) #
 
 This repository has 4 different git-branches as templates to choose from:
 
 - [Dotnet 8.0 with Microsoft SQL Server + SSDT (dacpac)](https://github.com/Thorium/WebsitePlayground/tree/dotnet-ssdt)
-- [.Net Framework 4.8.1 with Microsoft SQL Server + SSDT (dacpac)](https://github.com/Thorium/WebsitePlayground/tree/dotnet-mysql)
-- [Dotnet 8.0 with MySQL (MariaDB)](https://github.com/Thorium/WebsitePlayground/tree/net48-ssdt)
+- [.Net Framework 4.8.1 with Microsoft SQL Server + SSDT (dacpac)](https://github.com/Thorium/WebsitePlayground/tree/net48-ssdt)
+- [Dotnet 8.0 with MySQL (MariaDB)](https://github.com/Thorium/WebsitePlayground/tree/dotnet-mysql)
 - [.Net Framework 4.8.1 with MySQL (MariaDB)](https://github.com/Thorium/WebsitePlayground/tree/net48-mysql)
 
 ## Overview ##
