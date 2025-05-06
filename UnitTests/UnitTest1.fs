@@ -60,12 +60,12 @@ type ``Program logic tests fixture``() =
 
             // Mock database
             let test_data = // Note case-sensitivity: has to match DB in both table names and column names.
-                [ "companyweb.company",
+                [ "Companyweb.company",
                     [|  {| Id = uid1; Founded = DateTime(2000,01,01); Name = "TESTCORP 1"; Ceo = "Mr Boss" |}
                         {| Id = uid1; Founded = DateTime(2010,01,01); Name = "TESTCORP 2"; Ceo = "Mr Boss" |}
                         |] :> obj
                     // other mock tables here...
-                    "companyweb.login",
+                    "Companyweb.login",
                     [|  {| UserId = uid1; IP = "1.2.3.4"; |}
                         {| UserId = uid2; IP = "255.255.255.10"; |}
                         |] :> obj
