@@ -8,5 +8,12 @@ Microsoft.AspNetCore.SignalR
 Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson
 MySqlConnector
 Newtonsoft.Json
-SQLProvider
+Owin.Compression
+SQLProvider.MySqlConnector
 Microsoft.Data.SqlClient
+SQLProvider.MySql
+Microsoft.AspNetCore.WebUtilities
+Microsoft.AspNetCore.Authentication.JwtBearer
+Microsoft.Net.Http.Headers
+System.Configuration.ConfigurationManager
+System.ServiceProcess.ServiceController

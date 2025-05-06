@@ -1,16 +1,19 @@
-
 group Server
     source https://api.nuget.org/v3/index.json
-    framework: netcoreapp3.0, netstandard2.0, netstandard2.1, net6.0, net8.0
+    storage: none
 
     nuget FSharp.Core
     nuget FSharp.Data
     nuget Microsoft.Data.SqlClient
+    nuget Microsoft.Net.Http.Headers 8.0.15
+    nuget MysqlConnector
     nuget Owin.Compression
     nuget Logary
     nuget Logary.Targets.ApplicationInsights
     nuget Saturn
-    nuget Microsoft.AspNetCore.Authentication.JwtBearer
+    nuget Microsoft.AspNetCore.Authentication.JwtBearer 8.0.15
+    nuget SQLProvider.MySql
+    nuget SQLProvider.MySqlConnector
     nuget Microsoft.AspNetCore.SignalR
     nuget Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson
     nuget MySqlConnector
@@ -18,6 +21,9 @@ group Server
     nuget System.Configuration.ConfigurationManager
     nuget System.ServiceProcess.ServiceController
     nuget Thoth.Json.Giraffe
+    nuget Microsoft.AspNetCore.WebUtilities 8.0.15
+    nuget System.ServiceProcess.ServiceController 8.0.1
+    nuget System.Configuration.ConfigurationManager 8.0.1
 
 group Clientside
   source https://api.nuget.org/v3/index.json
@@ -38,28 +44,48 @@ group Clientside
   // danielm/uploader booncon/slippry janl/mustache.js shutterstock/rickshaw
   http https://cdn.jsdelivr.net/npm/@microsoft/signalr@7.0.12/dist/browser/signalr.js signalr.js
   http https://cdn.jsdelivr.net/npm/@microsoft/signalr@7.0.12/dist/browser/signalr.min.js signalr.min.js
+  http https://cdn.jsdelivr.net/npm/signalr@2.4.3/jquery.signalR.js jquery.signalR.js
+  http https://cdn.jsdelivr.net/npm/signalr@2.4.3/jquery.signalR.min.js jquery.signalR.min.js
   http https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.4.min.js jquery.min.js
   http https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.4.min.map jquery.min.map
   http https://code.jquery.com/ui/1.12.1/jquery-ui.min.js
   http https://code.jquery.com/ui/1.12.1/themes/sunny/jquery-ui.min.css
-  http https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js
+  http https://unpkg.com/tether@1.2.4/dist/js/tether.min.js
   http https://ajax.aspnetcdn.com/ajax/bootstrap/5.2.3/css/bootstrap.min.css
   http https://ajax.aspnetcdn.com/ajax/bootstrap/5.2.3/bootstrap.min.js
   http https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js
   http https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js
-  http https://unpkg.com/react@16/umd/react.production.min.js
-  http https://unpkg.com/react-dom@16/umd/react-dom.production.min.js
-  http https://unpkg.com/react@16/umd/react.development.js
+  http https://unpkg.com/react@17/umd/react.production.min.js
+  http https://unpkg.com/react-dom@17/umd/react-dom.production.min.js
+  http https://unpkg.com/react@17/umd/react.development.js
 
 group Build
   source https://api.nuget.org/v3/index.json
-  nuget FAKE
+  framework: net6.0
+  nuget Fake.Core.Process
+  nuget Fake.Core.Target
+  nuget Fake.Core.ReleaseNotes
+  nuget Fake.DotNet.Cli
+  nuget Fake.DotNet.MSBuild
+  nuget Fake.DotNet.Testing.NUnit
+  nuget Fake.DotNet.Testing.XUnit2
+  nuget Fake.IO.FileSystem
+  nuget Fake.Tools.Git
   nuget FSharp.Configuration
+  nuget Microsoft.Data.SqlClient
+  nuget Microsoft.Data.Tools.MsBuild
 
 // Testing frameworks:
-//group Test
-//  https://api.nuget.org/v3/index.json
-//
+group Test
+  source https://api.nuget.org/v3/index.json
+
+  nuget coverlet.collector 6.0.4
+  nuget Microsoft.NET.Test.Sdk 17.13.0
+  nuget NUnit 4.3.2
+  nuget NUnit.Analyzers 4.7.0
+  nuget NUnit3TestAdapter 5.0.0
+
+// Other useful components:
 //  nuget canopy
 //  nuget FsUnit.xUnit
 //  nuget xunit.core

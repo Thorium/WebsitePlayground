@@ -1,0 +1,6 @@
+group Test
+coverlet.collector
+Microsoft.NET.Test.Sdk
+NUnit
+NUnit.Analyzers
+NUnit3TestAdapter

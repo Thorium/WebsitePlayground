@@ -3,7 +3,8 @@
 
 //npm install
 
-var gulp = require('gulp'),
+const gulp = require('gulp'),
+    clean = require('gulp-clean'),
     jshint = require('gulp-jshint'),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
@@ -13,7 +14,7 @@ var gulp = require('gulp'),
     sourcemaps = require('gulp-sourcemaps'),
     less = require('gulp-less'),
 //    sass = require('gulp-sass'), // Would need PYTHON installed
-    gulpMerge = require('gulp-merge'),
+    mergeStream = require('merge-stream'),
     mincss = require('gulp-minify-css'),
     flatten = require('gulp-flatten'),
     gulpif = require('gulp-if'),
@@ -26,7 +27,8 @@ var gulp = require('gulp'),
     tslint = require('gulp-tslint'),
     stylishts = require('gulp-tslint-stylish'),
     htmlhint = require("gulp-htmlhint"),
-	htmlmin = require('gulp-htmlmin')
+	htmlmin = require('gulp-htmlmin'),
+    replace = require('gulp-replace')
 	;
 
 // Set to true for production build. gulp deploy --release ok
@@ -126,7 +128,7 @@ function minifystyles(target) {
 	  .pipe(gulpif(!isRelease, sourcemaps.init()))
       .pipe(autoprefixer('last 2 version'));
 
-    return gulpMerge(cssfile, lessfile) //gulpMerge(lessfile, sassfile))
+    return mergeStream(cssfile, lessfile) //gulpMerge(lessfile, sassfile))
       .pipe(concat(target+'.css'))
       .pipe(rename({suffix: '.min'}))
       .pipe(mincss())
@@ -198,4 +200,8 @@ gulp.task('watch', function () {
 
 // Default Task
 gulp.task('deploy', gulp.parallel('deployStatic', 'tslint', 'typeScripts', 'styles', 'styleslib', 'concatLibs', 'maps'));
+gulp.task('clean', function () {
+    return gulp.src(files.targetPath, { read: false, allowEmpty: true })
+        .pipe(clean());
+});
 gulp.task('default', gulp.series('deploy', 'watch'));

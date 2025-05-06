@@ -1,5 +1,6 @@
 --DROP DATABASE companyweb
-CREATE DATABASE companyweb
+IF DB_ID('companyweb') IS NULL 
+    CREATE DATABASE companyweb
 
 USE companyweb
 

@@ -47,6 +47,7 @@
   <ItemGroup>
     <None Include="paket.references" />
     <Compile Include="Domain.fs" />
+    <Compile Include="Logics.fs" />
     <Compile Include="Scheduler.fs" />
     <Compile Include="SignalRHubs.fs" />
     <Compile Include="OwinStartup.fs" />
@@ -54,15 +55,5 @@
     <None Include="Program.fsx" />
     <None Include="app.config" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Logary" Version="5.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="3.1.5" />
-    <PackageReference Include="Saturn" Version="0.16.1" />
-    <PackageReference Include="SQLProvider" Version="1.3.19" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.2" />
-    <PackageReference Include="System.ServiceProcess.ServiceController" Version="7.0.1" />
-   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
