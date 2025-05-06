@@ -129,20 +129,20 @@ export function getFormValuesFrom(form, paramNames:Array<string>) {
 
 export function setValuesToFormName(formIdName, data) {
     _.each(data, (c:any) => {
-        setItemValue($('#' + formIdName + ' #'+c.Item1), c.Item2);
+        setItemValue($('#' + formIdName + ' #'+c.item1), c.item2);
     });
 }
 
 export function setValuesToForm(data) {
     _.each(data, (c:any) => {
-        setItemValue($('#'+c.Item1), c.Item2);
+        setItemValue($('#'+c.item1), c.item2);
     });
 }
 
 export function parseTuplesToDictionary(listOfItems) {
     const all = _.map(listOfItems, function(item) {
         let dict : any = {};
-        _.each(item, (c:any) => { dict[c.Item1] = c.Item2; });
+        _.each(item, (c:any) => { dict[c.item1] = c.item2; });
         return dict;
     });
     return all;
@@ -151,7 +151,7 @@ export function parseTuplesToDictionary(listOfItems) {
 export function parseTuplesToObject(listOfItems) {
 	let res = {};
     _.each(listOfItems, function(item:any) {
-        res[item.Item1] = item.Item2;
+        res[item.item1] = item.item2;
     });
     return res;
 }
@@ -163,8 +163,8 @@ export function parseFieldsFromForm(form){
    const keys = Object.keys(values);
    const tupleArray = _.map(keys, k => {
        return k.indexOf("Date")>-1 && values[k] != null ?
-           { Item1: k, Item2: new Date(values[k])} :
-           { Item1: k, Item2: values[k]};});
+           { item1: k, item2: new Date(values[k])} :
+           { item1: k, item2: values[k]};});
 
    return tupleArray;
 }

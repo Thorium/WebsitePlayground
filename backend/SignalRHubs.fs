@@ -5,8 +5,8 @@ open System
 open FSharp.Data
 open FSharp.Data.Sql
 open FSharp.Data.Sql.Common
-open Microsoft.AspNet.SignalR
-open Microsoft.AspNet.SignalR.Hubs
+open Microsoft.AspNetCore.SignalR
+open Microsoft.AspNetCore.SignalR
 open System.Threading.Tasks
 
 type IMessageToClient =  // Server can push data to single or all clients
@@ -19,12 +19,11 @@ open Logary
 let dbContext = dbReadContext()
 
 // Example of queries and real-time communtication
-[<HubName("SignalHub")>]
 type SignalHub() as this =
     inherit Hub<IMessageToClient>()
 
-    override __.OnConnected() =
-        let t = base.OnConnected()
+    override __.OnConnectedAsync() =
+        let t = base.OnConnectedAsync()
         Message.eventInfo "Client connected: {clientId}" |> Message.setField "clientId" this.Context.ConnectionId |> writeLog
         // We could do authentication check here.
         t
@@ -42,12 +41,11 @@ type SignalHub() as this =
         }
 
     //[<Authorize(Roles = "loggedin")>]
-    member __.BuyStocks (company:string) (amount:int) =
+    member __.BuyStocks (company:string, amount:int) =
         //Signal to all users is as easy as signal to single user:
         this.Clients.All.NotifyDeal ("Announcement to all users: " + (string)amount + " of " + company + " stocks just sold!")
 
 // Example of basic CRUD
-[<HubName("CompanyHub")>]
 type CompanyHub() =
     inherit Hub<IMessageToClient>()
 

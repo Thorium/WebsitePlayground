@@ -17,9 +17,6 @@
     "jsdoc-format": true,
     "label-position": true,
     "max-line-length": [true, 180],
-    "member-ordering": [true,
-        "variables-before-functions"
-    ],
     "no-any": false,
     "no-arg": true,
     "no-bitwise": true,

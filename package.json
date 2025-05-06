@@ -14,6 +14,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
+    "@microsoft/signalr": "^5.0.12",
     "@types/foundation": "^5.5.30",
     "@types/google.analytics": "0.0.35",
     "@types/jquery": "^2.0.68",

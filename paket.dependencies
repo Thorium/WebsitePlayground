@@ -1,41 +1,35 @@
-source https://api.nuget.org/v3/index.json
-storage: none
+group Server
+    source https://api.nuget.org/v3/index.json
+    storage: none
 
-// Server side, F# .NET:
-nuget FSharp.Data
-nuget Microsoft.AspNet.SignalR.Core framework: >= 4.0
-nuget Microsoft.AspNet.WebApi.OwinSelfHost framework: >= 4.0
-nuget Microsoft.AspNet.Identity.Owin framework: >= 4.0
-nuget Microsoft.Net.Http
-nuget Microsoft.Owin.Cors framework: >= 4.0
-nuget Microsoft.Owin.Security.Cookies framework: >= 4.0
-nuget Microsoft.Owin.StaticFiles framework: >= 4.0
-nuget Microsoft.Owin.Diagnostics framework: >= 4.0
-nuget Microsoft.Owin.Host.SystemWeb framework: >= 4.0
-nuget Microsoft.Owin.Security.Facebook framework: >= 4.0
-nuget Microsoft.Owin.Security.Google framework: >= 4.0
-nuget MysqlConnector
-nuget Owin.Compression
-nuget Owin.Security.AesDataProtectorProvider framework: >= 4.0
-nuget MySql.Data
-// nuget System.Reactive
-nuget Logary < 5
-nuget Hopac < 0.4
-nuget NodaTime = 1.3.4 // just for logary 4 compatibility
-nuget Logary.Targets.ApplicationInsights
-nuget FSharp.Core
-nuget SQLProvider.MsSql
-nuget System.Runtime.InteropServices.RuntimeInformation
+    nuget FSharp.Core
+    nuget FSharp.Data
+    nuget Microsoft.Data.SqlClient
+    nuget Microsoft.Net.Http.Headers 8.0.15
+    nuget MysqlConnector
+    nuget Owin.Compression
+    nuget Logary
+    nuget Logary.Targets.ApplicationInsights
+    nuget Saturn
+    nuget Microsoft.AspNetCore.Authentication.JwtBearer 8.0.15
+    nuget SQLProvider.MsSql
+    nuget Microsoft.AspNetCore.SignalR
+    nuget Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson
+    nuget MySqlConnector
+    nuget SQLProvider
+    nuget System.Configuration.ConfigurationManager
+    nuget System.ServiceProcess.ServiceController
+    nuget Thoth.Json.Giraffe
+    nuget Microsoft.AspNetCore.WebUtilities 8.0.15
+    nuget System.ServiceProcess.ServiceController 8.0.1
+    nuget System.Configuration.ConfigurationManager 8.0.1
 
-// Client side, Javascript: (Please use minified, save some build time)
 group Clientside
   source https://api.nuget.org/v3/index.json
   github zurb/bower-foundation css/foundation.css
   github zurb/bower-foundation css/foundation.min.css
   github zurb/bower-foundation css/normalize.css
   github zurb/bower-foundation js/foundation.min.js
-  //github SignalR/bower-signalr jquery.signalR.js
-  //github SignalR/bower-signalr jquery.signalR.min.js
   github aFarkas/html5shiv dist/html5shiv.min.js
   github FortAwesome/Font-Awesome:4.x css/font-awesome.min.css
   github FortAwesome/Font-Awesome:4.x fonts/fontawesome-webfont.eot
@@ -47,7 +41,8 @@ group Clientside
   github furf/jquery-ui-touch-punch jquery.ui.touch-punch.min.js
   // other possible:
   // danielm/uploader booncon/slippry janl/mustache.js shutterstock/rickshaw
-
+  http https://cdn.jsdelivr.net/npm/@microsoft/signalr@7.0.12/dist/browser/signalr.js signalr.js
+  http https://cdn.jsdelivr.net/npm/@microsoft/signalr@7.0.12/dist/browser/signalr.min.js signalr.min.js
   http https://cdn.jsdelivr.net/npm/signalr@2.4.3/jquery.signalR.js jquery.signalR.js
   http https://cdn.jsdelivr.net/npm/signalr@2.4.3/jquery.signalR.min.js jquery.signalR.min.js
   http https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.4.min.js jquery.min.js
@@ -55,8 +50,8 @@ group Clientside
   http https://code.jquery.com/ui/1.12.1/jquery-ui.min.js
   http https://code.jquery.com/ui/1.12.1/themes/sunny/jquery-ui.min.css
   http https://unpkg.com/tether@1.2.4/dist/js/tether.min.js
-  http https://ajax.aspnetcdn.com/ajax/bootstrap/4.6.0/css/bootstrap.min.css
-  http https://ajax.aspnetcdn.com/ajax/bootstrap/4.6.0/bootstrap.min.js
+  http https://ajax.aspnetcdn.com/ajax/bootstrap/5.2.3/css/bootstrap.min.css
+  http https://ajax.aspnetcdn.com/ajax/bootstrap/5.2.3/bootstrap.min.js
   http https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js
   http https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js
   http https://unpkg.com/react@17/umd/react.production.min.js

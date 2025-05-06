@@ -54,6 +54,15 @@ open System.IO
 open System.Diagnostics
 open System.IO.Compression
 
+//Target.initEnvironment ()
+
+let environVarOrDefault varName defaultValue =
+    try
+        let envvar = (Environment.environVar varName).ToUpper()
+        if String.IsNullOrEmpty envvar then defaultValue else envvar
+    with
+    | _ ->  defaultValue
+
 let buildDir = __SOURCE_DIRECTORY__
 let verbosity = MSBuildVerbosity.Minimal
 /// Pick path for NPM (and Gulp). Todo: fix and test for Mac
@@ -86,7 +95,7 @@ let npmPath, npmCmd =
 Target.initEnvironment()
 let codeAnalysis = "RunCodeAnalysis","false"
 let buildMode = "Configuration", Environment.environVarOrDefault "Configuration" "Debug"
-let buildType = match snd(buildMode) with | "Release" -> "Rebuild" | _ -> "Build"
+//let buildType = match snd(buildMode) with | "Release" -> "Rebuild" | _ -> "Build"
 let mono = (Environment.environVarOrDefault "MONO" "0") = "1"
 let ``database connection string`` = "Data Source=localhost; Initial Catalog=Companyweb; Integrated Security=True;"
 let sqlpackagePath = "packages/build/Microsoft.Data.Tools.MsBuild/lib/net46/sqlpackage.exe"
@@ -117,6 +126,8 @@ let runShell = fun (command, args) ->
         reraise ()
 
 Target.create "npm" (fun _ ->
+    let npm = ProcessUtils.tryFindFileOnPath "npm" 
+    if npm.IsNone then failwith "npm not found" else
     try
        runShell(npmPath + npmCmd,"install -g npm")
        runShell(npmPath + npmCmd,"install -g gulp jshint eslint")
@@ -131,6 +142,8 @@ Target.create "npm" (fun _ ->
 )
 // Client side gulp-tasks
 Target.create "gulp" (fun _ ->
+    let gulp = ProcessUtils.tryFindFileOnPath "gulp" 
+    if gulp.IsNone then failwith "gulp not found" else
     try
         let gulpCmd =
 
@@ -235,7 +248,7 @@ Target.create "package" ( fun _ ->
 
     // What you could do: Modify .config-file with "FSharp.Configuration" NuGet-package...
 
-    Branches.tag "" tag
+    //Fake.Git.Branches.tag "" tag
 )
 
 Target.create "start" ( fun _ ->

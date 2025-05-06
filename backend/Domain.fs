@@ -29,7 +29,7 @@ open FSharp.Data
 open FSharp.Data.Sql
 open FSharp.Data.Sql.MsSql
 
-open System.Data.SqlClient
+//open System.Data.SqlClient
 open System.Threading.Tasks
 
 open Hopac
@@ -55,7 +55,8 @@ type TypeProviderConnection =
         CaseSensitivityChange = Common.CaseSensitivityChange.ORIGINAL
         >
 
-let logger = lazy(Logary.Logging.getCurrentLogger())
+let logger = //lazy(Logary.Logging.getCurrentLogger())
+             lazy(Logary.Log.create "Websiteplayground")
 let cstr = System.Configuration.ConfigurationManager.AppSettings.["RuntimeDBConnectionString"]
 let internal createDbReadContext() =
     let rec createCon x =
@@ -63,11 +64,11 @@ let internal createDbReadContext() =
             if isNull cstr then TypeProviderConnection.GetReadOnlyDataContext()
             else TypeProviderConnection.GetReadOnlyDataContext cstr
         with
-        | :? System.Data.SqlClient.SqlException as ex when x < 3 ->
+        | :? Microsoft.Data.SqlClient.SqlException as ex when x < 3 ->
             logSimple (logger.Force()) (Logary.Message.eventWarn ("Error connecting SQL, retrying... {msg}") |> Logary.Message.setField "msg" ex.Message)
             System.Threading.Thread.Sleep 50
             createCon (x+1)
-        | :? System.Data.SqlClient.SqlException as ex when x < 5 ->
+        | :? Microsoft.Data.SqlClient.SqlException as ex when x < 5 ->
             logSimple (logger.Force()) (Logary.Message.eventWarn ("Error connecting SQL, retrying... {msg}") |> Logary.Message.setField "msg" ex.Message)
             System.Threading.Thread.Sleep 1500
             createCon (x+1)
@@ -129,7 +130,7 @@ let inline writeWithDbContextManualComplete() =
     scope, context
 
 open System.Threading.Tasks
-open Logary.Logging
+
 /// Write operations should be wrapped to transaction with this.
 /// Try to avoid transactions taking possibly seconds.
 let inline writeWithDbContext (func:TypeProviderConnection.dataContext -> ^T) =
