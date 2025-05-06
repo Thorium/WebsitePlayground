@@ -81,10 +81,17 @@ type CompanyHub() =
       transaction |> Async.StartAsTask
 
     member __.Read itemId =
-        query {
-            for u in dbReadContext().Companyweb.Company do
-            where (u.Id = itemId)
-        } |> Seq.tryHeadAsync
+        task {
+            let! res = 
+                query {
+                    for u in dbReadContext().Companyweb.Company do
+                    where (u.Id = itemId)
+                } |> Seq.tryHeadAsync
+            return
+                match res with
+                | Some e -> e.ColumnValues
+                | None -> Seq.empty
+        }
 
     member __.Update itemId data =
       writeWithDbContext <| fun (dbContext:WriteDataContext) ->
