@@ -77,6 +77,36 @@ type LogExceptionAttribute() =
 open Owin.Security.AesDataProtectorProvider
 open System.Net
 
+// WebApi example, for external services. This is what you may need e.g. for webhooks. See routing below.
+type MyController() as this =
+    inherit ApiController()
+
+    // This would be a HTTP GET to http://localhost:7050/webapi/my
+    member __.Get () =
+        this.Request.CreateResponse(System.Net.HttpStatusCode.OK,"Node found.")
+
+
+    // This would be a HTTP POST to http://localhost:7050/webapi/my/asdfasdfasdf
+    member __.Post(param1:string) : Task<HttpResponseMessage> =
+        task {
+            // maybe some validity checking of parameters. Remember this is public endpoint now.
+            // Also good idea could be logging the calls to somewhere like to a non-full-recovery-model database
+            if param1 = "" then
+                return this.Request.CreateResponse(System.Net.HttpStatusCode.Forbidden, "No permission.")
+            else
+            let someResponse =
+                Logics.getData()
+                |> Array.map(fun i ->
+                    FSharp.Data.JsonProvider.Serializer.Serialize i.JsonValue)
+
+            return
+                this.Request.CreateResponse(System.Net.HttpStatusCode.OK,
+                    Content =
+                        new StringContent(
+                            "[" + (String.concat "," someResponse) + "]",
+                            System.Text.Encoding.UTF8, "application/json"))
+        }
+
 type LoggingPipelineModule() =
     inherit Microsoft.AspNet.SignalR.Hubs.HubPipelineModule() with
         override __.OnIncomingError(exceptionContext, invokerContext) =
@@ -176,7 +206,10 @@ type MyWebStartup() =
         // REST Web Api if needed:
         // Note: If parameter name is "param" as here, then it's referenced with only value in uri: /value/
         // otherwise you need an attribute [<FromUri>]x and it's referenced with ?x=...
-        //httpConfig.Routes.MapHttpRoute("MyApi", "api/{controller}/{param}") |> ignore // "api/my" -> MyController
+        httpConfig.Routes.MapHttpRoute("DirectApi", "webapi/{controller}") |> ignore // "webapi/my" -> MyController
+        httpConfig.Routes.MapHttpRoute("MyApi1", "webapi/{controller}/{param1}") |> ignore // "webapi/my" -> MyController
+        httpConfig.Routes.MapHttpRoute("MyApi2", "webapi/{controller}/{param1}/{param2}") |> ignore // "webapi/my" -> MyController
+        // ... and so on. Or you can do use attribute-mapping if you prefer that.
 
         ap.UseWebApi(httpConfig) |> ignore
         httpConfig.MapHttpAttributeRoutes()

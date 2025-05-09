@@ -230,6 +230,8 @@ Target.create "package" ( fun _ ->
         if File.Exists target then File.Delete target
         System.IO.Compression.ZipFile.CreateFromDirectory(source, target, CompressionLevel.Optimal, false)
 
+    File.Copy(resolvePath2 "database\bin" "database.dacpac", resolvePath2 "backend/bin" "database.dacpac", true)
+
     (resolvePath2 "frontend" "dist", resolvePath2 "release" "wwwroot.zip") ||> generateZip
     (resolvePath2 "backend" "bin", resolvePath2 "release" "server.zip") ||> generateZip
 

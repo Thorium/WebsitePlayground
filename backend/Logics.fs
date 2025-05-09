@@ -1,4 +1,5 @@
-// --- Some logics, because it's not good to add everyting to the SignalRHub, just as if you want to share it with e.g. a WebApi --------------------------------c----
+// --- Some logics, because it's not good to add everyting to the SignalRHub, just as if you want to share it with e.g. a WebApi ---
+// If you need independent functions, this place is good to seek: https://fssnip.net/tags/
 module Logics
 
     open System
@@ -6,6 +7,7 @@ module Logics
     open FSharp.Data
     open FSharp.Data.Sql
 
+    /// Example of database query operation
     let executeSearch (dbContext:ReadDataContext) (searchparams:SearchObject) =
         let ceoFilter =
             match searchparams.CEOName with
@@ -42,7 +44,35 @@ module Logics
             match fetched with
             | Some entity ->
                 entity |> actionToEntity
+
+                // You could also modify entities like this:
+                //entity.Founded <- DateTime(1992, 2, 2)
+
                 do! dbContext.SubmitUpdates2 ()
+
                 return entity.ColumnValues
             | None -> return Seq.empty
         }
+
+    // Expample of JSON parsing:
+    // Some list of data samples from whatever API docs:
+
+    open FSharp.Data.JsonProvider
+
+    type SampleJson = FSharp.Data.JsonProvider<"""[
+        { "name" : "Tuomas", "age" : 30 },
+        { "name" : "Seppo" },
+        { "error" : "no name "}
+    ]""", SampleIsList=true>
+
+    let getData() =
+
+        let someApiResponse = """{ "name" : "Jaakko" }"""
+        let item = SampleJson.Load (Serializer.Deserialize someApiResponse)
+        let x = item.Name // Strongly typed
+
+        let item2 = SampleJson.Root(Some "Pekka", Some 20, None)
+
+        [| item; item2 |]
+
+
