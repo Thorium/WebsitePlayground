@@ -4,6 +4,7 @@ group Server
 
     nuget FSharp.Core
     nuget FSharp.Data
+    nuget FSharp.Data.JsonProvider.Serializer
     nuget Microsoft.Data.SqlClient
     nuget Microsoft.Net.Http.Headers 8.0.15
     nuget MysqlConnector
