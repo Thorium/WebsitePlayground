@@ -55,9 +55,6 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FSharp.Data.JsonProvider.Serializer" Version="1.0.4" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
