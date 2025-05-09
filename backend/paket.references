@@ -16,3 +16,5 @@ Microsoft.AspNetCore.Authentication.JwtBearer
 Microsoft.Net.Http.Headers
 System.Configuration.ConfigurationManager
 System.ServiceProcess.ServiceController
+FSharp.Data
+FSharp.Data.JsonProvider.Serializer
