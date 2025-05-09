@@ -3,6 +3,7 @@ storage: none
 
 // Server side, F# .NET:
 nuget FSharp.Data
+nuget FSharp.Data.JsonProvider.Serializer
 nuget Microsoft.AspNet.SignalR.Core framework: >= 4.0
 nuget Microsoft.AspNet.WebApi.OwinSelfHost framework: >= 4.0
 nuget Microsoft.AspNet.Identity.Owin framework: >= 4.0
