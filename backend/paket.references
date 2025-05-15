@@ -10,7 +10,6 @@ MySqlConnector
 Newtonsoft.Json
 Owin.Compression
 SQLProvider.MySqlConnector
-Microsoft.Data.SqlClient
 SQLProvider.MySql
 Microsoft.AspNetCore.WebUtilities
 Microsoft.AspNetCore.Authentication.JwtBearer

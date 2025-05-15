@@ -5,7 +5,7 @@ group Server
     nuget FSharp.Core
     nuget FSharp.Data
     nuget FSharp.Data.JsonProvider.Serializer
-    nuget Microsoft.Data.SqlClient
+//    nuget Microsoft.Data.SqlClient
     nuget Microsoft.Net.Http.Headers 8.0.15
     nuget MysqlConnector
     nuget Owin.Compression
@@ -13,12 +13,12 @@ group Server
     nuget Logary.Targets.ApplicationInsights
     nuget Saturn
     nuget Microsoft.AspNetCore.Authentication.JwtBearer 8.0.15
+    //nuget SQLProvider
     nuget SQLProvider.MySql
     nuget SQLProvider.MySqlConnector
     nuget Microsoft.AspNetCore.SignalR
     nuget Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson
     nuget MySqlConnector
-    nuget SQLProvider
     nuget System.Configuration.ConfigurationManager
     nuget System.ServiceProcess.ServiceController
     nuget Thoth.Json.Giraffe
