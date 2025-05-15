@@ -6,7 +6,6 @@ Logary
 Logary.Targets.ApplicationInsights
 Microsoft.AspNetCore.SignalR
 Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson
-MySqlConnector
 Newtonsoft.Json
 Owin.Compression
 SQLProvider.MsSql
