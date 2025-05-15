@@ -12,7 +12,6 @@ Microsoft.Owin.Host.SystemWeb
 Microsoft.Owin.Security.Cookies
 Microsoft.Owin.Security.Facebook
 Microsoft.Owin.Security.Google
-MySqlConnector
 Newtonsoft.Json
 Owin.Compression
 Owin.Security.AesDataProtectorProvider

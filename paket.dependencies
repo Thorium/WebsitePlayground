@@ -15,10 +15,8 @@ nuget Microsoft.Owin.Diagnostics framework: >= 4.0
 nuget Microsoft.Owin.Host.SystemWeb framework: >= 4.0
 nuget Microsoft.Owin.Security.Facebook framework: >= 4.0
 nuget Microsoft.Owin.Security.Google framework: >= 4.0
-nuget MysqlConnector
 nuget Owin.Compression
 nuget Owin.Security.AesDataProtectorProvider framework: >= 4.0
-nuget MySql.Data
 // nuget System.Reactive
 nuget Logary < 5
 nuget Hopac < 0.4
