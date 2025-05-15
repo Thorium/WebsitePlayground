@@ -66,14 +66,25 @@ let internal createDbReadContext() =
             if isNull cstr then TypeProviderConnection.GetReadOnlyDataContext()
             else TypeProviderConnection.GetReadOnlyDataContext cstr
         with
-        | :? Microsoft.Data.SqlClient.SqlException as ex when x < 3 ->
+        // If you use MySqlConnector
+        | :? MySqlConnector.MySqlException as ex when x < 3 ->
             logSimple (logger.Force()) (Logary.Message.eventWarn ("Error connecting SQL, retrying... {msg}") |> Logary.Message.setField "msg" ex.Message)
             System.Threading.Thread.Sleep 50
             createCon (x+1)
-        | :? Microsoft.Data.SqlClient.SqlException as ex when x < 5 ->
+        | :? MySqlConnector.MySqlException as ex when x < 5 ->
             logSimple (logger.Force()) (Logary.Message.eventWarn ("Error connecting SQL, retrying... {msg}") |> Logary.Message.setField "msg" ex.Message)
             System.Threading.Thread.Sleep 1500
             createCon (x+1)
+        // If you use MySql.Data
+        | :? MySql.Data.MySqlClient.MySqlException as ex when x < 3 ->
+            logSimple (logger.Force()) (Logary.Message.eventWarn ("Error connecting SQL, retrying... {msg}") |> Logary.Message.setField "msg" ex.Message)
+            System.Threading.Thread.Sleep 50
+            createCon (x+1)
+        | :? MySql.Data.MySqlClient.MySqlException as ex when x < 5 ->
+            logSimple (logger.Force()) (Logary.Message.eventWarn ("Error connecting SQL, retrying... {msg}") |> Logary.Message.setField "msg" ex.Message)
+            System.Threading.Thread.Sleep 1500
+            createCon (x+1)
+
     createCon 0
 
 type ReadDataContext = TypeProviderConnection.readDataContext
