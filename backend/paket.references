@@ -1,7 +1,5 @@
 group Server
 FSharp.Core
-Saturn
-Thoth.Json.Giraffe
 Logary
 Logary.Targets.ApplicationInsights
 Microsoft.AspNetCore.SignalR
@@ -17,3 +15,7 @@ System.Configuration.ConfigurationManager
 System.ServiceProcess.ServiceController
 FSharp.Data
 FSharp.Data.JsonProvider.Serializer
+Oxpecker
+Oxpecker.OpenApi
+Microsoft.Extensions.Hosting.WindowsServices
+

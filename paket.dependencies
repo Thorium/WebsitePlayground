@@ -10,18 +10,25 @@ group Server
     nuget Owin.Compression
     nuget Logary
     nuget Logary.Targets.ApplicationInsights
-    nuget Saturn
     nuget Microsoft.AspNetCore.Authentication.JwtBearer 8.0.15
     nuget SQLProvider.MsSql
     nuget Microsoft.AspNetCore.SignalR
     nuget Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson
     // nuget SQLProvider
     nuget System.Configuration.ConfigurationManager
-    nuget System.ServiceProcess.ServiceController
-    nuget Thoth.Json.Giraffe
     nuget Microsoft.AspNetCore.WebUtilities 8.0.15
     nuget System.ServiceProcess.ServiceController 8.0.1
     nuget System.Configuration.ConfigurationManager 8.0.1
+    nuget Microsoft.Extensions.Configuration 8.0.0
+    nuget Oxpecker
+    nuget Oxpecker.OpenApi
+    nuget Microsoft.Extensions.Hosting.WindowsServices
+//    nuget Destructurama.FSharp
+//    nuget Serilog
+//    nuget Serilog.Extensions.Logging
+//    nuget Serilog.Sinks.ApplicationInsights
+//    nuget Serilog.Sinks.Console
+//    nuget Serilog.Sinks.File
 
 group Clientside
   source https://api.nuget.org/v3/index.json
