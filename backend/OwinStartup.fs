@@ -45,10 +45,10 @@ let errorHandler (ctx: Microsoft.AspNetCore.Http.HttpContext) (next: Microsoft.A
     let writeError (ex) =
 
         let err =
-            "Api error 400 {uri} {ex} \r\n\r\n {stack}" |> Logary.Message.eventError
-            |> Logary.Message.setField "uri" (ctx.Request.Path)
-            |> Logary.Message.setField "ex" (ex.ToString())
-            |> Logary.Message.setField "stack" (System.Diagnostics.StackTrace(1, true).ToString())
+            "Api error 400 {uri} {ex} \r\n\r\n {stack}" |> Logari.Message.eventError
+            |> Logari.Message.setField "uri" (ctx.Request.Path)
+            |> Logari.Message.setField "ex" (ex.ToString())
+            |> Logari.Message.setField "stack" (System.Diagnostics.StackTrace(1, true).ToString())
         err |> writeLog
 
     task {

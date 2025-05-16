@@ -9,8 +9,6 @@ group Server
     nuget Microsoft.Net.Http.Headers 8.0.15
     nuget MysqlConnector
     nuget Owin.Compression
-    nuget Logary
-    nuget Logary.Targets.ApplicationInsights
     nuget Microsoft.AspNetCore.Authentication.JwtBearer 8.0.15
     //nuget SQLProvider
     nuget SQLProvider.MySql
@@ -26,12 +24,12 @@ group Server
     nuget Oxpecker
     nuget Oxpecker.OpenApi
     nuget Microsoft.Extensions.Hosting.WindowsServices
-//    nuget Destructurama.FSharp
-//    nuget Serilog
-//    nuget Serilog.Extensions.Logging
-//    nuget Serilog.Sinks.ApplicationInsights
-//    nuget Serilog.Sinks.Console
-//    nuget Serilog.Sinks.File
+    nuget Destructurama.FSharp
+    nuget Logari
+    nuget Serilog.Extensions.Logging
+    nuget Serilog.Sinks.ApplicationInsights
+    nuget Serilog.Sinks.Console
+    nuget Serilog.Sinks.File
 
 group Clientside
   source https://api.nuget.org/v3/index.json
