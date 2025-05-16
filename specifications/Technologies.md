@@ -97,17 +97,17 @@ We use F# Data type providers to avoid complex O/R-mappings and domain models:
 - [SQLProvider](https://github.com/fsprojects/SQLProvider)
 - [FSharp.Data.SqlClient](http://fsprojects.github.io/FSharp.Data.SqlClient/)
 
-### Saturn / Giraffe ###
+### Oxpecker ###
 
-[Saturn](https://saturnframework.org/) is just a lightweight wrapper over [Giraffe](https://github.com/giraffe-fsharp/Giraffe) and Kestrel, a lightweight web-server.
+[Oxpecker](https://lanayx.github.io/Oxpecker/) is just a lightweight wrapper over AspNetCore and Kestrel, a lightweight web-server.
 
 ### SignalR ###
 
 [SignalR](http://signalr.net/) is a real-time communication library that can handle also push-based notifications from the server to the clients. It uses WebSockets and fallbacks for long-polling.
 
-### Logary ###
+### Serilog ###
 
-[Logary] (https://logary.github.io/) is a logging library that makes it easy to integrate with many different "Operational Intelligence platforms" to gather real-time log data from distributed web-servers.
+[Serilog](https://serilog.net/) is used via [Logari](https://github.com/Thorium/Logari), a wrapper that makes Serilog as nice to use as [Logary] (https://logary.github.io/).
 
 # Frontend #
 
