@@ -15,7 +15,7 @@ type IMessageToClient =  // Server can push data to single or all clients
 
 let rnd = Random()
 open System.Security.Claims
-open Logary
+open Logari
 let dbContext = dbReadContext()
 
 // Example of queries and real-time communtication
