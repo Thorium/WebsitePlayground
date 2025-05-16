@@ -62,10 +62,10 @@ open System.Web.Http.Filters
 type LogExceptionAttribute() =
     inherit ExceptionFilterAttribute()
     let writeErr(context:HttpActionExecutedContext) =
-        "Api error {uri} {ex} \r\n\r\n {stack}" |> Logary.Message.eventError
-        |> Logary.Message.setField "uri" (context.Request.RequestUri)
-        |> Logary.Message.setField "ex" (context.Exception.ToString())
-        |> Logary.Message.setField "stack" (System.Diagnostics.StackTrace(1, true).ToString())
+        "Api error {uri} {ex} \r\n\r\n {stack}" |> Logari.Message.eventError
+        |> Logari.Message.setField "uri" (context.Request.RequestUri)
+        |> Logari.Message.setField "ex" (context.Exception.ToString())
+        |> Logari.Message.setField "stack" (System.Diagnostics.StackTrace(1, true).ToString())
         |> writeLog
     override __.OnException(context:HttpActionExecutedContext) =
         writeErr context
@@ -112,20 +112,20 @@ type LoggingPipelineModule() =
         override __.OnIncomingError(exceptionContext, invokerContext) =
             let invokeMethod = invokerContext.MethodDescriptor
             let args = String.Join(", ", invokerContext.Args)
-            Logary.Message.eventError(invokeMethod.Hub.Name + "." + invokeMethod.Name + "({args}) exception:\r\n {err}")
-            |> Logary.Message.setField "args" args |> Logary.Message.setField "err" (exceptionContext.Error.ToString()) |> writeLog
+            Logari.Message.eventError(invokeMethod.Hub.Name + "." + invokeMethod.Name + "({args}) exception:\r\n {err}")
+            |> Logari.Message.setField "args" args |> Logari.Message.setField "err" (exceptionContext.Error.ToString()) |> writeLog
             base.OnIncomingError(exceptionContext, invokerContext)
 
         override __.OnBeforeIncoming context =
-            let msg =Logary.Message.eventDebug("=> Invoking " + context.MethodDescriptor.Hub.Name + "." + context.MethodDescriptor.Name)
+            let msg =Logari.Message.eventDebug("=> Invoking " + context.MethodDescriptor.Hub.Name + "." + context.MethodDescriptor.Name)
             if not(isNull context.Hub || isNull context.Hub.Context || isNull context.Hub.Context.ConnectionId) then
-                msg |> Logary.Message.setField "clientId" context.Hub.Context.ConnectionId |> writeLog
+                msg |> Logari.Message.setField "clientId" context.Hub.Context.ConnectionId |> writeLog
             else
                 msg |> writeLog
             base.OnBeforeIncoming context
 
         override __.OnBeforeOutgoing context =
-            Logary.Message.eventDebug("<= Invoking " + context.Invocation.Hub + "." + context.Invocation.Method) |> writeLog
+            Logari.Message.eventDebug("<= Invoking " + context.Invocation.Hub + "." + context.Invocation.Method) |> writeLog
             base.OnBeforeOutgoing context
 
 /// Direct linking url-routing,

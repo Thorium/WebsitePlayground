@@ -4,6 +4,7 @@ storage: none
 // Server side, F# .NET:
 nuget FSharp.Data
 nuget FSharp.Data.JsonProvider.Serializer
+nuget Logari.Logary 1.0.1
 nuget Microsoft.AspNet.SignalR.Core framework: >= 4.0
 nuget Microsoft.AspNet.WebApi.OwinSelfHost framework: >= 4.0
 nuget Microsoft.AspNet.Identity.Owin framework: >= 4.0
@@ -15,10 +16,13 @@ nuget Microsoft.Owin.Diagnostics framework: >= 4.0
 nuget Microsoft.Owin.Host.SystemWeb framework: >= 4.0
 nuget Microsoft.Owin.Security.Facebook framework: >= 4.0
 nuget Microsoft.Owin.Security.Google framework: >= 4.0
+nuget Microsoft.Extensions.Options 8.0.2
+nuget Microsoft.Extensions.Configuration.Abstractions 8.0
+nuget Microsoft.Extensions.Configuration 8.0
 nuget Owin.Compression
 nuget Owin.Security.AesDataProtectorProvider framework: >= 4.0
 // nuget System.Reactive
-nuget Logary < 5
+nuget Logary
 nuget Hopac < 0.4
 nuget NodaTime = 1.3.4 // just for logary 4 compatibility
 nuget Logary.Targets.ApplicationInsights

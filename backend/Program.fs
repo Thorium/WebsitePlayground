@@ -14,8 +14,10 @@ let mutable log = Unchecked.defaultof<IDisposable>
 let hostName = System.Net.Dns.GetHostName()
 let serverPath = System.Reflection.Assembly.GetExecutingAssembly().Location |> System.IO.Path.GetDirectoryName
 
-let startServer() =
+do setupLogariSql()
 
+let startServer() =
+    Logging.setupLogging()
     System.Net.ServicePointManager.SecurityProtocol <- System.Net.SecurityProtocolType.Tls12 ||| System.Net.SecurityProtocolType.Tls11
 
     let fetchLogLevel =
@@ -46,7 +48,7 @@ let startServer() =
         |> Array.filter(fun p -> p<>"")
         |> Array.map(fun port -> protocol + "://" + addr + ":" + port)
         |> Array.iter(fun url ->
-            Message.eventInfo url |> writeLog
+            Message.eventInfo url |> Logging.writeLog
             options.Urls.Add url
         )
 
@@ -56,7 +58,7 @@ let startServer() =
     // You probably need adnmin rights to start a web server:
     server <- Microsoft.Owin.Hosting.WebApp.Start<MyWebStartup> options
 
-    Message.eventInfo ("Server started.") |> writeLog
+    Message.eventInfo ("Server started.") |> Logging.writeLog
 
 let stopServer() =
     if server <> Unchecked.defaultof<IDisposable> then
@@ -71,13 +73,13 @@ open System.ServiceProcess
 type WinService() =
     inherit ServiceBase(ServiceName = "companyweb")
     override x.OnStart(args) =
-        Logary.Message.eventInfo "Starting server" |> writeLog
+        Logary.Message.eventInfo "Starting server" |> Logging.writeLog
         startServer(); base.OnStart(args)
     override x.OnStop() =
-        Logary.Message.eventInfo "Stopping server" |> writeLog
+        Logary.Message.eventInfo "Stopping server" |> Logging.writeLog
         stopServer(); base.OnStop()
     override x.Dispose(disposing) =
-        Logary.Message.eventInfo "Disposing server" |> writeLog
+        Logary.Message.eventInfo "Disposing server" |> Logging.writeLog
         if disposing then stopServer()
         base.Dispose(true)
 
@@ -98,7 +100,7 @@ let main args =
     try
         if Environment.UserInteractive || not(isNull (Type.GetType "Mono.Runtime")) then
             startServer()
-            Message.eventInfo "Press Enter to stop & quit." |> writeLog
+            Message.eventInfo "Press Enter to stop & quit." |> Logging.writeLog
             Console.ReadLine() |> ignore
             stopServer()
         else
@@ -106,6 +108,6 @@ let main args =
     with
     | e -> Logary.Message.eventError "Error with webserver {err}"
             |> Logary.Message.setField "err" (e.ToString())
-            |> writeLog
+            |> Logging.writeLog
            Console.WriteLine (e.GetBaseException().Message)
     0

@@ -1,6 +1,8 @@
 FSharp.Core
 FSharp.Data
 FSharp.Data.JsonProvider.Serializer
+Logari
+Logari.Logary
 Logary
 Logary.Targets.ApplicationInsights
 Microsoft.AspNet.SignalR.Core
