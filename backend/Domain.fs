@@ -32,9 +32,7 @@ open FSharp.Data.Sql.MsSql
 //open System.Data.SqlClient
 open System.Threading.Tasks
 
-open Hopac
-open Logary
-open Logary.Logger
+open Logari
 
 // --- SQL-Server connection ------------------------------------
 
@@ -55,8 +53,7 @@ type TypeProviderConnection =
         CaseSensitivityChange = Common.CaseSensitivityChange.ORIGINAL
         >
 
-let logger = //lazy(Logary.Logging.getCurrentLogger())
-             lazy(Logary.Log.create "Websiteplayground")
+
 let cstr = System.Configuration.ConfigurationManager.AppSettings.["RuntimeDBConnectionString"]
 let internal createDbReadContext() =
     let rec createCon x =
@@ -65,11 +62,11 @@ let internal createDbReadContext() =
             else TypeProviderConnection.GetReadOnlyDataContext cstr
         with
         | :? Microsoft.Data.SqlClient.SqlException as ex when x < 3 ->
-            logSimple (logger.Force()) (Logary.Message.eventWarn ("Error connecting SQL, retrying... {msg}") |> Logary.Message.setField "msg" ex.Message)
+            writeLogSimple (logger.Force()) (Message.eventWarn ("Error connecting SQL, retrying... {msg}") |> Message.setField "msg" ex.Message)
             System.Threading.Thread.Sleep 50
             createCon (x+1)
         | :? Microsoft.Data.SqlClient.SqlException as ex when x < 5 ->
-            logSimple (logger.Force()) (Logary.Message.eventWarn ("Error connecting SQL, retrying... {msg}") |> Logary.Message.setField "msg" ex.Message)
+            writeLogSimple (logger.Force()) (Message.eventWarn ("Error connecting SQL, retrying... {msg}") |> Message.setField "msg" ex.Message)
             System.Threading.Thread.Sleep 1500
             createCon (x+1)
     createCon 0
@@ -92,10 +89,10 @@ let dbReadContext() =
             let itm = lazy(createDbReadContext())
             contextHolder <- itm
         with
-        | e -> logSimple (logger.Force()) (Logary.Message.eventError ("SQL connection failed: {msg}") |> Logary.Message.setField "msg" e.Message)
+        | e -> writeLogSimple (logger.Force()) (Message.eventError ("SQL connection failed: {msg}") |> Message.setField "msg" e.Message)
     contextHolder.Force()
 
-let writeLog x = logSimple (logger.Force()) x
+let writeLog x = writeLogSimple (logger.Force()) x
 
 let isMono = not(isNull (Type.GetType "Mono.Runtime"))
 
@@ -142,7 +139,7 @@ let inline writeWithDbContext (func:TypeProviderConnection.dataContext -> ^T) =
         | false -> ""
     let logmsg act tid =
         let tidm = match String.IsNullOrEmpty tid with | true -> "" | false -> " at trhead " + tid
-        Logary.Message.eventDebug("Transaction {transId} " + act + " {tidm}") |> Logary.Message.setField "transId" transId |> Logary.Message.setField "tidm" tidm
+        Message.eventDebug("Transaction {transId} " + act + " {tidm}") |> Message.setField "transId" transId |> Message.setField "tidm" tidm
         |> writeLog
     logmsg "started" (System.Threading.Thread.CurrentThread.ManagedThreadId.ToString())
     let res = func context
@@ -187,7 +184,7 @@ let inline writeWithDbContext (func:TypeProviderConnection.dataContext -> ^T) =
         x
     | item when (not (isNull item)) && item.GetType().Name = "FSharpAsync`1" ->
         let msg = "Use writeWithDbContextAsync"
-        msg |> Logary.Message.eventError |> writeLog
+        msg |> Message.eventError |> writeLog
         failwith msg
     | x ->
         let tid = System.Threading.Thread.CurrentThread.ManagedThreadId.ToString()
@@ -216,7 +213,7 @@ let inline writeWithDbContextAsync (func:TypeProviderConnection.dataContext -> A
             | false -> ""
         let logmsg act tid =
             let tidm = match String.IsNullOrEmpty tid with | true -> "" | false -> " at trhead " + tid
-            Logary.Message.eventDebug("Transaction {transId} " + act + " {tidm}") |> Logary.Message.setField "transId" transId |> Logary.Message.setField "tidm" tidm
+            Message.eventDebug("Transaction {transId} " + act + " {tidm}") |> Message.setField "transId" transId |> Message.setField "tidm" tidm
             |> writeLog
         logmsg "started" (System.Threading.Thread.CurrentThread.ManagedThreadId.ToString())
         let! res = func context
@@ -234,7 +231,14 @@ let inline writeWithDbContextAsync (func:TypeProviderConnection.dataContext -> A
         return res
     }
 
-FSharp.Data.Sql.Common.QueryEvents.SqlQueryEvent |> Event.add (fun e -> "Executed SQL: {sql}" |> Logary.Message.eventDebug |> Logary.Message.setField "sql" ( e.ToString()) |> writeLog) //Even better would be: e.ToRawSqlWithParamInfo
+let setupLogariSql() =
+    FSharp.Data.Sql.Common.QueryEvents.SqlQueryEvent |> Event.add (fun e ->
+        try 
+            "Executed SQL: {sql}" |> Message.eventDebug |> Message.setField "sql" ( e.ToString()) |> writeLog //Even better would be: e.ToRawSqlWithParamInfo
+        with r -> // If logging fails, not a lot we can do
+            printfn $"Executed SQL: {e.ToString()}"
+            printfn $"Logari fail {r.Message}"
+    )
 
 let DateTimeString (dt:DateTime) =
     dt.ToString("yyyy-MM-dd HH\:mm\:ss") //temp .NET fix as MySQL.Data.dll is broken: fails without .ToString(...)
@@ -248,9 +252,9 @@ let asyncErrorHandling<'a> (a:Async<'a>) =
         match res with
         | Choice1Of2 x -> return x
         | Choice2Of2 e ->
-            Logary.Message.eventError "Async error: {err} \r\n\r\n stacktrace: {stack}"
-                |> Logary.Message.setField "err" e
-                |> Logary.Message.setField "stack" (System.Diagnostics.StackTrace(1, true).ToString())
+            Message.eventError "Async error: {err} \r\n\r\n stacktrace: {stack}"
+                |> Message.setField "err" e
+                |> Message.setField "stack" (System.Diagnostics.StackTrace(1, true).ToString())
                 |> writeLog
             return raise e
     }
@@ -302,16 +306,16 @@ type TypeProviderConnection.dataContext with
                 let fields = String.Join("\r\n  ", entity.ColumnValues |> Seq.map(fun (c,v) -> match v with null -> c | _ -> c + " " + v.ToString()) |> Seq.toArray)
                 "Item: \r\n" + fields) |> Seq.toArray
             let ex = new InvalidOperationException(errormsg + "\r\n\r\nDatabase commit failed for entities: " + String.Join("\r\n", entities) + "\r\n", e)
-            Logary.Message.eventError "SubmitUpdates2 error {err}"
-            |> Logary.Message.setField "err" errormsg
+            Message.eventError "SubmitUpdates2 error {err}"
+            |> Message.setField "err" errormsg
             |> writeLog
             sqlList |> Seq.iter(fun e ->
-                writeLog (Logary.Message.eventError "SQL executed when error" |> Logary.Message.setField "sql" (e.ToString()))
+                writeLog (Message.eventError "SQL executed when error" |> Message.setField "sql" (e.ToString()))
             )
             try
                 x.ClearUpdates() |> ignore
             with
-            | ex2 -> Logary.Message.eventError "SubmitUpdates2 clearing error {err}" |> Logary.Message.setField "err" (ex2.ToString()) |> writeLog
+            | ex2 -> Message.eventError "SubmitUpdates2 clearing error {err}" |> Message.setField "err" (ex2.ToString()) |> writeLog
             return raise ex
     }
 
@@ -365,9 +369,9 @@ let asyncScheduleErrorHandling res =
         r |> function
             | Choice1Of2 x -> x
             | Choice2Of2 ex ->
-                Logary.Message.eventError("Scheduler error {err}, stack {stack}")
-                |> Logary.Message.setField "err" (ex.ToString())
-                |> Logary.Message.setField "stack" (System.Diagnostics.StackTrace(1, true).ToString())
+                Message.eventError("Scheduler error {err}, stack {stack}")
+                |> Message.setField "err" (ex.ToString())
+                |> Message.setField "stack" (System.Diagnostics.StackTrace(1, true).ToString())
                 |> writeLog
                 //System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(ex).Throw()
                 //failwith "err"

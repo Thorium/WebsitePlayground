@@ -1,7 +1,12 @@
 group Server
 FSharp.Core
-Logary
-Logary.Targets.ApplicationInsights
+Logari
+Destructurama.FSharp
+Serilog
+Serilog.Extensions.Logging
+Serilog.Sinks.ApplicationInsights
+Serilog.Sinks.Console
+Serilog.Sinks.File
 Microsoft.AspNetCore.SignalR
 Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson
 Newtonsoft.Json
@@ -18,4 +23,3 @@ FSharp.Data.JsonProvider.Serializer
 Oxpecker
 Oxpecker.OpenApi
 Microsoft.Extensions.Hosting.WindowsServices
-

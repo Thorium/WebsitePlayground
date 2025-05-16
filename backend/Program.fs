@@ -3,9 +3,7 @@ module MyApp
 open System
 open SignalRHubs
 open OwinStart
-open Logary
-open Logary.Configuration
-open Logary.Targets
+open Serilog
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Http
 open Microsoft.AspNetCore.Hosting
@@ -16,10 +14,53 @@ open System.Threading.Tasks
 open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
 
-//open Logary.Metrics
-
 let hostName = System.Net.Dns.GetHostName()
 let serverPath = System.Reflection.Assembly.GetExecutingAssembly().Location |> System.IO.Path.GetDirectoryName
+
+do setupLogariSql()
+
+/// Setup a serilog instance and add that to DBandManagement logging
+let setupLogging isLive isService =
+
+    let logSetup = LoggerConfiguration().Destructure.FSharpTypes().MinimumLevel
+
+    let logSetup2 =
+        (if isService then
+            logSetup.Information()
+         else
+            logSetup.Debug()
+         ).Enrich.FromLogContext()
+
+    let logSetup3 =
+          logSetup2
+            .WriteTo.Conditional((fun e ->
+                  e.Level = Events.LogEventLevel.Debug ||
+                  e.Level = Events.LogEventLevel.Information ||
+                  e.Level = Events.LogEventLevel.Verbose),
+                  (fun wt -> wt.File(getRootedPath ("happy" + (if isLive then "-" else "x-") + ".log"), rollingInterval = RollingInterval.Month) |> ignore
+                             ()
+                  ))
+            .WriteTo.Conditional((fun e ->
+                  e.Level = Events.LogEventLevel.Warning ||
+                  e.Level = Events.LogEventLevel.Error),
+                  (fun wt -> wt.File(getRootedPath ("sad" + (if isLive then "-" else "x-") + ".log"), rollingInterval = RollingInterval.Month) |> ignore
+                             ()
+                  ))
+
+    let serilogLogger =
+        (if isService then logSetup3
+         else logSetup3.WriteTo.Console())
+          //.WriteTo.ApplicationInsights(
+            //    serviceProvider.GetRequiredService<TelemetryConfiguration>(),
+            //    TelemetryConverter.Traces
+            //)
+          .CreateLogger();
+
+    let fact = lazy (new LoggerFactory()).AddSerilog(serilogLogger).CreateLogger("CompanyWeb")
+
+    let forced = fact.Force()
+    Logari.logger <- fact
+    serilogLogger
 
 /// Start as service:
 /// sc create companyweb binPath= "c:\...\WebsitePlayground.exe"
@@ -48,22 +89,13 @@ type CompanyWebWinService(loggerFactory:ILoggerFactory) =
           }
 
 let startServer (isService:bool) (args:string[]) =
-
+    let logger = setupLogging true isService
     let useHttps =
 #if DEBUG
         false
 #else
         true
 #endif
-
-    System.Net.ServicePointManager.SecurityProtocol <- System.Net.SecurityProtocolType.Tls12 ||| System.Net.SecurityProtocolType.Tls11
-
-    let log =
-        Config.create "WebsitePlayground" "laptop"
-        |> Config.target (LiterateConsole.create LiterateConsole.empty "console")
-        |> Config.ilogger (ILogger.Console Debug)
-        |> Config.build
-        |> Hopac.Hopac.run
 
     //Scheduler.doStuff()
 
@@ -97,7 +129,7 @@ let startServer (isService:bool) (args:string[]) =
 
     app.Run()
 
-    Message.eventInfo ("Server started.") |> writeLog
+    ()
 
 let stopServer() =
     ()
