@@ -1,28 +1,6 @@
 [<AutoOpen>]
 module Domain
 
-//http://eiriktsarpalis.github.io/typeshape/#/33
-type TaskResponse =
-    abstract Accept : TaskFunc<'R> -> 'R
-and AsyncResponse =
-    abstract Accept : AsyncFunc<'R> -> 'R
-
-and TaskResponse<'T> = { Item : 'T System.Threading.Tasks.Task }
-with interface TaskResponse with
-        member cell.Accept f = f.Invoke<'T> cell
-and AsyncResponse<'T> = { Item : Async<'T> }
-with interface AsyncResponse with
-        member cell.Accept f = f.Invoke<'T> cell
-
-and TaskFunc<'R> = abstract Invoke<'T> : TaskResponse<'T> -> 'R
-and AsyncFunc<'R> = abstract Invoke<'T> : AsyncResponse<'T> -> 'R
-
-let packTask (c : TaskResponse<'T>) = c :> TaskResponse
-let unpackTask (cell : TaskResponse) (f : TaskFunc<'R>) : 'R = cell.Accept f
-let packAsync (c : AsyncResponse<'T>) = c :> AsyncResponse
-let unpackAsync (cell : AsyncResponse) (f : AsyncFunc<'R>) : 'R = cell.Accept f
-
-
 open System
 open System.Linq
 open FSharp.Data
@@ -130,76 +108,21 @@ open System.Threading.Tasks
 open Logary.Logging
 /// Write operations should be wrapped to transaction with this.
 /// Try to avoid transactions taking possibly seconds.
-let inline writeWithDbContext (func:TypeProviderConnection.dataContext -> ^T) =
-    let transaction, context = writeWithDbContextManualComplete()
-    let scope = transaction
-    let transId =
-        match not (isNull System.Transactions.Transaction.Current || isNull System.Transactions.Transaction.Current.TransactionInformation) with
-        | true -> System.Transactions.Transaction.Current.TransactionInformation.LocalIdentifier
-        | false -> ""
-    let logmsg act tid =
-        let tidm = match String.IsNullOrEmpty tid with | true -> "" | false -> " at trhead " + tid
-        Message.eventDebug("Transaction {transId} " + act + " {tidm}") |> Message.setField "transId" transId |> Message.setField "tidm" tidm
-        |> writeLog
-    logmsg "started" (System.Threading.Thread.CurrentThread.ManagedThreadId.ToString())
-    let res = func context
-    match box res with
-    | :? Task as task ->
-        let packed = packTask { Item = res }
+let inline writeWithDbContext (func:TypeProviderConnection.dataContext -> Task<^T>) =
+    task {
+        let transaction, context = writeWithDbContextManualComplete()
+        use scope = transaction
+        let! res = func context
 
-        let commit = Func<Task,_>(fun a ->
-            let tid = System.Threading.Thread.CurrentThread.ManagedThreadId.ToString()
-            if not isMono then
-                match a.Status with
-                | TaskStatus.RanToCompletion ->
-                    if scope<>null then
-                        try
-                            scope.Complete()
-                            logmsg "completed" tid
-                            scope.Dispose()
-                        with
-                        | _ ->
-                            logmsg "was disposed" tid
-                            ()
-                | x ->
-                    logmsg "failed" tid
-                    scope.Dispose()
-            )
-        let c = task.ContinueWith(commit) :> Task
-
-        let getRes cell =
-            unpackTask cell
-                { new TaskFunc<'T> with
-                    member __.Invoke (cell : TaskResponse<_>) =
-                      let t =
-                          async {
-                            let! r = cell.Item |> Async.AwaitTask
-                            do! c |> Async.AwaitTask
-                            return r
-                          } |> Async.StartAsTask
-                      box(t) :?> 'T
-                }
-
-        let x = getRes packed
-        x
-    | item when (not (isNull item)) && item.GetType().Name = "FSharpAsync`1" ->
-        let msg = "Use writeWithDbContextAsync"
-        msg |> Message.eventError |> writeLog
-        failwith msg
-    | x ->
-        let tid = System.Threading.Thread.CurrentThread.ManagedThreadId.ToString()
         if not isMono then
             if not (isNull scope) then
                 try
                     scope.Complete()
-                    logmsg "completed" tid
                     scope.Dispose()
-
                 with
-                | :? ObjectDisposedException ->
-                logmsg "was disposed" tid
-                ()
-        res
+                | :? ObjectDisposedException -> ()
+        return res
+    }
 
 /// Async write operations should be wrapped into a transaction with this.
 /// Try to avoid transactions taking possibly seconds.
@@ -207,27 +130,14 @@ let inline writeWithDbContextAsync (func:TypeProviderConnection.dataContext -> A
     async {
         let transaction, context = writeWithDbContextManualComplete()
         use scope = transaction
-        let transId =
-            match not (isNull System.Transactions.Transaction.Current || isNull System.Transactions.Transaction.Current.TransactionInformation) with
-            | true -> System.Transactions.Transaction.Current.TransactionInformation.LocalIdentifier
-            | false -> ""
-        let logmsg act tid =
-            let tidm = match String.IsNullOrEmpty tid with | true -> "" | false -> " at trhead " + tid
-            Message.eventDebug("Transaction {transId} " + act + " {tidm}") |> Message.setField "transId" transId |> Message.setField "tidm" tidm
-            |> writeLog
-        logmsg "started" (System.Threading.Thread.CurrentThread.ManagedThreadId.ToString())
         let! res = func context
         if not isMono then
-            if not (isNull scope) then
-                let tid = System.Threading.Thread.CurrentThread.ManagedThreadId.ToString()
-                try
-                    scope.Complete()
-                    logmsg "completed" tid
-                    scope.Dispose()
-                with
-                | :? ObjectDisposedException ->
-                    logmsg "was null" tid
-                    ()
+          if not(isNull scope) then
+              try
+                  scope.Complete()
+                  scope.Dispose()
+              with
+              | :? ObjectDisposedException -> ()
         return res
     }
 
