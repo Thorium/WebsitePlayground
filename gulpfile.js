@@ -48,7 +48,7 @@ var files = {
              'paket-files/clientside/cdn.jsdelivr.net/lodash.min.js',
              'paket-files/clientside/cdnjs.cloudflare.com/modernizr.min.js',
               includeReact,
-             'paket-files/clientside/npmcdn.com/tether.min.js',
+             'paket-files/clientside/unpkg.com/tether.min.js',
              'paket-files/clientside/**/*.js',
               excludeReact, excludeSignalR, excludePaketGithubBinaries], // Gulp is intelligent enough to not include same twice
 
