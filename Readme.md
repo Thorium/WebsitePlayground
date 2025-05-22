@@ -33,6 +33,7 @@ Documentation:
 - [More about the Technology-stack](specifications/Technologies.md)
 - [How to install the environment](specifications/Deployment.md)
 - [General developer instructions](specifications/Development.md)
+- [How to copy this template as a new project](specifications/NewProject.md)
 
 
 There are two screens: 1) You can search for companies. 2) CRUD-operations for companies.
