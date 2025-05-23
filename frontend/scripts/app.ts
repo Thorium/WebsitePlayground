@@ -1,6 +1,7 @@
 
 import tools = require('./tools');
 import './gui_shared';
+import './signalhub';
 
 import idx = require('./index');
 import company = require('./company');
@@ -37,9 +38,10 @@ $(function() {
     }
 
     function doInit(locale) {
+        $("#tinyLoader").hide();
         idx.initIndex(locale);
-        if(window.location.href.indexOf("/company.html") > 0){ company.initCompany(locale); }
-        if(window.location.href.indexOf("/results.html") > 0){ results.initResults(locale); }
+        if(window.location.href.indexOf("/company.html") > 0){ company.initPage(locale); }
+        if(window.location.href.indexOf("/results.html") > 0){ results.initPage(locale); }
         $(document).foundation();
     }
         

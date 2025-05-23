@@ -123,7 +123,7 @@ let startServer (isService:bool) (args:string[]) =
         )
     ) |> ignore
 
-    let _ = OwinStart.configureServices builder.Services logger
+    let _ = OwinStart.configureServices builder logger
     let app = builder.Build()
     let _ = OwinStart.configureApp app
 

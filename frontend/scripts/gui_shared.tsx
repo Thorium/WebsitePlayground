@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as _ from "lodash";
+import tools = require("./tools");
 
 interface NavbarProps { companyId: string; }
 class CompanyWebNavBar extends React.Component<NavbarProps, any> {
@@ -73,12 +74,12 @@ class AvailableCompany extends React.Component<CompanyProps, any> {
         var webPage = [];
         var company = this.props.company;
         const floatRight: React.CSSProperties = {"float":"right"};
-        if(company.image!==null){
-            logoImage.push(<a className="th" key={"img"+company.Id} href={company.image.value}><img src={company.image.value} /></a>);
+        if (company.image !== null) {
+            logoImage.push(<a className="th" key="logo" href={tools.renderIfSome(company.image)}> <img src={tools.renderIfSome(company.image)} /></a >);
         }
         if(company.url!==null){
             webPage.push(<span key={"url"+company.url.value}>Website:
-                           <a href={company.url.value} target="_blank">{company.url.value}</a>
+                <a href={tools.renderIfSome(company.url)} target="_blank">{tools.renderIfSome(company.url)}</a>
                          </span>);
         }
         return (

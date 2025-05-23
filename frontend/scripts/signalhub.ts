@@ -63,12 +63,13 @@ export function refreshResultList() {
 
     $(document).foundation();
     gui_shared.renderNavBar("");
-
+    $("#tinyLoader").show();
     connection.start().then(() => {
-    
         connection.invoke("SearchCompanies", searchObject).then(function (data) {
+                $("#tinyLoader").hide();
                 gui_shared.renderAvailableCompanies(data, connection);
             }).catch(function(err) {
+                    $("#tinyLoader").hide();
                     console.log('Response: ' + err);
             });
         }

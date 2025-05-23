@@ -16,7 +16,14 @@
     <div class="pageLoaded">
 		<div id="navbar"></div> 
 
-		<span id="profileInfo" class="desktop-bold-medium"></span>
+		<div id="companyListDiv">
+			<span id="profileInfo2" class="desktop-bold-medium" style="padding-left: 3px;">List of companies</span>
+			<div class="panel formScreen">
+				<div id="companyList"></div>
+			</div>
+		</div>
+
+		<span id="profileInfo" class="desktop-bold-medium" style="padding-left: 3px;"></span>
 
 		<div class="panel formScreen">
 			<form id="companyform" method="post" data-abide="ajax">
@@ -78,15 +85,10 @@
 						<input type="button" class = "button" id="updatebtn" value="Update" />
 						<input type="button" class = "button" id="deletebtn" value="Delete" />
 						<input type="button" class = "secondary button" id="back" value="Back" />
+						<span id="tinyLoader" class="fa fa-spinner fa-spin fa-1x"></span>
 					</div>
 				</div>
 			</form>
-			<p>
-				Just for technical info, the URL for companies will be: <br/>
-				<a href="company.html#/item/1" target="_blank">company.html#/item/1</a><br/>
-				<a href="company.html#/item/2" target="_blank">company.html#/item/2</a><br/>
-				...
-			</p>
 		</div>
 		<div id="footer"></div>
 	</div>
