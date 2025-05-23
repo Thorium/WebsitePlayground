@@ -74,7 +74,7 @@ class AvailableCompany extends React.Component<CompanyProps, any> {
         var company = this.props.company;
         const floatRight: React.CSSProperties = {"float":"right"};
         if(company.Image!==null){
-            logoImage.push(<a className="th" key={company.Id} href={company.Image.Fields}><img src={company.Image.Fields} /></a>);
+            logoImage.push(<a className="th" key="logo" href={company.Image.Fields}><img src={company.Image.Fields} /></a>);
         }
         if(company.Url!==null){
             webPage.push(<span key={company.Url.Fields}>Website:
