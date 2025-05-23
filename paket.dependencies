@@ -8,7 +8,6 @@ group Server
     nuget Microsoft.Data.SqlClient
     nuget Microsoft.Net.Http.Headers 8.0.15
     nuget Owin.Compression
-    nuget Microsoft.AspNetCore.Authentication.JwtBearer 8.0.15
     nuget SQLProvider.MsSql
     nuget Microsoft.AspNetCore.SignalR
     nuget Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson

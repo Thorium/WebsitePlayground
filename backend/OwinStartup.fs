@@ -9,6 +9,7 @@ open Oxpecker.OpenApi
 open Microsoft.AspNetCore.Builder
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Logging
+//open Microsoft.Identity.Web
 
 open System.Configuration
 open System.Security.Principal
@@ -25,15 +26,17 @@ let serverPath =
 let origins =
     let allowedOrigins =
         [|
-            "http*://*.myserver.com"
+            "http*://*.myserver.com" // Add your server/domain here. Note the possible pots as well
             "http*://www.google-analytics.com"
             "http*://maps.googleapis.com"
             "http*://fonts.googleapis.com"
+            //"https://login.microsoftonline.com"
             #if DEBUG
             "http://localhost"
             "ws*://localhost"
-            "http://localhost:7050"
-            "ws*://localhost:7050"
+            "http://localhost:" + System.Configuration.ConfigurationManager.AppSettings["WebServerPorts"]
+            "https://localhost:" + System.Configuration.ConfigurationManager.AppSettings["WebServerPortsSSL"]
+            "ws*://localhost:" + System.Configuration.ConfigurationManager.AppSettings["WebServerPortsSSL"]
             #endif
         |]
     if not(String.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings.["ServerAddress"])) then
@@ -77,9 +80,11 @@ let errorHandler (ctx: Microsoft.AspNetCore.Http.HttpContext) (next: Microsoft.A
     }
     :> Task
 
-let notFoundHandler (ctx: Microsoft.AspNetCore.Http.HttpContext)  =
-    let logger = ctx.GetLogger()
-    logger.LogInformation("Unhandled 404 error: " + ctx.Request.Path)
+let notFoundHandler (ctx: Microsoft.AspNetCore.Http.HttpContext) =
+    try
+        let logger = ctx.GetLogger()
+        logger.LogInformation("Unhandled 404 error: " + ctx.Request.Path)
+    with e -> Console.WriteLine ("Logging failure: "+ e.Message)
     let result = TypedResults.Problem (
         statusCode = StatusCodes.Status404NotFound,
         title = "Not Found",
@@ -148,7 +153,33 @@ let endpoints = [
         ]
     ]
 
-let configureServices (services: IServiceCollection) logger =
+let configureServices (builder: WebApplicationBuilder) logger =
+
+    let services = builder.Services
+
+//    services
+//        .AddAuthentication(Microsoft.AspNetCore.Authentication.OpenIdConnect.OpenIdConnectDefaults.AuthenticationScheme)
+//        .AddMicrosoftIdentityWebApp(fun opts ->
+//                // You'll need to configure Entra ID Enterprise Application for this to work.
+//                opts.Instance <- "https://login.microsoftonline.com/"
+//                opts.Domain <- "my.azurewebsites.net"
+//                opts.TenantId <- "" //subscription guid
+//                opts.ClientId <- "" // guid
+//                opts.ClientSecret <- "" //get from portal
+//                opts.CallbackPath <- ""
+//            ) |> ignore
+
+    builder
+        .Services
+        .AddAuthorizationBuilder()
+        //.SetFallbackPolicy(
+        //    Microsoft.AspNetCore.Authorization.AuthorizationPolicyBuilder()
+        //        .RequireAuthenticatedUser()
+        //        .Build()
+        //)
+        |> ignore
+
+    let services = services.AddDataProtection().Services
     let services =
         services
               .AddCors(fun opts -> opts.AddDefaultPolicy(fun policy ->
@@ -160,10 +191,6 @@ let configureServices (services: IServiceCollection) logger =
                     .WithOrigins origins |> ignore
                   ()
                 ))
-    //let _ = services.AddTransient<IUserService, UserService>() |> ignore
-
-    let services = services.AddAuthorization()
-    let services = services.AddDataProtection().Services
 
     let services =
       services
@@ -223,6 +250,7 @@ let configureApp (app: IApplicationBuilder) =
                         ))
     let app =
       (appConfigSignalR app)
+       //.UseAuthentication()
        .UseAuthorization()
        .UseOxpecker(endpoints)
        //.UseStaticFiles(new StaticFileOptions(FileProvider =

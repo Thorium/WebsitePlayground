@@ -14,7 +14,6 @@ Owin.Compression
 SQLProvider.MsSql
 Microsoft.Data.SqlClient
 Microsoft.AspNetCore.WebUtilities
-Microsoft.AspNetCore.Authentication.JwtBearer
 Microsoft.Net.Http.Headers
 System.Configuration.ConfigurationManager
 System.ServiceProcess.ServiceController
