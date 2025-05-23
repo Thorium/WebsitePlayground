@@ -96,11 +96,14 @@ export function refreshResultList() {
 	const keys = Object.keys(searchObject);
 	const params = _.filter(keys, function(c){return ($('#'+c.toLowerCase()).val()!=="");});
 	_.each(params, function(p){ searchObject[p] = mapOptionType(p);});
+	$("#tinyLoader").show();
 
 	signalHub.server.searchCompanies(searchObject).done(function (data) {
 			const act = signalHub.server.buyStocks;
 			gui_shared.renderAvailableCompanies(data, act);
+			$("#tinyLoader").hide();
 		}).fail(function(xhr, textStatus, errorThrown) {
+                $("#tinyLoader").hide();
                 console.log('Response: ' + textStatus);
 		});
 }

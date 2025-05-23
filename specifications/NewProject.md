@@ -45,3 +45,14 @@ Scan through the build.fsx file if that is appropriate.
 Try the command line as well (`build.cmd` and `run.cmd`).
 Try opening the solution in Visual Studio and building there.
 Now that the infrastructure is there, you should be able to focus on your queries, webpages, and APIs.
+
+### Theme
+
+Change the `frontend\styles\main.less` @brand-primary colour, body background-color, etc.
+If you change the font-face, the font files are located at `frontend\fonts`.
+The web-pages are still named and titled as "company" so you may want to change their names.
+
+### Authentication
+
+If you want to do a non-public or sign-in required website:
+You can use any AspNetCore authentication mechanisms.
