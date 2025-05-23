@@ -102,4 +102,12 @@ type CompanyHub() =
       writeWithDbContext <| fun (dbContext:WriteDataContext) ->
         Logics.executeCrud dbContext itemId (fun e -> e.Delete())
 
-
+    member __.GetCompanyList() =
+        task {
+            let! res = 
+                query {
+                    for c in dbReadContext().Companyweb.Company do
+                    select (c.Id, c.Name)
+                } |> Array.executeQueryAsync
+            return res
+        }

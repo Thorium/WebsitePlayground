@@ -171,3 +171,9 @@ export function parseFieldsFromForm(form){
 export function onChangeInputs(inputs,callback) {
     _.each(inputs, function(i){ $('#'+i).change(callback); });
 }
+
+export function renderIfSome(optvalue){
+    return (optvalue === undefined || optvalue === null) ? "" :
+           (optvalue.Fields === undefined || optvalue.Fields === null) ? "" :
+            optvalue.Fields.length > 0 ? optvalue.Fields[0] : "";
+}

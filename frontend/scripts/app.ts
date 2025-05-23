@@ -38,8 +38,8 @@ $(function() {
 
     function doInit(locale) {
         idx.initIndex(locale);
-        if(window.location.href.indexOf("/company.html") > 0){ company.initCompany(locale); }
-        if(window.location.href.indexOf("/results.html") > 0){ results.initResults(locale); }
+        if(window.location.href.indexOf("/company.html") > 0){ company.initPage(locale); }
+        if(window.location.href.indexOf("/results.html") > 0){ results.initPage(locale); }
         $(document).foundation();
     }
 

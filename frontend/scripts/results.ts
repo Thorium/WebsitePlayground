@@ -1,7 +1,7 @@
 import tools = require("./tools");
 import signalhub = require("./signalhub");
 
-export function initResults(locale) {
+export function initPage(locale) {
     tools.setFormValues(tools.parseUrlPathParameters(window.location.href));
 
     $(".pagination").hide();
