@@ -1,7 +1,7 @@
 import tools = require("./tools");
 import * as _ from "lodash";
 import * as signalR from "@microsoft/signalr";
-import companyGridControl = require("./grid")
+import companyGridControl = require("./grid");
 
 export function initPage(locale) {
 	
@@ -48,7 +48,7 @@ export function initPage(locale) {
 
             companyConnection.invoke("GetCompanyList").then(companyList => {
                 
-                // Render a type-script component template:
+                // // Render a React.js component template:
                 // companyGridControl.renderList(companyList, pageId);
                 // // tools.generatePagination(totalcount, pageId, pagesize);
 
