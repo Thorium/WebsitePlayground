@@ -43,7 +43,12 @@ $(document).ready(function () {
 	// };
 
 	signalHub.client.notifyDeal = function (data) {
-		alert(data);
+            if($("#infoDialog").length){
+                $("#actionDetails").text(data);
+                $("#infoDialog").foundation('reveal', 'open');
+            } else {
+                alert(data);
+            }
 	};
 
 	connection.error(function (error) {

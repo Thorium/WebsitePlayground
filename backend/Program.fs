@@ -65,7 +65,8 @@ let stopServer() =
         server.Dispose()
     if log <> Unchecked.defaultof<IDisposable> then
         log.Dispose()
-
+    System.Threading.Thread.Sleep 500 // Let logger finish
+        
 /// Start as service:
 /// sc create companyweb binPath= "c:\...\WebsitePlayground.exe"
 /// sc start companyweb

@@ -1,5 +1,6 @@
 import tools = require("./tools");
 import * as _ from "lodash";
+import companyGridControl = require("./grid");
 interface ICompanyHub extends SignalR { CompanyHub: any; }
 
 export function initPage(locale) {
@@ -35,14 +36,28 @@ export function initPage(locale) {
 
         $("#companyListDiv").show();
         $("#tinyLoader").show();
-        companyHub.server.getCompanyList().done(function (res) {
+
+        // Paging:
+        // If you want to implement paging, send selected pageId to server side (SQL) to only pick the page you need, not all items.
+        // Then return also totalcount from the method with the list of items.
+        let pageId = parsed.pageId === undefined || parsed.pageId === null ? 0 : parsed.pageId;
+
+        companyHub.server.getCompanyList().done(function (companyList) {
+
+            // // Render a React.js component template:
+            // companyGridControl.renderList(companyList, pageId);
+            // // tools.generatePagination(totalcount, pageId, pagesize);
+
+            // Render an old-fashion jQuery html:
             $("#companyList").html("");
-            res.forEach(data => {
+            companyList.forEach(company => {
                 let a = $("<a/>");
-                a.prop("href", "company.html#/item/" + data.Item1);
-                a.text(data.Item2);
+                a.prop("href", "company.html#/item/" + company.Id);
+                a.text(company.Name);
                 $("<div/>").append(a).appendTo($("#companyList"));
             });
+
+
             $("#tinyLoader").hide();
         }).fail(function (xhr, textStatus, errorThrown) { 
             $("#tinyLoader").hide();
