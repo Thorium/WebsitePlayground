@@ -45,7 +45,12 @@ export function refreshResultList() {
     });
 
     connection.on("NotifyDeal", (data) => {
-        alert(data);
+        if($("#infoDialog").length){
+            $("#actionDetails").text(data);
+            $("#infoDialog").foundation('reveal', 'open');
+        } else {
+            alert(data);
+        }
     });
 
 	const ms = new Date().getTime() + 86400000;

@@ -132,9 +132,8 @@ let startServer (isService:bool) (args:string[]) =
     ()
 
 let stopServer() =
+    System.Threading.Thread.Sleep 500 // Let logger finish
     ()
-
-
 
 //[<System.ComponentModel.RunInstaller(true)>]
 //type public FSharpServiceInstaller() =
