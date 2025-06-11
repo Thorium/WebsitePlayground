@@ -1,7 +1,7 @@
 import tools = require("./tools");
 import * as _ from "lodash";
 import * as signalR from "@microsoft/signalr";
-import companyGridControl = require("./grid")
+import companyGridControl = require("./grid");
 
 export function initPage(locale) {
 	
