@@ -1,6 +1,7 @@
 import tools = require("./tools");
 import * as _ from "lodash";
 import * as signalR from "@microsoft/signalr";
+import companyGridControl = require("./grid")
 
 export function initPage(locale) {
 	
@@ -39,15 +40,27 @@ export function initPage(locale) {
 
             $("#companyListDiv").show();
             $("#tinyLoader").show();
-            companyConnection.invoke("GetCompanyList").then(res => {
+
+            // Paging:
+            // If you want to implement paging, send selected pageId to server side (SQL) to only pick the page you need, not all items.
+            // Then return also totalcount from the method with the list of items.
+            let pageId = parsed.pageId === undefined || parsed.pageId === null ? 0 : parsed.pageId;
+
+            companyConnection.invoke("GetCompanyList").then(companyList => {
                 
+                // Render a type-script component template:
+                // companyGridControl.renderList(companyList, pageId);
+                // // tools.generatePagination(totalcount, pageId, pagesize);
+
+                // Render an old-fashion jQuery html:
                 $("#companyList").html("");
-                res.forEach(data => {
+                companyList.forEach(company => {
                     let a = $("<a/>");
-                    a.prop("href", "company.html#/item/" + data.item1);
-                    a.text(data.item2);
+                    a.prop("href", "company.html#/item/" + company.id);
+                    a.text(company.name);
                     $("<div/>").append(a).appendTo($("#companyList"));
                 });
+
                 $("#tinyLoader").hide();
             }).catch(function(err) {
                 $("#tinyLoader").hide();

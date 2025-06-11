@@ -102,10 +102,13 @@ type CompanyHub() =
 
     member __.GetCompanyList() =
         task {
+            let pageSize = 10
             let! res = 
                 query {
                     for c in dbReadContext().Companyweb.Company do
-                    select (c.Id, c.Name)
+                    //skip (pageId * pageSize)
+                    //take pageSize
+                    select ({| Id = c.Id; Name = c.Name; Ceo = c.Ceo; Founded = c.Founded |})
                 } |> Array.executeQueryAsync
             return res
         }
