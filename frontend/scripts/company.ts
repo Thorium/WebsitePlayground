@@ -18,20 +18,6 @@ export function initPage(locale) {
         .withAutomaticReconnect([0, 0, 10000])
         .configureLogging(signalR.LogLevel.Information)
         .build();
-
-    function setValuesToForm(data) {
-        _.each(data, function(c:any){ $('#'+c.item1).val(c.item2); });
-    }
-    
-    function parseFieldFromForm(){
-       const nonbuttons = _.filter($(":input"), i => (<HTMLInputElement>i).type !== "button");
-       const ids = _.map(nonbuttons, function(i) { return i.id;});
-       const values = tools.getFormValues(ids);
-       const keys = Object.keys(values);
-       const tupleArray = _.map(keys, function(k) { return { item1: k, item2: values[k]};});
-       // debugger;
-       return tupleArray;
-    }
     
     const compId = parsed.item;
     companyConnection.start().then(function(){
@@ -74,7 +60,7 @@ export function initPage(locale) {
             $("#createbtn").click(function () {
                 tools.validateForm($("#companyform"), function () {
                     $("#tinyLoader").show();
-                    companyConnection.invoke("Create", parseFieldFromForm()).then(
+                    companyConnection.invoke("Create", tools.parseFieldFromForm()).then(
                         function(data){ 
                             $("#tinyLoader").hide();
                             const id = _.filter(data, function(i:any){return i.item1==="Id";});
@@ -94,7 +80,7 @@ export function initPage(locale) {
             $("#tinyLoader").show();
             companyConnection.invoke("Read", parseInt(compId, 10)).then(data => {
                 $("#tinyLoader").hide();
-                setValuesToForm(data);
+                tools.setValuesToForm(data);
                 const stempdate = $("#Founded").val().split("T")[0];
                 $("#Founded").val(stempdate);
                 return false;
@@ -110,11 +96,11 @@ export function initPage(locale) {
             $("#updatebtn").click(function () {
                 tools.validateForm($("#companyform"), function () {
                     $("#tinyLoader").show();
-                    companyConnection.invoke("Update", parseInt(compId, 10), parseFieldFromForm())
+                    companyConnection.invoke("Update", parseInt(compId, 10), tools.parseFieldFromForm())
                         .then(function(d){ 
                             $("#tinyLoader").hide();
                             alert("Company updated!"); 
-                            setValuesToForm(d);
+                            tools.setValuesToForm(d);
                         }).catch(function(err) {
                             $("#tinyLoader").hide();
                             console.log('Response: ' + err);
