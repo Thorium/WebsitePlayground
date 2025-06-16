@@ -15,21 +15,7 @@ export function initPage(locale) {
 
     const conn = <ICompanyHub> $.connection;
     const companyHub = conn.CompanyHub; // Hub class
-    
-    function setValuesToForm(data) {
-        _.each(data, function(c:any){ $('#'+c.Item1).val(c.Item2); });
-    }
-    
-    function parseFieldFromForm(){
-       const nonbuttons = _.filter($(":input"), i => (<HTMLInputElement>i).type !== "button");
-       const ids = _.map(nonbuttons, function(i) { return i.id;});
-       const values = tools.getFormValues(ids);
-       const keys = Object.keys(values);
-       const tupleArray = _.map(keys, function(k) { return { Item1: k, Item2: values[k]};});
-       // debugger;
-       return tupleArray;
-    }
-    
+
     const compId = parsed.item;
     
     if(compId===undefined || compId === "undefined"){
@@ -71,7 +57,7 @@ export function initPage(locale) {
         $("#createbtn").click(function () {
             tools.validateForm($("#companyform"), function () {
                 $("#tinyLoader").show();
-                companyHub.server.create(parseFieldFromForm()).done(
+                companyHub.server.create(tools.parseFieldFromForm()).done(
                     function(data){ 
                         $("#tinyLoader").hide();
                         const id = _.filter(data, function(i:any){return i.Item1==="Id";});
@@ -91,7 +77,7 @@ export function initPage(locale) {
         $("#tinyLoader").show();
         companyHub.server.read(compId).done(data => {
             $("#tinyLoader").hide();
-            setValuesToForm(data);
+            tools.setValuesToForm(data);
             const stempdate = $("#Founded").val().split("T")[0];
             $("#Founded").val(stempdate);
             return false;
@@ -107,10 +93,10 @@ export function initPage(locale) {
         $("#updatebtn").click(function () {
             tools.validateForm($("#companyform"), function () {
                 $("#tinyLoader").show();
-                companyHub.server.update(compId, parseFieldFromForm()).done(function(d){
+                companyHub.server.update(compId, tools.parseFieldFromForm()).done(function(d){
                     $("#tinyLoader").hide();
                     alert("Company updated!"); 
-                    setValuesToForm(d);
+                    tools.setValuesToForm(d);
                 }).fail(function(xhr, textStatus, errorThrown) { 
                     console.log('Response: ' + textStatus);
                     $("#tinyLoader").hide();
