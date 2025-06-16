@@ -210,6 +210,19 @@ export function parseTuplesToObject(listOfItems) {
     return res;
 }
 
+export function parseFieldFromForm(){
+   const nonbuttons = _.filter($(":input"), i => (<HTMLInputElement>i).type !== "button");
+   const ids = _.map(nonbuttons, i => i.id);
+   const values = getFormValues(ids);
+   const keys = Object.keys(values);
+   const tupleArray = _.map(keys, k => {
+       return k.indexOf("Date")>-1 && values[k] != null ?
+           { Item1: k, Item2: new Date(values[k])} :
+           { Item1: k, Item2: values[k]};});
+   // debugger;
+   return tupleArray;
+}
+
 export function parseFieldsFromForm(form){
    const nonbuttons = _.filter(form.find(":input"), (i:any) => i.type !== "button");
    const ids = _.map(nonbuttons, (i:any) => i.id);
