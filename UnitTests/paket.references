@@ -1,3 +1,4 @@
+FSharp.Core
 group Test
 coverlet.collector
 Microsoft.NET.Test.Sdk
