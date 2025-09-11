@@ -4,8 +4,9 @@ import './gui_shared';
 import signalhub = require("./signalhub");
 
 import idx = require('./index');
-import company = require('./company');
-import results = require('./results');
+// We can load modules eagerly or lazily, see end of this file.
+// import company = require('./company');
+// import results = require('./results');
 
 // Here would be client-side routing and localization of html-content.
 
@@ -38,8 +39,12 @@ $(function() {
 
     function doInit(locale) {
         idx.initIndex(locale);
-        if(window.location.href.indexOf("/company.html") > 0){ company.initPage(locale); }
-        if(window.location.href.indexOf("/results.html") > 0){ results.initPage(locale); }
+        // If loaded eagerly above:
+        // if(window.location.href.indexOf("/company.html") > 0){ company.initPage(locale); }
+        // if(window.location.href.indexOf("/results.html") > 0){ results.initPage(locale); }
+        // If loading lazily:
+        if(window.location.href.indexOf("/company.html") > 0){ import('./company').then(company => company.initPage(locale)); }
+        if(window.location.href.indexOf("/results.html") > 0){ import('./results').then(results => results.initPage(locale)); }
         $(document).foundation();
     }
 
