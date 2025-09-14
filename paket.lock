@@ -709,7 +709,7 @@ NUGET
       Serilog (>= 4.0) - restriction: || (&& (>= net462) (< netstandard2.0)) (&& (< net462) (>= netstandard2.0)) (>= net471) (>= net6.0)
     Serilog.Sinks.File (7.0)
       Serilog (>= 4.2) - restriction: || (&& (>= net462) (< netstandard2.0)) (&& (< net462) (>= netstandard2.0)) (>= net471) (>= net6.0)
-    SQLProvider.MsSql (1.5.16)
+    SQLProvider.MsSql (1.5.17)
       FSharp.Core (>= 8.0.301)
       Microsoft.Data.SqlClient (>= 5.2.2)
       Newtonsoft.Json (>= 13.0.1)
