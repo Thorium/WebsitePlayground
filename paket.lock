@@ -297,9 +297,9 @@ NUGET
       Newtonsoft.Json (>= 13.0.1) - restriction: >= net45
       Owin (>= 1.0) - restriction: >= net45
     Microsoft.Owin.Security.OAuth (4.2.3) - restriction: >= net40
-      Microsoft.Owin (>= 4.2.2) - restriction: >= net45
+      Microsoft.Owin (>= 4.2.3) - restriction: >= net45
       Microsoft.Owin.Security (>= 4.2.3) - restriction: >= net45
-      Newtonsoft.Json (>= 10.0.3) - restriction: >= net45
+      Newtonsoft.Json (>= 13.0.1) - restriction: >= net45
       Owin (>= 1.0) - restriction: >= net45
     Microsoft.Owin.StaticFiles (4.2.3) - restriction: >= net40
       Microsoft.Owin (>= 4.2.3) - restriction: >= net45
@@ -425,7 +425,7 @@ NUGET
     runtime.win-arm64.runtime.native.System.Data.SqlClient.sni (4.4) - restriction: >= net6.0
     runtime.win-x64.runtime.native.System.Data.SqlClient.sni (4.4) - restriction: >= net6.0
     runtime.win-x86.runtime.native.System.Data.SqlClient.sni (4.4) - restriction: >= net6.0
-    SQLProvider.MsSql (1.5.16)
+    SQLProvider.MsSql (1.5.17)
       FSharp.Core (>= 8.0.301)
       Microsoft.Data.SqlClient (>= 5.2.2)
       Newtonsoft.Json (>= 13.0.1)
