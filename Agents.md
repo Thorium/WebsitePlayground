@@ -31,8 +31,8 @@ F# + TypeScript web application with MariaDB/MySQL backend and React frontend. F
 
 **Indentation:** 4 spaces (no tabs). **Naming:** PascalCase for types, camelCase for parameters/values. Use `__` for member prefixes.
 **Domain models:** POCO types with no methods. Business logic in static/extension methods. **Avoid null:** Use `Option<'T>`. **Functional:** Prefer immutable data, `List/Array.map|filter` over loops, pipeline operator `|>`.
-**Async:** Convert F# `async { }` to `Task<>` for SignalR: `|> Async.StartAsTask`. **Transactions:** Use `writeWithDbContext` for DB writes, `dbReadContext` for reads only.
-**Error handling:** Fail fast on technical errors, use Result/Option for business logic errors.
+**Async:** Use `task { }` for SignalR methods. Convert F# `async { }` to `Task<>` with `|> Async.StartAsTask` if needed. **Transactions:** Use `writeWithDbContext` helper for DB writes, `dbReadContext()` for reads only.
+**Error handling:** Fail fast on technical errors, use Result/Option for business logic errors. **Submit changes:** Use `dbContext.SubmitUpdates2()` (not SubmitUpdatesAsync).
 
 ## Code Style - TypeScript Frontend
 
@@ -64,14 +64,14 @@ let executeSearch (dbContext:ReadDataContext) (searchparams:SearchObject) =
         return companies
     }
 
-// Writes use dbWriteContext() with SubmitUpdatesAsync
+// Writes use dbWriteContext() with SubmitUpdates2
 let executeCrud (dbContext:WriteDataContext) itemId actionToEntity =
     task {
         let! fetched = query { ... } |> Seq.tryHeadAsync
         match fetched with
         | Some entity ->
             entity |> actionToEntity
-            do! dbContext.SubmitUpdatesAsync()
+            do! dbContext.SubmitUpdates2()
         | None -> ()
     }
 ```
@@ -166,7 +166,7 @@ const MyComponent = React.createClass({
 - [ ] **Linting passes:** `gulp tslint` for TypeScript changes
 - [ ] **F# conventions:** POCO domain models, Option instead of null, task { } for async
 - [ ] **TS conventions:** ES5 target, React.createClass, SignalR .fail() handlers
-- [ ] **Database:** Read contexts for queries, write contexts with SubmitUpdatesAsync for mutations
+- [ ] **Database:** Read contexts for queries, write contexts with SubmitUpdates2 for mutations
 - [ ] **Security:** Input validation, parameterized queries (SQLProvider handles this)
 - [ ] **Logging:** Use Logari for F# backend logging with structured messages
 - [ ] **Minimal changes**: Only modified what's necessary
