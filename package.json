@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "gulp",
     "build": "gulp deploy",
-    "lint": "eslint .",
+    "lint": "gulp tslint",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
