@@ -7,7 +7,6 @@ group Server
     nuget FSharp.Data.JsonProvider.Serializer
 //    nuget Microsoft.Data.SqlClient
     nuget Microsoft.Net.Http.Headers 8.0.15
-    nuget MysqlConnector
     nuget Owin.Compression
     nuget Microsoft.AspNetCore.Authentication.JwtBearer 8.0.15
     //nuget SQLProvider
@@ -16,10 +15,9 @@ group Server
     nuget Microsoft.AspNetCore.SignalR
     nuget Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson
     nuget MySqlConnector
-    nuget System.Configuration.ConfigurationManager
+    nuget System.Configuration.ConfigurationManager 8.0.1
     nuget Microsoft.AspNetCore.WebUtilities 8.0.15
     nuget System.ServiceProcess.ServiceController 8.0.1
-    nuget System.Configuration.ConfigurationManager 8.0.1
 
     nuget Oxpecker
     nuget Oxpecker.OpenApi
