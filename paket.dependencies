@@ -4,7 +4,7 @@ storage: none
 // Server side, F# .NET:
 nuget FSharp.Data
 nuget FSharp.Data.JsonProvider.Serializer
-nuget Logari.Logary 1.0.1
+nuget Logari.Logary 1.0.4
 nuget Microsoft.AspNet.SignalR.Core framework: >= 4.0
 nuget Microsoft.AspNet.WebApi.OwinSelfHost framework: >= 4.0
 nuget Microsoft.AspNet.Identity.Owin framework: >= 4.0
@@ -16,9 +16,9 @@ nuget Microsoft.Owin.Diagnostics framework: >= 4.0
 nuget Microsoft.Owin.Host.SystemWeb framework: >= 4.0
 nuget Microsoft.Owin.Security.Facebook framework: >= 4.0
 nuget Microsoft.Owin.Security.Google framework: >= 4.0
-nuget Microsoft.Extensions.Options 8.0.2
-nuget Microsoft.Extensions.Configuration.Abstractions 8.0
-nuget Microsoft.Extensions.Configuration 8.0
+nuget Microsoft.Extensions.Options > 9
+nuget Microsoft.Extensions.Configuration.Abstractions
+nuget Microsoft.Extensions.Configuration
 nuget MysqlConnector
 nuget Owin.Compression
 nuget Owin.Security.AesDataProtectorProvider framework: >= 4.0
