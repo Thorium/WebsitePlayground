@@ -37,6 +37,8 @@ $(function() {
         console.log(e);
     }
 
+    const isLoginPage = window.location.pathname.toLowerCase().indexOf("/login.html") > -1;
+
     function doInit(locale) {
         idx.initIndex(locale);
         // If loaded eagerly above:
@@ -45,10 +47,11 @@ $(function() {
         // If loading lazily:
         if(window.location.href.indexOf("/company.html") > 0){ import('./company').then(company => company.initPage(locale)); }
         if(window.location.href.indexOf("/results.html") > 0){ import('./results').then(results => results.initPage(locale)); }
+        if(isLoginPage){ import('./login').then(login => login.initLoginPage(locale)); }
         $(document).foundation();
     }
 
-    signalhub.hubConnector.done(function () {
+    function finishInit() {
         // window.onunload = undefined;
         // window.onbeforeunload = undefined;
         // const nav:any = navigator;
@@ -72,5 +75,11 @@ $(function() {
                 $(this).prop("title").split('\r\n').join('<br/>').split('\\r\\n').join('<br/>')).dialog();
             return false;
         });
+    }
+
+    signalhub.hubConnector.done(function () {
+        finishInit();
+    }).fail(function() {
+        finishInit();
     });
 });

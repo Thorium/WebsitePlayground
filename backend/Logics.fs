@@ -75,4 +75,93 @@ module Logics
 
         [| item; item2 |]
 
+    let private maxFailedAttempts = 5
+    let private lockoutMinutes = 15
+
+    let private openConnection() =
+        task {
+            let connection = new global.MySqlConnector.MySqlConnection(cstr)
+            do! connection.OpenAsync()
+            return connection
+        }
+
+    let ``register user`` (request:RegisterRequest) =
+        task {
+            let normalizedEmail = request.Email |> ``normalize email``
+            match ``validate password strength`` request.Password with
+            | Some reason -> return WeakPassword reason
+            | None ->
+                use! connection = openConnection()
+                use existingCommand = new global.MySqlConnector.MySqlCommand("SELECT 1 FROM users WHERE Email = @email LIMIT 1", connection)
+                existingCommand.Parameters.AddWithValue("@email", normalizedEmail) |> ignore
+                let! existingUser = existingCommand.ExecuteScalarAsync()
+
+                if isNull existingUser then
+                    let passwordHash = ``hash password`` request.Password
+                    use insertCommand = new global.MySqlConnector.MySqlCommand("INSERT INTO users (Email, PasswordHash, IsActive, FailedLoginAttempts, CreatedAt) VALUES (@email, @passwordHash, @isActive, @failedLoginAttempts, @createdAt)", connection)
+                    insertCommand.Parameters.AddWithValue("@email", normalizedEmail) |> ignore
+                    insertCommand.Parameters.AddWithValue("@passwordHash", passwordHash) |> ignore
+                    insertCommand.Parameters.AddWithValue("@isActive", true) |> ignore
+                    insertCommand.Parameters.AddWithValue("@failedLoginAttempts", 0) |> ignore
+                    insertCommand.Parameters.AddWithValue("@createdAt", DateTime.UtcNow) |> ignore
+                    let! _ = insertCommand.ExecuteNonQueryAsync()
+                    return RegistrationSuccess
+                else
+                    return EmailExists
+        }
+
+    let ``authenticate user`` (request:LoginRequest) =
+        task {
+            let normalizedEmail = request.Email |> ``normalize email``
+            use! connection = openConnection()
+            use selectCommand = new global.MySqlConnector.MySqlCommand("SELECT Id, Email, PasswordHash, IsActive, FailedLoginAttempts, LockedUntil FROM users WHERE Email = @email LIMIT 1", connection)
+            selectCommand.Parameters.AddWithValue("@email", normalizedEmail) |> ignore
+            use! reader = selectCommand.ExecuteReaderAsync()
+            let! hasUser = reader.ReadAsync()
+
+            if not hasUser then
+                return InvalidCredentials
+            else
+                let userId = reader.GetInt32(0)
+                let email = reader.GetString(1)
+                let passwordHash = reader.GetString(2)
+                let isActive = reader.GetBoolean(3)
+                let failedAttempts = reader.GetInt32(4)
+                let lockedUntil =
+                    if reader.IsDBNull(5) then ValueNone else ValueSome (reader.GetDateTime(5))
+                do reader.Close() //do! reader.CloseAsync()
+
+                if not isActive then
+                    return AccountInactive
+                else
+                    match lockedUntil with
+                    | ValueSome lockedAt when lockedAt > DateTime.UtcNow ->
+                        return AccountLocked lockedAt
+                    | _ ->
+                        let passwordValid = ``verify password`` request.Password passwordHash
+                        if passwordValid then
+                            use resetCommand = new global.MySqlConnector.MySqlCommand("UPDATE users SET FailedLoginAttempts = 0, LastFailedLogin = NULL, LockedUntil = NULL, LastLoginAt = @lastLoginAt WHERE Id = @id", connection)
+                            resetCommand.Parameters.AddWithValue("@id", userId) |> ignore
+                            resetCommand.Parameters.AddWithValue("@lastLoginAt", DateTime.UtcNow) |> ignore
+                            let! _ = resetCommand.ExecuteNonQueryAsync()
+                            return Success (userId, email)
+                        else
+                            let nextFailedAttempts = failedAttempts + 1
+                            let lockExpiresAt =
+                                if nextFailedAttempts >= maxFailedAttempts then
+                                    ValueSome (DateTime.UtcNow.AddMinutes(float lockoutMinutes))
+                                else
+                                    ValueNone
+                            use failCommand = new global.MySqlConnector.MySqlCommand("UPDATE users SET FailedLoginAttempts = @failedLoginAttempts, LastFailedLogin = @lastFailedLogin, LockedUntil = @lockedUntil WHERE Id = @id", connection)
+                            failCommand.Parameters.AddWithValue("@id", userId) |> ignore
+                            failCommand.Parameters.AddWithValue("@failedLoginAttempts", nextFailedAttempts) |> ignore
+                            failCommand.Parameters.AddWithValue("@lastFailedLogin", DateTime.UtcNow) |> ignore
+                            match lockExpiresAt with
+                            | ValueSome lockedAt -> failCommand.Parameters.AddWithValue("@lockedUntil", lockedAt) |> ignore
+                            | ValueNone -> failCommand.Parameters.AddWithValue("@lockedUntil", DBNull.Value) |> ignore
+                            let! _ = failCommand.ExecuteNonQueryAsync()
+                            match lockExpiresAt with
+                            | ValueSome lockedAt -> return AccountLocked lockedAt
+                            | ValueNone -> return InvalidCredentials
+        }
 
