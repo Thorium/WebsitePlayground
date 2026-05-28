@@ -11,6 +11,9 @@ group Server
     nuget SQLProvider.MsSql
     nuget Microsoft.AspNetCore.SignalR
     nuget Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson
+    nuget Microsoft.AspNetCore.Authentication.Cookies
+    nuget Microsoft.AspNetCore.Authentication.Abstractions
+    nuget System.Security.Cryptography.Xml 10.0.8
     // nuget SQLProvider
     nuget Oxpecker
     nuget Oxpecker.OpenApi

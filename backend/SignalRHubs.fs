@@ -14,7 +14,6 @@ type IMessageToClient =  // Server can push data to single or all clients
     //abstract ListCompanies : seq<CompanySearchResult> -> Task
 
 let rnd = Random()
-open System.Security.Claims
 open Logari
 let dbContext = dbReadContext()
 

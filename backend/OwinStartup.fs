@@ -14,7 +14,11 @@ open Microsoft.Extensions.Logging
 open System.Configuration
 open System.Security.Principal
 open System.IO
+open System.Text
 open Microsoft.AspNetCore.Http
+open Microsoft.AspNetCore.Authentication
+open Newtonsoft.Json
+open Logari
 let displayErrors = ConfigurationManager.AppSettings.["WebServerDebug"].ToString().ToLower() = "true"
 let hubConfig = Microsoft.AspNetCore.SignalR.HubOptions(EnableDetailedErrors = Nullable(displayErrors))
 
@@ -140,15 +144,175 @@ let myEndpointHandler (param1:string) : EndpointHandler =
                 do! ctx.Write (TypedResults.Ok someResponse)
         }
 
+let private readJson<'T> (ctx: HttpContext) =
+    task {
+        use reader = new StreamReader(ctx.Request.Body, Encoding.UTF8)
+        let! body = reader.ReadToEndAsync()
+        return JsonConvert.DeserializeObject<'T>(body)
+    }
+
+let private authCookieScheme = Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme
+
+let registerHandler : EndpointHandler =
+    fun (ctx: HttpContext) ->
+        task {
+            let! request = readJson<RegisterRequest> ctx
+            let normalizedRequest = { request with Email = request.Email |> ``normalize email`` }
+            let! response =
+                writeWithDbContext <| fun (dbContext:WriteDataContext) ->
+                    task {
+                        let! result = Logics.``register user`` dbContext normalizedRequest
+                        match result with
+                        | RegistrationSuccess ->
+                            Message.eventInfo "User registered: {email}"
+                            |> Message.setField "email" normalizedRequest.Email
+                            |> writeLog
+                            return {
+                                Success = true
+                                ErrorCode = ""
+                                ErrorMessage = ""
+                            }
+                        | EmailExists ->
+                            Message.eventWarn "Registration failed: Email exists {email}"
+                            |> Message.setField "email" normalizedRequest.Email
+                            |> writeLog
+                            return {
+                                Success = false
+                                ErrorCode = "EmailExists"
+                                ErrorMessage = "Email already registered. Please use another email."
+                            }
+                        | WeakPassword reason ->
+                            Message.eventWarn "Registration failed: Weak password for {email}"
+                            |> Message.setField "email" normalizedRequest.Email
+                            |> writeLog
+                            return {
+                                Success = false
+                                ErrorCode = "WeakPassword"
+                                ErrorMessage = reason
+                            }
+                    }
+            do! ctx.Write (TypedResults.Ok response)
+        }
+
+let loginHandler : EndpointHandler =
+    fun (ctx: HttpContext) ->
+        task {
+            let! request = readJson<LoginRequest> ctx
+            let normalizedRequest = { request with Email = request.Email |> ``normalize email`` }
+            // Note: if this grows beyond a lightweight demo flow, add request-level throttling,
+            // failed-login audit logging, and protection for dictionary attacks here.
+            let! response =
+                writeWithDbContext <| fun (dbContext:WriteDataContext) ->
+                    task {
+                        let! result = Logics.``authenticate user`` dbContext normalizedRequest
+                        match result with
+                        | Success (userId, email) ->
+                            let claims = [
+                                Claim(ClaimTypes.NameIdentifier, userId.ToString())
+                                Claim(ClaimTypes.Name, email)
+                                Claim(ClaimTypes.Role, "AuthenticatedUser")
+                            ]
+                            let identity = ClaimsIdentity(claims, authCookieScheme)
+                            let principal = ClaimsPrincipal(identity)
+                            do! ctx.SignInAsync(
+                                authCookieScheme,
+                                principal,
+                                AuthenticationProperties(
+                                    IsPersistent = true,
+                                    ExpiresUtc = DateTimeOffset.UtcNow.AddHours(8.0)
+                                ))
+                            Message.eventInfo "User logged in: {email}"
+                            |> Message.setField "email" email
+                            |> writeLog
+                            return {
+                                Success = true
+                                ErrorCode = ""
+                                ErrorMessage = ""
+                                LockedUntil = Nullable()
+                            }
+                        | InvalidCredentials ->
+                            Message.eventWarn "Failed login attempt: {email}"
+                            |> Message.setField "email" normalizedRequest.Email
+                            |> writeLog
+                            return {
+                                Success = false
+                                ErrorCode = "InvalidCredentials"
+                                ErrorMessage = "Invalid email or password"
+                                LockedUntil = Nullable()
+                            }
+                        | AccountLocked lockedUntil ->
+                            Message.eventWarn "Login attempt on locked account: {email}"
+                            |> Message.setField "email" normalizedRequest.Email
+                            |> writeLog
+                            return {
+                                Success = false
+                                ErrorCode = "AccountLocked"
+                                ErrorMessage = "Account is locked due to too many failed attempts."
+                                LockedUntil = Nullable lockedUntil
+                            }
+                        | AccountInactive ->
+                            Message.eventWarn "Login attempt on inactive account: {email}"
+                            |> Message.setField "email" normalizedRequest.Email
+                            |> writeLog
+                            return {
+                                Success = false
+                                ErrorCode = "AccountInactive"
+                                ErrorMessage = "Account is inactive. Please contact support."
+                                LockedUntil = Nullable()
+                            }
+                    }
+            do! ctx.Write (TypedResults.Ok response)
+        }
+
+let logoutHandler : EndpointHandler =
+    fun (ctx: HttpContext) ->
+        task {
+            let email =
+                match ctx.User with
+                | null -> "unknown"
+                | user when user.Identity.IsAuthenticated -> user.Identity.Name
+                | _ -> "unknown"
+            do! ctx.SignOutAsync(authCookieScheme)
+            Message.eventInfo "User logged out: {email}"
+            |> Message.setField "email" email
+            |> writeLog
+            do! ctx.Write (TypedResults.Ok {| Success = true |})
+        }
+
+let currentUserHandler : EndpointHandler =
+    fun (ctx: HttpContext) ->
+        task {
+            match ctx.User with
+            | null ->
+                do! ctx.Write (TypedResults.Ok {
+                    IsAuthenticated = false
+                    Email = ""
+                })
+            | user when user.Identity.IsAuthenticated ->
+                do! ctx.Write (TypedResults.Ok {
+                    IsAuthenticated = true
+                    Email = user.Identity.Name
+                })
+            | _ ->
+                do! ctx.Write (TypedResults.Ok {
+                    IsAuthenticated = false
+                    Email = ""
+                })
+        }
+
 // WebAPI example: Some map to do Oxpecker routing
 let endpoints = [
         subRoute "/webapi" [
             POST [
                 routef "/my/{%O:alpha}" <| (fun (param1: string) -> myEndpointHandler param1)
+                route "/auth/register" registerHandler
+                route "/auth/login" loginHandler
+                route "/auth/logout" logoutHandler
             ] // |> configureEndpoint _.RequireAuthorization(Microsoft.AspNetCore.Authorization.AuthorizeAttribute ...
 
             GET [ // This would be a HTTP GET to http://localhost:7050/webapi/my
                 routef "/my" <| (text "Node Found.")
+                route "/auth/me" currentUserHandler
             ]
         ]
     ]
@@ -157,26 +321,31 @@ let configureServices (builder: WebApplicationBuilder) logger =
 
     let services = builder.Services
 
-//    services
-//        .AddAuthentication(Microsoft.AspNetCore.Authentication.OpenIdConnect.OpenIdConnectDefaults.AuthenticationScheme)
-//        .AddMicrosoftIdentityWebApp(fun opts ->
-//                // You'll need to configure Entra ID Enterprise Application for this to work.
-//                opts.Instance <- "https://login.microsoftonline.com/"
-//                opts.Domain <- "my.azurewebsites.net"
-//                opts.TenantId <- "" //subscription guid
-//                opts.ClientId <- "" // guid
-//                opts.ClientSecret <- "" //get from portal
-//                opts.CallbackPath <- ""
-//            ) |> ignore
+    // Configure cookie authentication
+    services
+        .AddAuthentication(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme)
+        .AddCookie(fun opts ->
+            opts.Cookie.Name <- "WebsitePlayground.Auth"
+            opts.Cookie.HttpOnly <- true
+#if DEBUG
+            opts.Cookie.SecurePolicy <- Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest
+#else
+            opts.Cookie.SecurePolicy <- Microsoft.AspNetCore.Http.CookieSecurePolicy.Always
+#endif
+            opts.Cookie.SameSite <- Microsoft.AspNetCore.Http.SameSiteMode.Strict
+            opts.ExpireTimeSpan <- TimeSpan.FromHours(8.0)
+            opts.SlidingExpiration <- true
+            opts.LoginPath <- "/login.html"
+            opts.LogoutPath <- "/logout"
+            opts.AccessDeniedPath <- "/login.html"
+        ) |> ignore
 
     builder
         .Services
         .AddAuthorizationBuilder()
-        //.SetFallbackPolicy(
-        //    Microsoft.AspNetCore.Authorization.AuthorizationPolicyBuilder()
-        //        .RequireAuthenticatedUser()
-        //        .Build()
-        //)
+        .AddPolicy("AuthenticatedUser", fun policy ->
+            policy.RequireAuthenticatedUser() |> ignore
+        )
         |> ignore
 
     let services = services.AddDataProtection().Services
@@ -244,14 +413,15 @@ let configureApp (app: IApplicationBuilder) =
             .WithOrigins origins |> ignore
           ())
        .UseRouting()
+       .UseAuthentication()
+       .UseAuthorization()
+       .UseAntiforgery()
        .UseFileServer(FileServerOptions(
                            FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(serverPath),
                            RequestPath = ""
                         ))
     let app =
       (appConfigSignalR app)
-       //.UseAuthentication()
-       .UseAuthorization()
        .UseOxpecker(endpoints)
        //.UseStaticFiles(new StaticFileOptions(FileProvider =
        //     new Microsoft.Extensions.FileProviders.PhysicalFileProvider(Util.serverPath)
