@@ -16,6 +16,9 @@ open System.Threading.Tasks
 open System.Configuration
 open System.Security.Principal
 open System.IO
+open Newtonsoft.Json
+open Newtonsoft.Json.Linq
+open Logari
 let displayErrors = ConfigurationManager.AppSettings.["WebServerDebug"].ToString().ToLower() = "true"
 let hubConfig = Microsoft.AspNet.SignalR.HubConfiguration(EnableDetailedErrors = displayErrors, EnableJavaScriptProxies = true)
 
@@ -139,6 +142,163 @@ type RedirectRoutingController() as this =
     [<Route("company"); HttpGet; System.Web.Http.Description.ApiExplorerSettings(IgnoreApi = true)>] member __.RedirectToCompany() = createRedirectResponse "company.html"
     [<Route("results"); HttpGet; System.Web.Http.Description.ApiExplorerSettings(IgnoreApi = true)>] member __.RedirectToResults() = createRedirectResponse "results.html"
 
+type AuthController() as this =
+    inherit ApiController()
+
+    let authenticationType = CookieAuthenticationDefaults.AuthenticationType
+
+    let getOwinContext() = this.Request.GetOwinContext()
+
+    let registerResponse success errorCode errorMessage =
+        {
+            Success = success
+            ErrorCode = errorCode
+            ErrorMessage = errorMessage
+        }
+
+    let loginResponse success errorCode errorMessage lockedUntil =
+        {
+            Success = success
+            ErrorCode = errorCode
+            ErrorMessage = errorMessage
+            LockedUntil = lockedUntil
+        }
+
+    member private __.ReadJsonObject() : Task<JObject> =
+        task {
+            let! body = this.Request.Content.ReadAsStringAsync()
+            if String.IsNullOrWhiteSpace body then
+                return null
+            else
+                return JsonConvert.DeserializeObject<JObject>(body)
+        }
+
+    member private __.ReadAuthRequest() : Task<RegisterRequest> =
+        task {
+            let! json = this.ReadJsonObject()
+            if isNull json then
+                return Unchecked.defaultof<RegisterRequest>
+            else
+                let emailToken = json.GetValue("Email", StringComparison.OrdinalIgnoreCase)
+                let passwordToken = json.GetValue("Password", StringComparison.OrdinalIgnoreCase)
+                let email = if isNull emailToken then null else emailToken.Value<string>()
+                let password = if isNull passwordToken then null else passwordToken.Value<string>()
+                return {
+                    Email = email
+                    Password = password
+                }
+        }
+
+    [<Route("webapi/auth/register"); HttpPost>]
+    member __.Register() : Task<HttpResponseMessage> =
+        task {
+            let! request = this.ReadAuthRequest()
+            if isNull (box request) then
+                return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid registration request")
+            elif String.IsNullOrWhiteSpace request.Email || String.IsNullOrWhiteSpace request.Password then
+                return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Email and password are required")
+            else
+                let normalizedRequest = { request with Email = request.Email |> ``normalize email`` }
+                let! response =
+                    writeWithDbContext <| fun (dbContext:WriteDataContext) ->
+                        task {
+                            let! result = Logics.``register user`` dbContext normalizedRequest
+                            match result with
+                            | RegistrationSuccess ->
+                                Logari.Message.eventInfo "User registered: {email}"
+                                |> Logari.Message.setField "email" normalizedRequest.Email
+                                |> writeLog
+                                return registerResponse true "" ""
+                            | EmailExists ->
+                                Logari.Message.eventWarn "Registration failed: Email exists {email}"
+                                |> Logari.Message.setField "email" normalizedRequest.Email
+                                |> writeLog
+                                return registerResponse false "EmailExists" "Email already registered. Please use another email."
+                            | WeakPassword reason ->
+                                Logari.Message.eventWarn "Registration failed: Weak password for {email}"
+                                |> Logari.Message.setField "email" normalizedRequest.Email
+                                |> writeLog
+                                return registerResponse false "WeakPassword" reason
+                        }
+                return this.Request.CreateResponse(HttpStatusCode.OK, response)
+        }
+
+    [<Route("webapi/auth/login"); HttpPost>]
+    member __.Login() : Task<HttpResponseMessage> =
+        task {
+            let! request = this.ReadAuthRequest()
+            if isNull (box request) then
+                return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid login request")
+            elif String.IsNullOrWhiteSpace request.Email || String.IsNullOrWhiteSpace request.Password then
+                return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Email and password are required")
+            else
+                let normalizedRequest : LoginRequest = { Email = request.Email |> ``normalize email``; Password = request.Password }
+                let! response =
+                    writeWithDbContext <| fun (dbContext:WriteDataContext) ->
+                        task {
+                            let! result = Logics.``authenticate user`` dbContext normalizedRequest
+                            match result with
+                            | Success (userId, email) ->
+                                let identity = ClaimsIdentity(authenticationType:string)
+                                identity.AddClaim(Claim(ClaimTypes.NameIdentifier, userId.ToString()))
+                                identity.AddClaim(Claim(ClaimTypes.Name, email))
+                                identity.AddClaim(Claim(ClaimTypes.Role, "AuthenticatedUser"))
+                                let properties = AuthenticationProperties(IsPersistent = true)
+                                properties.ExpiresUtc <- Nullable(DateTimeOffset.UtcNow.AddHours(8.0))
+                                let owinContext = getOwinContext()
+                                owinContext.Authentication.SignIn(properties, identity)
+                                Logari.Message.eventInfo "User logged in: {email}"
+                                |> Logari.Message.setField "email" email
+                                |> writeLog
+                                return loginResponse true "" "" (Nullable())
+                            | InvalidCredentials ->
+                                Logari.Message.eventWarn "Failed login attempt: {email}"
+                                |> Logari.Message.setField "email" normalizedRequest.Email
+                                |> writeLog
+                                return loginResponse false "InvalidCredentials" "Invalid email or password" (Nullable())
+                            | AccountLocked lockedUntil ->
+                                Logari.Message.eventWarn "Login attempt on locked account: {email}"
+                                |> Logari.Message.setField "email" normalizedRequest.Email
+                                |> writeLog
+                                return loginResponse false "AccountLocked" "Account is locked due to too many failed attempts." (Nullable lockedUntil)
+                            | AccountInactive ->
+                                Logari.Message.eventWarn "Login attempt on inactive account: {email}"
+                                |> Logari.Message.setField "email" normalizedRequest.Email
+                                |> writeLog
+                                return loginResponse false "AccountInactive" "Account is inactive. Please contact support." (Nullable())
+                        }
+                return this.Request.CreateResponse(HttpStatusCode.OK, response)
+        }
+
+    [<Route("webapi/auth/logout"); HttpPost>]
+    member __.Logout() : HttpResponseMessage =
+        let email =
+            if isNull this.User || isNull this.User.Identity || not this.User.Identity.IsAuthenticated then
+                "unknown"
+            else
+                this.User.Identity.Name
+        let owinContext = getOwinContext()
+        owinContext.Authentication.SignOut(authenticationType)
+        Logari.Message.eventInfo "User logged out: {email}"
+        |> Logari.Message.setField "email" email
+        |> writeLog
+        this.Request.CreateResponse(HttpStatusCode.OK, box {| Success = true |})
+
+    [<Route("webapi/auth/me"); HttpGet>]
+    member __.CurrentUser() : HttpResponseMessage =
+        let response =
+            if isNull this.User || isNull this.User.Identity || not this.User.Identity.IsAuthenticated then
+                {
+                    IsAuthenticated = false
+                    Email = ""
+                }
+            else
+                {
+                    IsAuthenticated = true
+                    Email = this.User.Identity.Name
+                }
+        this.Request.CreateResponse(HttpStatusCode.OK, response)
+
 type MyWebStartup() =
 
     member __.Configuration(ap:Owin.IAppBuilder) =
@@ -184,6 +344,17 @@ type MyWebStartup() =
         Microsoft.AspNet.SignalR.GlobalHost.HubPipeline.AddModule(new LoggingPipelineModule()) |> ignore
 
         ap.UseAesDataProtectorProvider("mykey123")
+        ap.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType)
+        ap.UseCookieAuthentication(
+            CookieAuthenticationOptions(
+                AuthenticationType = CookieAuthenticationDefaults.AuthenticationType,
+                CookieName = "WebsitePlayground.Auth",
+                CookieHttpOnly = true,
+                ExpireTimeSpan = TimeSpan.FromHours(8.0),
+                SlidingExpiration = true,
+                LoginPath = PathString("/login.html")
+            ))
+        |> ignore
 
         //OWIN Component registrations here...
         ap.UseErrorPage(new ErrorPageOptions(ShowExceptionDetails = displayErrors))
@@ -202,6 +373,7 @@ type MyWebStartup() =
 
         use httpConfig = new HttpConfiguration()
         httpConfig.Filters.Add(LogExceptionAttribute())
+        httpConfig.MapHttpAttributeRoutes()
 
         // REST Web Api if needed:
         // Note: If parameter name is "param" as here, then it's referenced with only value in uri: /value/
@@ -212,7 +384,6 @@ type MyWebStartup() =
         // ... and so on. Or you can do use attribute-mapping if you prefer that.
 
         ap.UseWebApi(httpConfig) |> ignore
-        httpConfig.MapHttpAttributeRoutes()
 
         // Google and Facebook authentications would be here...
         //ap.UseFacebookAuthentication(..)

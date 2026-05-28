@@ -75,4 +75,90 @@ module Logics
 
         [| item; item2 |]
 
+    let private maxFailedAttempts = 5
+    let private lockoutMinutes = 15
 
+    let ``register user`` (dbContext:WriteDataContext) (request:RegisterRequest) =
+        task {
+            let normalizedEmail = request.Email |> ``normalize email``
+            match ``validate password strength`` request.Password with
+            | Some reason -> return WeakPassword reason
+            | None ->
+                let! existingEmail =
+                    query {
+                        for u in dbContext.Companyweb.Users do
+                        where (u.Email = normalizedEmail)
+                    } |> Seq.tryHeadAsync
+
+                match existingEmail with
+                | Some _ -> return EmailExists
+                | None ->
+                    let passwordHash = ``hash password`` request.Password
+                    let newUser = dbContext.Companyweb.Users.Create()
+                    newUser.Email <- normalizedEmail
+                    newUser.PasswordHash <- passwordHash
+                    newUser.IsActive <- true
+                    newUser.FailedLoginAttempts <- 0
+                    newUser.CreatedAt <- DateTime.UtcNow
+
+                    do! dbContext.SubmitUpdates2()
+                    return RegistrationSuccess
+        }
+
+    let private ``reset failed attempts`` (user:WriteDataContext.``Companyweb.usersEntity``) =
+        user.FailedLoginAttempts <- 0
+        user.LastFailedLogin <- ValueNone
+        user.LockedUntil <- ValueNone
+
+    let private ``increment failed attempts`` (user:WriteDataContext.``Companyweb.usersEntity``) =
+        user.FailedLoginAttempts <- user.FailedLoginAttempts + 1
+        user.LastFailedLogin <- ValueSome DateTime.UtcNow
+        if user.FailedLoginAttempts >= maxFailedAttempts then
+            user.LockedUntil <- ValueSome (DateTime.UtcNow.AddMinutes(float lockoutMinutes))
+
+    let ``authenticate user`` (dbContext:WriteDataContext) (request:LoginRequest) =
+        task {
+            let normalizedEmail = request.Email |> ``normalize email``
+            // Note: a more hardened login flow would also record failed attempts by IP/email for audit,
+            // add protection for dictionary attacks, and throttle repeated login attempts.
+            let! userOpt =
+                query {
+                    for u in dbContext.Companyweb.Users do
+                    where (u.Email = normalizedEmail)
+                } |> Seq.tryHeadAsync
+
+            match userOpt with
+            | None ->
+                return InvalidCredentials
+            | Some user ->
+                if not user.IsActive then
+                    return AccountInactive
+                else
+                    match user.LockedUntil with
+                    | ValueSome lockedUntil when lockedUntil > DateTime.UtcNow ->
+                        return AccountLocked lockedUntil
+                    | _ ->
+                        let passwordValid = ``verify password`` request.Password user.PasswordHash
+                        if passwordValid then
+                            ``reset failed attempts`` user
+                            user.LastLoginAt <- ValueSome DateTime.UtcNow
+                            do! dbContext.SubmitUpdates2()
+                            return Success (user.Id, user.Email)
+                        else
+                            ``increment failed attempts`` user
+                            do! dbContext.SubmitUpdates2()
+                            match user.LockedUntil with
+                            | ValueSome lockedUntil -> return AccountLocked lockedUntil
+                            | ValueNone -> return InvalidCredentials
+        }
+
+    let ``get user by id`` (dbContext:ReadDataContext) (userId:int) =
+        task {
+            let! userOpt =
+                query {
+                    for u in dbContext.Companyweb.Users do
+                    where (u.Id = userId)
+                    select (u.Id, u.Email, u.IsActive)
+                } |> Seq.tryHeadAsync
+            return userOpt
+        }

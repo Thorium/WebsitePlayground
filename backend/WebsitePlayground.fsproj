@@ -45,6 +45,7 @@
   </Target>
   -->
   <ItemGroup>
+    <None Include="paket.references" />
     <Compile Include="Domain.fs" />
     <Compile Include="Logics.fs" />
     <Compile Include="Scheduler.fs" />

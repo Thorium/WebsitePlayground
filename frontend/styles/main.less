@@ -34,6 +34,44 @@ body {
 .panel{
     background-color: #fbf2ff;
 }
+
+.login-page-row {
+    max-width: 500px;
+    margin: 50px auto;
+}
+
+.login-message {
+    display: none;
+}
+
+.login-tab-header {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #d8c2e0;
+}
+
+.login-tab-button {
+    flex: 1;
+    padding: 12px 16px;
+    border: 0;
+    background-color: transparent;
+    color: #702090;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+.login-tab-button.active {
+    background-color: #702090;
+    color: #ffffff;
+}
+
+.auth-tab-panel {
+    display: none;
+}
+
+.auth-tab-panel.active {
+    display: block;
+}
 .reveal-modal {
     overflow: auto;
     max-height: 80vh;
@@ -132,6 +170,36 @@ li {
 	border-bottom:1px;
     padding-left: 25px;
     padding-right: 10px;
+}
+
+.navbar-user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-right: 16px;
+    line-height: @navbarHeight;
+}
+
+.navbar-user-info-anonymous {
+    opacity: 0.78;
+}
+
+.navbar-user-email {
+    font-size: 1rem;
+}
+
+.navbar-user-action {
+    text-decoration: underline;
+}
+
+.navbar-user-action-subtle {
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.navbar-user-action-subtle:hover,
+.navbar-user-action-subtle:focus {
+    text-decoration: underline;
 }
 
 @media only screen and (min-width: 40em) {
