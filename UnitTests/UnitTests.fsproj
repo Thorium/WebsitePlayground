@@ -1,14 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\netfx.props" />
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
     <IsPackable>false</IsPackable>
     <GenerateProgramFile>false</GenerateProgramFile>
     <IsTestProject>true</IsTestProject>
+    <TargetFrameworkVersion Condition="'$(TargetFramework)' == 'net48'">v4.8</TargetFrameworkVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFSharpCoreVersion>7.0.0.0</TargetFSharpCoreVersion>
   </PropertyGroup>
   <ItemGroup>
     <None Include="paket.references" />
     <Compile Include="UnitTest1.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+    <PackageReference Include="NUnit" Version="4.3.2" />
+    <PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
+    <PackageReference Include="NUnit.Analyzers" Version="4.7.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="6.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\backend\WebsitePlayground.fsproj" />
