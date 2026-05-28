@@ -47,16 +47,11 @@ $(function() {
         // If loading lazily:
         if(window.location.href.indexOf("/company.html") > 0){ import('./company').then(company => company.initPage(locale)); }
         if(window.location.href.indexOf("/results.html") > 0){ import('./results').then(results => results.initPage(locale)); }
+        if(window.location.href.indexOf("/login.html") > 0){ import('./login').then(login => login.initLoginPage(locale)); }
         $(document).foundation();
     }
 
-    const connection = new signalR.HubConnectionBuilder()
-        .withUrl("/signalhub")
-        .withAutomaticReconnect([0, 0, 10000])
-        .configureLogging(signalR.LogLevel.Information)
-        .build();
-
-    connection.start().then(function () {
+    function finishInit() {
         // window.onunload = undefined;
         // window.onbeforeunload = undefined;
         // const nav:any = navigator;
@@ -80,5 +75,24 @@ $(function() {
                 $(this).prop("title").split('\r\n').join('<br/>').split('\\r\\n').join('<br/>')).dialog();
             return false;
         });
+    }
+
+    const isLoginPage = window.location.href.indexOf("/login.html") > 0;
+    if (isLoginPage) {
+        finishInit();
+        return;
+    }
+
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/signalhub")
+        .withAutomaticReconnect([0, 0, 10000])
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
+
+    connection.start().then(function () {
+        finishInit();
+    }).catch(function (error) {
+        console.log("SignalHub connection failed:", error);
+        finishInit();
     });
 });

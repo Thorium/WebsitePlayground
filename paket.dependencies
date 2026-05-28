@@ -6,18 +6,21 @@ group Server
     nuget FSharp.Data
     nuget FSharp.Data.JsonProvider.Serializer
 //    nuget Microsoft.Data.SqlClient
-    nuget Microsoft.Net.Http.Headers 8.0.15
+    nuget Microsoft.Net.Http.Headers 10.0.8
     nuget Owin.Compression
-    nuget Microsoft.AspNetCore.Authentication.JwtBearer 8.0.15
+    nuget Microsoft.AspNetCore.Authentication.JwtBearer 10.0.8
+    nuget Microsoft.AspNetCore.Authentication.Cookies
+    nuget Microsoft.AspNetCore.Authentication.Abstractions
     //nuget SQLProvider
     nuget SQLProvider.MySql
     nuget SQLProvider.MySqlConnector
     nuget Microsoft.AspNetCore.SignalR
     nuget Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson
     nuget MySqlConnector
-    nuget System.Configuration.ConfigurationManager 8.0.1
-    nuget Microsoft.AspNetCore.WebUtilities 8.0.15
-    nuget System.ServiceProcess.ServiceController 8.0.1
+    nuget System.Configuration.ConfigurationManager 10.0.8
+    nuget Microsoft.AspNetCore.WebUtilities 10.0.8
+    nuget System.ServiceProcess.ServiceController 10.0.8
+    nuget System.Security.Cryptography.Xml 10.0.8
 
     nuget Oxpecker
     nuget Oxpecker.OpenApi

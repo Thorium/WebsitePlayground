@@ -22,10 +22,13 @@ let mysqldatapath = __SOURCE_DIRECTORY__ + @"/backend/mysqlconnector/"
 //let mysqldatapath = __SOURCE_DIRECTORY__ + @"/../packages/MySql.Data/lib/net462/"
 
 [<Literal>]
+let defaultMySqlConnectionString = @"server = localhost; database = companyweb; uid = webuser;pwd = p4ssw0rd"
+
+[<Literal>]
 let databaseType = Common.DatabaseProviderTypes.MYSQL
 type TypeProviderConnection =
     SqlDataProvider< // Supports: MS SQL Server, SQLite, PostgreSQL, Oracle, MySQL (MariaDB), ODBC and MS Access
-        ConnectionString = @"server = localhost; database = companyweb; uid = webuser;pwd = p4ssw0rd",
+        ConnectionString = defaultMySqlConnectionString,
         DatabaseVendor = databaseType,
         IndividualsAmount=1000,
         UseOptionTypes=FSharp.Data.Sql.Common.NullableColumnType.VALUE_OPTION,
@@ -35,6 +38,9 @@ type TypeProviderConnection =
 
 
 let cstr = System.Configuration.ConfigurationManager.AppSettings.["RuntimeDBConnectionString"]
+let runtimeConnectionString() =
+    if String.IsNullOrWhiteSpace cstr then defaultMySqlConnectionString else cstr
+
 let internal createDbReadContext() =
     let rec createCon x =
         try
@@ -283,6 +289,54 @@ type CompanySearchResult = {
     Image: string voption
 }
 
+// --- Authentication domain models -----------------------------
+
+[<Serializable>]
+type LoginRequest = {
+    Email: string;
+    Password: string;
+}
+
+[<Serializable>]
+type LoginResult =
+    | Success of userId:int * email:string
+    | InvalidCredentials
+    | AccountLocked of unlocksAt:DateTime
+    | AccountInactive
+
+[<CLIMutable; Serializable>]
+type LoginResponse = {
+    Success: bool;
+    ErrorCode: string;
+    ErrorMessage: string;
+    LockedUntil: Nullable<DateTime>;
+}
+
+[<Serializable>]
+type RegisterRequest = {
+    Email: string;
+    Password: string;
+}
+
+[<Serializable>]
+type RegisterResult =
+    | RegistrationSuccess
+    | EmailExists
+    | WeakPassword of reason:string
+
+[<CLIMutable; Serializable>]
+type RegisterResponse = {
+    Success: bool;
+    ErrorCode: string;
+    ErrorMessage: string;
+}
+
+[<CLIMutable; Serializable>]
+type CurrentUserResponse = {
+    IsAuthenticated: bool;
+    Email: string;
+}
+
 module Async =
   /// Async.Start with timeout in seconds
   let StartWithTimeout (timeoutSecs:int) (computation:Async<unit>) =
@@ -300,6 +354,53 @@ let ``compare urlSafe hash`` clear hash =
     let hash1 = clear |> ``calculate SHA256 hash`` |> doubleUrlDecode |> (fun x -> x.Replace("=",""))
     let hash2 = hash |> doubleUrlDecode |> (fun x -> x.Replace("=",""))
     hash1 = hash2
+
+let ``hash password`` (password:string) =
+    use rfc2898 = new System.Security.Cryptography.Rfc2898DeriveBytes(
+        password,
+        32,
+        100000,
+        System.Security.Cryptography.HashAlgorithmName.SHA256)
+    let salt = rfc2898.Salt
+    let hash = rfc2898.GetBytes(32)
+    let hashBytes = Array.concat [salt; hash]
+    Convert.ToBase64String(hashBytes)
+
+let ``verify password`` (password:string) (storedHash:string) =
+    try
+        let hashBytes = Convert.FromBase64String(storedHash)
+        if hashBytes.Length < 64 then
+            false
+        else
+            let salt = Array.sub hashBytes 0 32
+            let storedPasswordHash = Array.sub hashBytes 32 32
+            use rfc2898 = new System.Security.Cryptography.Rfc2898DeriveBytes(
+                password,
+                salt,
+                100000,
+                System.Security.Cryptography.HashAlgorithmName.SHA256)
+            let computedHash = rfc2898.GetBytes(32)
+            computedHash
+            |> Array.zip storedPasswordHash
+            |> Array.forall (fun (a, b) -> a = b)
+    with
+    | _ -> false
+
+let ``validate password strength`` (password:string) =
+    let hasMinLength = password.Length >= 8
+    let hasUpperCase = password |> Seq.exists Char.IsUpper
+    let hasLowerCase = password |> Seq.exists Char.IsLower
+    let hasDigit = password |> Seq.exists Char.IsDigit
+
+    match hasMinLength, hasUpperCase, hasLowerCase, hasDigit with
+    | false, _, _, _ -> Some "Password must be at least 8 characters long"
+    | _, false, _, _ -> Some "Password must contain at least one uppercase letter"
+    | _, _, false, _ -> Some "Password must contain at least one lowercase letter"
+    | _, _, _, false -> Some "Password must contain at least one digit"
+    | true, true, true, true -> None
+
+let ``normalize email`` (email:string) =
+    email.Trim().ToLowerInvariant()
 
 let GetUnionCaseName (x:'a) =
     match Microsoft.FSharp.Reflection.FSharpValue.GetUnionFields(x, typeof<'a>) with

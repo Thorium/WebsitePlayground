@@ -2,6 +2,17 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as _ from "lodash";
 import tools = require("./tools");
+import login = require("./login");
+
+function getResponseValue(result, pascalName, camelName) {
+  if(!result) {
+    return undefined;
+  }
+  if(typeof result[pascalName] !== "undefined") {
+    return result[pascalName];
+  }
+  return result[camelName];
+}
 
 interface NavbarProps { companyId: string; }
 class CompanyWebNavBar extends React.Component<NavbarProps, any> {
@@ -9,10 +20,27 @@ class CompanyWebNavBar extends React.Component<NavbarProps, any> {
     super(props);
     this.handleClick = this.handleClick.bind(this);        
     this.getLink = this.getLink.bind(this);       
-    this.state = {menuOn: false};
+    this.handleLogout = this.handleLogout.bind(this);
+    this.state = {menuOn: false, currentUserEmail: ""};
+  }
+  componentDidMount() {
+    login.getJson("/webapi/auth/me").then((result) => {
+      const isAuthenticated = getResponseValue(result, "IsAuthenticated", "isAuthenticated");
+      const email = getResponseValue(result, "Email", "email");
+      if (isAuthenticated && email) {
+        this.setState({currentUserEmail: email});
+      }
+    }).catch(() => {
+      this.setState({currentUserEmail: ""});
+    });
   }
   handleClick () {
     this.setState({menuOn: !this.state.menuOn});
+    return false;
+  }
+  handleLogout (event) {
+    event.preventDefault();
+    login.logout();
     return false;
   }
   getLink (itm) {
@@ -21,6 +49,7 @@ class CompanyWebNavBar extends React.Component<NavbarProps, any> {
   render () {
     var menutoggle = [];
     var menubar = [];
+    var userInfo = [];
 
     var companyUrl = this.getLink("company") + (this.props.companyId!==""? "#/item/"+this.props.companyId : "");
     if(this.state.menuOn){
@@ -41,6 +70,20 @@ class CompanyWebNavBar extends React.Component<NavbarProps, any> {
         </div>
         );
     }
+    if(this.state.currentUserEmail !== "") {
+      userInfo.push(
+        <div key="userInfo" className="navbar-user-info">
+          <span className="white navbar-user-email">Signed in as {this.state.currentUserEmail}</span>
+          <a className="white navbar-user-action navbar-user-action-subtle" href="#" onClick={this.handleLogout}>Logout</a>
+        </div>
+      );
+    } else {
+      userInfo.push(
+        <div key="loginLink" className="navbar-user-info navbar-user-info-anonymous">
+          <a className="white navbar-user-action navbar-user-action-subtle" href={this.getLink("login")}>Login</a>
+        </div>
+      );
+    }
     menutoggle.push(<section key="left" className="left-small">
     <a id="hamburger" className="left-off-canvas-toggle menu-icon" href="#" onClick={this.handleClick}><span></span></a>
     </section>);
@@ -52,6 +95,7 @@ class CompanyWebNavBar extends React.Component<NavbarProps, any> {
             <a className="white mainTitle" href={this.getLink("index")}>Company Web</a>
 	      </section>
 		  <section className="right">
+		    {userInfo}
 		  </section>
       </nav>
 		{menubar}

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - WebsitePlayground</title>
+
+    <meta name="robots" content="noindex,nofollow" />
+    <link rel='stylesheet' type='text/css' href='css/libs.min.css' />
+    <link rel='stylesheet' type='text/css' href='css/app.min.css' />
+    <script type='text/javascript' src='js/libs.min.js' defer='defer'></script>
+    <script type='text/javascript' src='js/app.min.js' defer='defer'></script>
+</head>
+<body>
+    <div class="pageLoader"><span class="fa fa-spinner fa-spin fa-4x"></span></div>
+    <div class="pageLoaded">
+        <div id="navbar"></div>
+
+        <div class="row login-page-row">
+            <div class="panel">
+                <div class="login-tab-header">
+                    <button type="button" class="login-tab-button active" data-auth-tab="login">Login</button>
+                    <button type="button" class="login-tab-button" data-auth-tab="register">Register</button>
+                </div>
+
+                <div id="loginTab" class="auth-tab-panel active">
+                    <h2>Login</h2>
+
+                    <div id="loginError" class="alert-box alert login-message">
+                        <span id="loginErrorMessage"></span>
+                    </div>
+
+                    <div id="loginSuccess" class="alert-box success login-message">
+                        Login successful! Redirecting...
+                    </div>
+
+                    <form id="loginForm">
+                        <div class="row">
+                            <div class="medium-12 columns">
+                                <label for="email">
+                                    <span class="fa fa-envelope"></span> Email
+                                </label>
+                                <input type="email" id="email" name="email" placeholder="your.email@example.com" required autocomplete="email" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="medium-12 columns">
+                                <label for="password">
+                                    <span class="fa fa-lock"></span> Password
+                                </label>
+                                <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="medium-12 columns">
+                                <button type="submit" class="btn button primary radius" id="loginButton">
+                                    <span class="fa fa-sign-in"></span> Login
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="registerTab" class="auth-tab-panel">
+                    <h2>Create Account</h2>
+
+                    <div id="registerError" class="alert-box alert login-message">
+                        <span id="registerErrorMessage"></span>
+                    </div>
+
+                    <div id="registerSuccess" class="alert-box success login-message">
+                        Registration successful! You can now login.
+                    </div>
+
+                    <form id="registerForm">
+                        <div class="row">
+                            <div class="medium-12 columns">
+                                <label for="regEmail">
+                                    <span class="fa fa-envelope"></span> Email
+                                </label>
+                                <input type="email" id="regEmail" name="email" placeholder="your.email@example.com" required autocomplete="email" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="medium-12 columns">
+                                <label for="regPassword">
+                                    <span class="fa fa-lock"></span> Password
+                                </label>
+                                <input type="password" id="regPassword" name="password" placeholder="Choose a strong password" required autocomplete="new-password" />
+                                <small>At least 8 characters with uppercase, lowercase, and digit</small>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="medium-12 columns">
+                                <button type="submit" class="btn button secondary radius" id="registerButton">
+                                    <span class="fa fa-user-plus"></span> Register
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="footer"></div>
+    </div>
+</body>
+</html>

@@ -9,6 +9,8 @@ Serilog.Sinks.Console
 Serilog.Sinks.File
 Microsoft.AspNetCore.SignalR
 Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson
+Microsoft.AspNetCore.Authentication.Cookies
+Microsoft.AspNetCore.Authentication.Abstractions
 MySqlConnector
 Newtonsoft.Json
 Owin.Compression
