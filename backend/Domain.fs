@@ -391,6 +391,10 @@ let ``validate password strength`` (password:string) =
     let hasUpperCase = password |> Seq.exists Char.IsUpper
     let hasLowerCase = password |> Seq.exists Char.IsLower
     let hasDigit = password |> Seq.exists Char.IsDigit
+    // NOTE: requiring a special character is intentionally left out of this sample (forcing it
+    // would be overkill for a demo) but is a sensible best practice before going to production.
+    // To enforce it, add `let hasSpecialChar = password |> Seq.exists (Char.IsLetterOrDigit >> not)`
+    // to the tuple below with a matching `Some "...special character"` arm.
 
     match hasMinLength, hasUpperCase, hasLowerCase, hasDigit with
     | false, _, _, _ -> Some "Password must be at least 8 characters long"

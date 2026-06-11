@@ -67,19 +67,22 @@ let errorHandler (ctx: Microsoft.AspNetCore.Http.HttpContext) (next: Microsoft.A
             let logger = ctx.GetLogger()
             logger.LogWarning(ex, "Unhandled 400 error")
             writeError ex
+            // SECURITY: only expose exception details to clients when running in debug/diagnostics mode
+            // (WebServerDebug app-setting). In production this avoids leaking internal information.
             let result = TypedResults.Problem (
                 statusCode = StatusCodes.Status400BadRequest,
                 title = "Bad Request",
-                detail = ex.Message)
+                detail = (if displayErrors then ex.Message else "The request could not be processed."))
             do! ctx.Write result
         | ex ->
             let logger = ctx.GetLogger()
             logger.LogError(ex, "Unhandled 500 error")
             writeError ex
+            // SECURITY: hide exception details from clients unless WebServerDebug is enabled.
             let result = TypedResults.Problem (
                 statusCode = StatusCodes.Status500InternalServerError,
                 title = "Internal Server Error",
-                detail = ex.Message)
+                detail = (if displayErrors then ex.Message else "An unexpected error occurred."))
             do! ctx.Write result
     }
     :> Task
@@ -304,7 +307,13 @@ let endpoints = [
                 route "/auth/register" registerHandler
                 route "/auth/login" loginHandler
                 route "/auth/logout" logoutHandler
-            ] // |> configureEndpoint _.RequireAuthorization(Microsoft.AspNetCore.Authorization.AuthorizeAttribute ...
+            ]
+            // NOTE: the /auth/* routes above must stay anonymous (they ARE the login flow).
+            // To require authentication for your own business endpoints, group them separately and
+            // attach the "AuthenticatedUser" policy (defined in configureServices), e.g.:
+            //     POST [ route "/company/save" saveCompanyHandler ]
+            //     |> List.map (configureEndpoint _.RequireAuthorization("AuthenticatedUser"))
+            // Left open here so the sample CRUD/search works without login.
 
             GET [ // This would be a HTTP GET to http://localhost:7050/webapi/my
                 routef "/my" <| (text "Node Found.")
