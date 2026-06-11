@@ -26,7 +26,10 @@ type SignalHub() as this =
     override __.OnConnected() =
         let t = base.OnConnected()
         Message.eventInfo "Client connected: {clientId}" |> Message.setField "clientId" this.Context.ConnectionId |> writeLog
-        // We could do authentication check here.
+        // NOTE: this hub is intentionally open so the sample works without login.
+        // To require authentication, annotate the hub (or individual methods) with
+        // [<Microsoft.AspNet.SignalR.Authorize>] (optionally Roles = "AuthenticatedUser")
+        // and inspect this.Context.User here to reject unauthenticated connections.
         t
 
     member __.SearchCompanies (searchparams:SearchObject) =
@@ -41,7 +44,9 @@ type SignalHub() as this =
             return companies
         }
 
-    //[<Authorize(Roles = "loggedin")>]
+    // To restrict this action to logged-in users, uncomment the attribute below
+    // (SignalR auth uses the same cookie identity established by the login flow):
+    //[<Microsoft.AspNet.SignalR.Authorize(Roles = "AuthenticatedUser")>]
     member __.BuyStocks (company:string) (amount:int) =
         //Signal to all users is as easy as signal to single user:
         this.Clients.All.NotifyDeal ("Announcement to all users: " + (string)amount + " of " + company + " stocks just sold!")
