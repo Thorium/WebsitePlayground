@@ -80,7 +80,7 @@ module Logics
 
     let private openConnection() =
         task {
-            let connection = new global.MySqlConnector.MySqlConnection(cstr)
+            let connection = new global.MySqlConnector.MySqlConnection(runtimeConnectionString())
             do! connection.OpenAsync()
             return connection
         }

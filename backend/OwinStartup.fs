@@ -294,6 +294,38 @@ type AuthController() as this =
                 }
         this.Request.CreateResponse(HttpStatusCode.OK, response)
 
+// SECURITY (#2): restrict CORS instead of AllowAll. Because credentials (auth cookie) are sent,
+// AllowAll would let ANY website make authenticated requests on a logged-in user's behalf.
+// The sample frontend is served same-origin (UseFileServer), so it needs no CORS at all; this
+// policy only reflects an explicit allow-list (configured ServerAddress, plus localhost in DEBUG).
+let private restrictedCorsOptions =
+    let isAllowedOrigin (origin:string) =
+        if String.IsNullOrWhiteSpace origin then false
+        else
+            let configured = ConfigurationManager.AppSettings.["ServerAddress"]
+            let matchesConfigured =
+                not (String.IsNullOrWhiteSpace configured) && origin.TrimEnd('/') = configured.TrimEnd('/')
+#if DEBUG
+            let isLocalhost =
+                match Uri.TryCreate(origin, UriKind.Absolute) with
+                | true, u -> u.Host = "localhost" || u.Host = "127.0.0.1"
+                | _ -> false
+            matchesConfigured || isLocalhost
+#else
+            matchesConfigured
+#endif
+    Microsoft.Owin.Cors.CorsOptions(
+        PolicyProvider = Microsoft.Owin.Cors.CorsPolicyProvider(
+            PolicyResolver = fun request ->
+                let policy =
+                    System.Web.Cors.CorsPolicy(
+                        AllowAnyHeader = true,
+                        AllowAnyMethod = true,
+                        SupportsCredentials = true)
+                let origin = request.Headers.Get "Origin"
+                if isAllowedOrigin origin then policy.Origins.Add origin
+                Task.FromResult policy))
+
 type MyWebStartup() =
 
     member __.Configuration(ap:Owin.IAppBuilder) =
@@ -338,7 +370,19 @@ type MyWebStartup() =
 
         Microsoft.AspNet.SignalR.GlobalHost.HubPipeline.AddModule(new LoggingPipelineModule()) |> ignore
 
-        ap.UseAesDataProtectorProvider("mykey123")
+        // SECURITY (#1): the auth-cookie encryption key must NOT be hard-coded. A key committed to
+        // source control lets anyone forge a valid auth cookie for any user (full auth bypass).
+        // Read it from config; if absent, fall back to an ephemeral random key for this process only
+        // (cookies won't survive a restart and won't validate across multiple servers). For production,
+        // set a strong, stable 'AuthCookieEncryptionKey' app-setting kept OUT of source control.
+        let authCookieEncryptionKey =
+            match ConfigurationManager.AppSettings.["AuthCookieEncryptionKey"] with
+            | k when not (String.IsNullOrWhiteSpace k) -> k
+            | _ ->
+                Logari.Message.eventWarn "No AuthCookieEncryptionKey configured; auth cookies use an ephemeral key (won't survive restart)."
+                |> writeLog
+                Guid.NewGuid().ToString("N") + Guid.NewGuid().ToString("N")
+        ap.UseAesDataProtectorProvider(authCookieEncryptionKey)
         ap.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType)
         ap.UseCookieAuthentication(
             CookieAuthenticationOptions(
@@ -359,8 +403,7 @@ type MyWebStartup() =
 
         //Allow cross domain
         |> fun app ->
-            app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll)
-            //app.UseCors(corsPolicy)
+            app.UseCors(restrictedCorsOptions) // SECURITY (#2): was CorsOptions.AllowAll; see restrictedCorsOptions above.
 
 
         //SignalR:

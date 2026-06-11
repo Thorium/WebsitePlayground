@@ -23,10 +23,13 @@ let mysqldatapath = __SOURCE_DIRECTORY__ + @"/backend/mysqlconnector/"
 //let mysqldatapath = __SOURCE_DIRECTORY__ + @"/../packages/MySql.Data/lib/net462/"
 
 [<Literal>]
+let defaultMySqlConnectionString = @"server = localhost; database = companyweb; uid = webuser;pwd = p4ssw0rd"
+
+[<Literal>]
 let databaseType = Common.DatabaseProviderTypes.MYSQL
 type TypeProviderConnection =
     SqlDataProvider< // Supports: MS SQL Server, SQLite, PostgreSQL, Oracle, MySQL (MariaDB), ODBC and MS Access
-        ConnectionString = @"server = localhost; database = companyweb; uid = webuser;pwd = p4ssw0rd",
+        ConnectionString = defaultMySqlConnectionString,
         DatabaseVendor = databaseType,
         IndividualsAmount=1000,
         UseOptionTypes=FSharp.Data.Sql.Common.NullableColumnType.VALUE_OPTION,
@@ -35,6 +38,12 @@ type TypeProviderConnection =
         ResolutionPath=mysqldatapath>
 
 let cstr = System.Configuration.ConfigurationManager.AppSettings.["RuntimeDBConnectionString"]
+/// Connection string for raw ADO.NET access. Falls back to the compile-time default when the
+/// RuntimeDBConnectionString app-setting is missing/blank, so login/registration don't throw a
+/// NullReference when config is incomplete.
+let runtimeConnectionString() =
+    if String.IsNullOrWhiteSpace cstr then defaultMySqlConnectionString else cstr
+
 let internal createDbReadContext() =
     let rec createCon x =
         try
@@ -384,6 +393,10 @@ let ``validate password strength`` (password:string) =
     let hasUpperCase = password |> Seq.exists Char.IsUpper
     let hasLowerCase = password |> Seq.exists Char.IsLower
     let hasDigit = password |> Seq.exists Char.IsDigit
+    // NOTE: requiring a special character is intentionally left out of this sample (forcing it
+    // would be overkill for a demo) but is a sensible best practice before going to production.
+    // To enforce it, add `let hasSpecialChar = password |> Seq.exists (Char.IsLetterOrDigit >> not)`
+    // to the tuple below with a matching `Some "...special character"` arm.
 
     match hasMinLength, hasUpperCase, hasLowerCase, hasDigit with
     | false, _, _, _ -> Some "Password must be at least 8 characters long"
