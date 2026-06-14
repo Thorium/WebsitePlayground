@@ -310,7 +310,7 @@ NUGET
     Destructurama.FSharp (4.0)
       FSharp.Core (>= 10.0.101) - restriction: >= netstandard2.0
       Serilog (>= 4.3) - restriction: >= netstandard2.0
-    FSharp.Core (10.1.300)
+    FSharp.Core (10.1.301)
     FSharp.Data (8.1.14)
       FSharp.Core (>= 6.0.1) - restriction: >= netstandard2.0
       FSharp.Data.Csv.Core (>= 8.1.14) - restriction: >= netstandard2.0
@@ -334,8 +334,8 @@ NUGET
       FSharp.Core (>= 6.0.1) - restriction: >= netstandard2.0
       FSharp.Data.Http (>= 8.1.14) - restriction: >= netstandard2.0
       FSharp.Data.Runtime.Utilities (>= 8.1.14) - restriction: >= netstandard2.0
-    FSharp.Data.JsonProvider.Serializer (1.0.7)
-      FSharp.Core (>= 10.1.201) - restriction: >= netstandard2.0
+    FSharp.Data.JsonProvider.Serializer (1.0.8)
+      FSharp.Core (>= 10.1.300) - restriction: >= netstandard2.0
       FSharp.Data.Json.Core (>= 8.1.11) - restriction: >= netstandard2.0
       System.Text.Json (>= 10.0.7) - restriction: || (&& (< net10.0) (>= net9.0)) (>= net48) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.0))
     FSharp.Data.Runtime.Utilities (8.1.14) - restriction: >= netstandard2.0
@@ -351,7 +351,7 @@ NUGET
       FSharp.Data.Http (>= 8.1.14) - restriction: >= netstandard2.0
       FSharp.Data.Json.Core (>= 8.1.14) - restriction: >= netstandard2.0
       FSharp.Data.Runtime.Utilities (>= 8.1.14) - restriction: >= netstandard2.0
-    Google.Protobuf (3.35) - restriction: || (>= net462) (>= netstandard2.0)
+    Google.Protobuf (3.35.1) - restriction: || (>= net462) (>= netstandard2.0)
       System.Memory (>= 4.5.3) - restriction: || (>= net45) (&& (< net5.0) (>= netstandard2.0)) (&& (>= netstandard1.1) (< netstandard2.0))
       System.Runtime.CompilerServices.Unsafe (>= 4.5.2) - restriction: && (< net45) (< net5.0) (>= netstandard2.0)
     K4os.Compression.LZ4 (1.3.8) - restriction: || (>= net462) (>= netstandard2.0)
@@ -374,39 +374,39 @@ NUGET
       Microsoft.Extensions.Logging.Console (>= 9.0.2) - restriction: >= netstandard2.0
     Microsoft.ApplicationInsights (2.23) - restriction: || (>= net462) (>= netstandard2.0)
       System.Diagnostics.DiagnosticSource (>= 5.0) - restriction: || (&& (>= net452) (< netstandard2.0)) (&& (< net452) (>= netstandard2.0)) (>= net46)
-    Microsoft.AspNetCore.Authentication (2.3.10) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Authentication.Core (>= 2.3.9) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.DataProtection (>= 2.3.9) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Http (>= 2.3.9) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Http.Extensions (>= 2.3.9) - restriction: >= netstandard2.0
+    Microsoft.AspNetCore.Authentication (2.3.11) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Authentication.Core (>= 2.3.10) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.DataProtection (>= 2.3.10) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Http (>= 2.3.10) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Http.Extensions (>= 2.3.10) - restriction: >= netstandard2.0
       Microsoft.Extensions.Logging.Abstractions (>= 8.0.2) - restriction: >= netstandard2.0
       Microsoft.Extensions.Options (>= 8.0.2) - restriction: >= netstandard2.0
       Microsoft.Extensions.WebEncoders (>= 8.0.11) - restriction: >= netstandard2.0
-    Microsoft.AspNetCore.Authentication.Abstractions (2.3.10)
-      Microsoft.AspNetCore.Http.Abstractions (>= 2.3.9) - restriction: >= netstandard2.0
+    Microsoft.AspNetCore.Authentication.Abstractions (2.3.11)
+      Microsoft.AspNetCore.Http.Abstractions (>= 2.3.10) - restriction: >= netstandard2.0
       Microsoft.Extensions.Logging.Abstractions (>= 8.0.2) - restriction: >= netstandard2.0
       Microsoft.Extensions.Options (>= 8.0.2) - restriction: >= netstandard2.0
-    Microsoft.AspNetCore.Authentication.Cookies (2.3.10)
-      Microsoft.AspNetCore.Authentication (>= 2.3.9) - restriction: >= netstandard2.0
-    Microsoft.AspNetCore.Authentication.Core (2.3.10) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Authentication.Abstractions (>= 2.3.9) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Http (>= 2.3.9) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Http.Extensions (>= 2.3.9) - restriction: >= netstandard2.0
+    Microsoft.AspNetCore.Authentication.Cookies (2.3.11)
+      Microsoft.AspNetCore.Authentication (>= 2.3.10) - restriction: >= netstandard2.0
+    Microsoft.AspNetCore.Authentication.Core (2.3.11) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Authentication.Abstractions (>= 2.3.10) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Http (>= 2.3.10) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Http.Extensions (>= 2.3.10) - restriction: >= netstandard2.0
     Microsoft.AspNetCore.Authentication.JwtBearer (10.0.8)
       Microsoft.IdentityModel.Protocols.OpenIdConnect (>= 8.0.1) - restriction: >= net10.0
-    Microsoft.AspNetCore.Authorization (10.0.8) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Metadata (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Diagnostics (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Logging.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Options (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.AspNetCore.Authorization.Policy (2.3.10) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Authentication.Abstractions (>= 2.3.9) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Authorization (>= 2.3.9) - restriction: >= netstandard2.0
-    Microsoft.AspNetCore.Connections.Abstractions (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Bcl.AsyncInterfaces (>= 10.0.8) - restriction: || (&& (< net10.0) (>= netstandard2.1)) (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
-      Microsoft.Extensions.Features (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      System.IO.Pipelines (>= 10.0.8) - restriction: || (&& (< net10.0) (>= netstandard2.1)) (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
-    Microsoft.AspNetCore.Cryptography.Internal (10.0.8) - restriction: >= netstandard2.0
+    Microsoft.AspNetCore.Authorization (10.0.9) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Metadata (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Diagnostics (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Logging.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Options (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.AspNetCore.Authorization.Policy (2.3.11) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Authentication.Abstractions (>= 2.3.10) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Authorization (>= 2.3.10) - restriction: >= netstandard2.0
+    Microsoft.AspNetCore.Connections.Abstractions (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Bcl.AsyncInterfaces (>= 10.0.9) - restriction: || (&& (< net10.0) (>= netstandard2.1)) (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
+      Microsoft.Extensions.Features (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      System.IO.Pipelines (>= 10.0.9) - restriction: || (&& (< net10.0) (>= netstandard2.1)) (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
+    Microsoft.AspNetCore.Cryptography.Internal (10.0.9) - restriction: >= netstandard2.0
       System.Memory (>= 4.6.3) - restriction: || (&& (< net10.0) (>= netstandard2.0)) (>= net462)
     Microsoft.AspNetCore.DataProtection (10.0.8) - restriction: >= netstandard2.0
       Microsoft.AspNetCore.Cryptography.Internal (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
@@ -419,66 +419,66 @@ NUGET
       System.Runtime.InteropServices.RuntimeInformation (>= 4.3) - restriction: >= net462
       System.Security.Cryptography.Xml (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
       System.Security.Principal.Windows (>= 5.0) - restriction: && (< net10.0) (< net462) (>= netstandard2.0)
-    Microsoft.AspNetCore.DataProtection.Abstractions (10.0.8) - restriction: >= netstandard2.0
-    Microsoft.AspNetCore.Hosting.Abstractions (2.3.10) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Hosting.Server.Abstractions (>= 2.3.9) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Http.Abstractions (>= 2.3.9) - restriction: >= netstandard2.0
+    Microsoft.AspNetCore.DataProtection.Abstractions (10.0.9) - restriction: >= netstandard2.0
+    Microsoft.AspNetCore.Hosting.Abstractions (2.3.11) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Hosting.Server.Abstractions (>= 2.3.10) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Http.Abstractions (>= 2.3.10) - restriction: >= netstandard2.0
       Microsoft.Extensions.Hosting.Abstractions (>= 8.0.1) - restriction: >= netstandard2.0
-    Microsoft.AspNetCore.Hosting.Server.Abstractions (2.3.10) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Http.Features (>= 2.3.9) - restriction: >= netstandard2.0
+    Microsoft.AspNetCore.Hosting.Server.Abstractions (2.3.11) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Http.Features (>= 2.3.10) - restriction: >= netstandard2.0
       Microsoft.Extensions.Configuration.Abstractions (>= 8.0) - restriction: >= netstandard2.0
-    Microsoft.AspNetCore.Http (2.3.10) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Http.Abstractions (>= 2.3.9) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.WebUtilities (>= 2.3.9) - restriction: >= netstandard2.0
+    Microsoft.AspNetCore.Http (2.3.11) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Http.Abstractions (>= 2.3.10) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.WebUtilities (>= 2.3.10) - restriction: >= netstandard2.0
       Microsoft.Extensions.ObjectPool (>= 8.0.11) - restriction: >= netstandard2.0
       Microsoft.Extensions.Options (>= 8.0.2) - restriction: >= netstandard2.0
-      Microsoft.Net.Http.Headers (>= 2.3.9) - restriction: >= netstandard2.0
-    Microsoft.AspNetCore.Http.Abstractions (2.3.10) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Http.Features (>= 2.3.9) - restriction: >= netstandard2.0
+      Microsoft.Net.Http.Headers (>= 2.3.10) - restriction: >= netstandard2.0
+    Microsoft.AspNetCore.Http.Abstractions (2.3.11) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Http.Features (>= 2.3.10) - restriction: >= netstandard2.0
       System.Text.Encodings.Web (>= 8.0) - restriction: >= netstandard2.0
-    Microsoft.AspNetCore.Http.Connections (1.2.10) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Authorization.Policy (>= 2.3.9) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Hosting.Abstractions (>= 2.3.9) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Http (>= 2.3.9) - restriction: >= netstandard2.0
+    Microsoft.AspNetCore.Http.Connections (1.2.11) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Authorization.Policy (>= 2.3.10) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Hosting.Abstractions (>= 2.3.10) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Http (>= 2.3.10) - restriction: >= netstandard2.0
       Microsoft.AspNetCore.Http.Connections.Common (>= 1.2) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Routing (>= 2.3.9) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.WebSockets (>= 2.3.9) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Routing (>= 2.3.10) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.WebSockets (>= 2.3.10) - restriction: >= netstandard2.0
       Newtonsoft.Json (>= 11.0.2) - restriction: >= netstandard2.0
       System.Net.WebSockets.WebSocketProtocol (>= 5.1) - restriction: >= netstandard2.0
-    Microsoft.AspNetCore.Http.Connections.Common (10.0.8) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Connections.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      System.Text.Json (>= 10.0.8) - restriction: || (&& (< net10.0) (>= netstandard2.0)) (>= net462)
-    Microsoft.AspNetCore.Http.Extensions (2.3.10) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Http.Abstractions (>= 2.3.9) - restriction: >= netstandard2.0
+    Microsoft.AspNetCore.Http.Connections.Common (10.0.9) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Connections.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      System.Text.Json (>= 10.0.9) - restriction: || (&& (< net10.0) (>= netstandard2.0)) (>= net462)
+    Microsoft.AspNetCore.Http.Extensions (2.3.11) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Http.Abstractions (>= 2.3.10) - restriction: >= netstandard2.0
       Microsoft.Extensions.FileProviders.Abstractions (>= 8.0) - restriction: >= netstandard2.0
-      Microsoft.Net.Http.Headers (>= 2.3.9) - restriction: >= netstandard2.0
+      Microsoft.Net.Http.Headers (>= 2.3.10) - restriction: >= netstandard2.0
       System.Buffers (>= 4.6) - restriction: >= netstandard2.0
     Microsoft.AspNetCore.Http.Features (5.0.17) - restriction: >= netstandard2.0
       Microsoft.Extensions.Primitives (>= 5.0.1) - restriction: || (>= net461) (>= netstandard2.0)
       System.IO.Pipelines (>= 5.0.2) - restriction: || (>= net461) (>= netstandard2.0)
-    Microsoft.AspNetCore.Metadata (10.0.8) - restriction: >= netstandard2.0
-    Microsoft.AspNetCore.OpenApi (10.0.8) - restriction: >= net10.0
+    Microsoft.AspNetCore.Metadata (10.0.9) - restriction: >= netstandard2.0
+    Microsoft.AspNetCore.OpenApi (10.0.9) - restriction: >= net10.0
       Microsoft.OpenApi (>= 2.0) - restriction: >= net10.0
-    Microsoft.AspNetCore.Routing (2.3.10) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Http.Extensions (>= 2.3.9) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Routing.Abstractions (>= 2.3.9) - restriction: >= netstandard2.0
+    Microsoft.AspNetCore.Routing (2.3.11) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Http.Extensions (>= 2.3.10) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Routing.Abstractions (>= 2.3.10) - restriction: >= netstandard2.0
       Microsoft.Extensions.Logging.Abstractions (>= 8.0.2) - restriction: >= netstandard2.0
       Microsoft.Extensions.ObjectPool (>= 8.0.11) - restriction: >= netstandard2.0
       Microsoft.Extensions.Options (>= 8.0.2) - restriction: >= netstandard2.0
-    Microsoft.AspNetCore.Routing.Abstractions (2.3.10) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Http.Abstractions (>= 2.3.9) - restriction: >= netstandard2.0
-    Microsoft.AspNetCore.SignalR (1.2.10)
+    Microsoft.AspNetCore.Routing.Abstractions (2.3.11) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Http.Abstractions (>= 2.3.10) - restriction: >= netstandard2.0
+    Microsoft.AspNetCore.SignalR (1.2.11)
       Microsoft.AspNetCore.Http.Connections (>= 1.2) - restriction: >= netstandard2.0
       Microsoft.AspNetCore.SignalR.Core (>= 1.2) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.WebSockets (>= 2.3.9) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.WebSockets (>= 2.3.10) - restriction: >= netstandard2.0
       System.IO.Pipelines (>= 8.0) - restriction: >= netstandard2.0
-    Microsoft.AspNetCore.SignalR.Common (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.AspNetCore.Connections.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Options (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.AspNetCore.SignalR.Common (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.AspNetCore.Connections.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Options (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
       System.Net.Sockets (>= 4.3) - restriction: >= net462
-      System.Text.Json (>= 10.0.8) - restriction: || (&& (< net10.0) (>= netstandard2.0)) (>= net462)
-    Microsoft.AspNetCore.SignalR.Core (1.2.10) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Authorization (>= 2.3.9) - restriction: >= netstandard2.0
+      System.Text.Json (>= 10.0.9) - restriction: || (&& (< net10.0) (>= netstandard2.0)) (>= net462)
+    Microsoft.AspNetCore.SignalR.Core (1.2.11) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Authorization (>= 2.3.10) - restriction: >= netstandard2.0
       Microsoft.AspNetCore.SignalR.Common (>= 1.2) - restriction: >= netstandard2.0
       Microsoft.AspNetCore.SignalR.Protocols.Json (>= 1.2) - restriction: >= netstandard2.0
       Microsoft.Extensions.DependencyInjection.Abstractions (>= 8.0.2) - restriction: >= netstandard2.0
@@ -486,203 +486,204 @@ NUGET
       System.IO.Pipelines (>= 8.0) - restriction: >= netstandard2.0
       System.Reflection.Emit (>= 4.7) - restriction: >= netstandard2.0
       System.Threading.Channels (>= 8.0) - restriction: >= netstandard2.0
-    Microsoft.AspNetCore.SignalR.Protocols.Json (10.0.8) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.SignalR.Common (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson (10.0.8)
-      Microsoft.AspNetCore.SignalR.Common (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.AspNetCore.SignalR.Protocols.Json (10.0.9) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.SignalR.Common (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson (10.0.9)
+      Microsoft.AspNetCore.SignalR.Common (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
       Newtonsoft.Json (>= 13.0.3) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.AspNetCore.WebSockets (2.3.10) - restriction: >= netstandard2.0
-      Microsoft.AspNetCore.Http.Extensions (>= 2.3.9) - restriction: >= netstandard2.0
+    Microsoft.AspNetCore.WebSockets (2.3.11) - restriction: >= netstandard2.0
+      Microsoft.AspNetCore.Http.Extensions (>= 2.3.10) - restriction: >= netstandard2.0
       Microsoft.Extensions.Options (>= 8.0.2) - restriction: >= netstandard2.0
       System.Net.WebSockets.WebSocketProtocol (>= 5.1) - restriction: >= netstandard2.0
     Microsoft.AspNetCore.WebUtilities (10.0.8)
       Microsoft.Net.Http.Headers (>= 10.0.8) - restriction: >= net10.0
-    Microsoft.Bcl.AsyncInterfaces (10.0.8) - restriction: || (&& (< net10.0) (>= netstandard2.1)) (>= net462) (&& (< net8.0) (>= net9.0)) (&& (< net8.0) (>= netstandard2.0)) (&& (>= netstandard2.0) (< netstandard2.1))
+    Microsoft.Bcl.AsyncInterfaces (10.0.9) - restriction: || (&& (< net10.0) (>= netstandard2.1)) (>= net462) (&& (< net8.0) (>= net9.0)) (&& (< net8.0) (>= netstandard2.0)) (&& (>= netstandard2.0) (< netstandard2.1))
       System.Threading.Tasks.Extensions (>= 4.6.3) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
-    Microsoft.Bcl.Cryptography (10.0.8) - restriction: || (&& (< net10.0) (>= net9.0)) (>= net462) (&& (>= net8.0) (< net9.0)) (&& (>= net8.0) (< netstandard2.1)) (&& (< net8.0) (>= netstandard2.0)) (&& (< net8.0) (>= netstandard2.1)) (&& (>= netstandard2.0) (< netstandard2.1))
-      System.Formats.Asn1 (>= 10.0.8) - restriction: || (>= net462) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.1)) (&& (>= netstandard2.0) (< netstandard2.1))
+    Microsoft.Bcl.Cryptography (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      System.Formats.Asn1 (>= 10.0.9) - restriction: || (>= net462) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.1)) (&& (>= netstandard2.0) (< netstandard2.1))
       System.Memory (>= 4.6.3) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
       System.Runtime.CompilerServices.Unsafe (>= 6.1.2) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.1)) (&& (>= netstandard2.0) (< netstandard2.1))
-    Microsoft.Extensions.Configuration (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Primitives (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.Extensions.Configuration.Abstractions (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Primitives (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.Extensions.Configuration (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Primitives (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.Extensions.Configuration.Abstractions (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Primitives (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
       System.ValueTuple (>= 4.6.2) - restriction: >= net462
-    Microsoft.Extensions.Configuration.Binder (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.Extensions.Configuration.CommandLine (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.Extensions.Configuration.EnvironmentVariables (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.Extensions.Configuration.FileExtensions (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.FileProviders.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.FileProviders.Physical (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Primitives (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.Extensions.Configuration.Json (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration.FileExtensions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.FileProviders.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      System.Text.Json (>= 10.0.8) - restriction: || (&& (< net10.0) (>= net9.0)) (>= net462) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.1)) (&& (>= netstandard2.0) (< netstandard2.1))
-    Microsoft.Extensions.Configuration.UserSecrets (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration.Json (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.FileProviders.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.FileProviders.Physical (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.Extensions.DependencyInjection (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Bcl.AsyncInterfaces (>= 10.0.8) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
-      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.Extensions.Configuration.Binder (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.Extensions.Configuration.CommandLine (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.Extensions.Configuration.EnvironmentVariables (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.Extensions.Configuration.FileExtensions (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.FileProviders.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.FileProviders.Physical (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Primitives (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.Extensions.Configuration.Json (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration.FileExtensions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.FileProviders.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      System.Text.Json (>= 10.0.9) - restriction: || (&& (< net10.0) (>= net9.0)) (>= net462) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.1)) (&& (>= netstandard2.0) (< netstandard2.1))
+    Microsoft.Extensions.Configuration.UserSecrets (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration.Json (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.FileProviders.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.FileProviders.Physical (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.Extensions.DependencyInjection (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Bcl.AsyncInterfaces (>= 10.0.9) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
+      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
       System.Threading.Tasks.Extensions (>= 4.6.3) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
-    Microsoft.Extensions.DependencyInjection.Abstractions (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Bcl.AsyncInterfaces (>= 10.0.8) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
+    Microsoft.Extensions.DependencyInjection.Abstractions (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Bcl.AsyncInterfaces (>= 10.0.9) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
       System.Threading.Tasks.Extensions (>= 4.6.3) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
-    Microsoft.Extensions.Diagnostics (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Diagnostics.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Options.ConfigurationExtensions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.Extensions.Diagnostics.Abstractions (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Options (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.Extensions.Diagnostics (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Diagnostics.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Options.ConfigurationExtensions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.Extensions.Diagnostics.Abstractions (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Options (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
       System.Buffers (>= 4.6.1) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
-      System.Diagnostics.DiagnosticSource (>= 10.0.8) - restriction: || (&& (< net10.0) (>= net9.0)) (>= net462) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.0))
+      System.Diagnostics.DiagnosticSource (>= 10.0.9) - restriction: || (&& (< net10.0) (>= net9.0)) (>= net462) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.0))
       System.Memory (>= 4.6.3) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
-    Microsoft.Extensions.Features (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.Extensions.FileProviders.Abstractions (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Primitives (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.Extensions.FileProviders.Physical (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.FileProviders.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.FileSystemGlobbing (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Primitives (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.Extensions.FileSystemGlobbing (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.Extensions.Hosting (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Bcl.AsyncInterfaces (>= 10.0.8) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
-      Microsoft.Extensions.Configuration (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration.Binder (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration.CommandLine (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration.EnvironmentVariables (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration.FileExtensions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration.Json (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration.UserSecrets (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.DependencyInjection (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Diagnostics (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.FileProviders.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.FileProviders.Physical (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Hosting.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Logging (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Logging.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Logging.Configuration (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Logging.Console (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Logging.Debug (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Logging.EventLog (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Logging.EventSource (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Options (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.Extensions.Features (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.Extensions.FileProviders.Abstractions (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Primitives (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.Extensions.FileProviders.Physical (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.FileProviders.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.FileSystemGlobbing (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Primitives (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.Extensions.FileSystemGlobbing (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.Extensions.Hosting (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Bcl.AsyncInterfaces (>= 10.0.9) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
+      Microsoft.Extensions.Configuration (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration.Binder (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration.CommandLine (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration.EnvironmentVariables (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration.FileExtensions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration.Json (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration.UserSecrets (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.DependencyInjection (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Diagnostics (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.FileProviders.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.FileProviders.Physical (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Hosting.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Logging (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Logging.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Logging.Configuration (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Logging.Console (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Logging.Debug (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Logging.EventLog (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Logging.EventSource (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Options (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
       System.Threading.Tasks.Extensions (>= 4.6.3) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
-    Microsoft.Extensions.Hosting.Abstractions (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Bcl.AsyncInterfaces (>= 10.0.8) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
-      Microsoft.Extensions.Configuration.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Diagnostics.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.FileProviders.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Logging.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.Extensions.Hosting.Abstractions (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Bcl.AsyncInterfaces (>= 10.0.9) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
+      Microsoft.Extensions.Configuration.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Diagnostics.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.FileProviders.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Logging.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
       System.Threading.Tasks.Extensions (>= 4.6.3) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
     Microsoft.Extensions.Hosting.WindowsServices (10.0.8)
       Microsoft.Extensions.Hosting (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
       Microsoft.Extensions.Logging.EventLog (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
       System.ServiceProcess.ServiceController (>= 10.0.8) - restriction: || (&& (< net462) (>= netstandard2.0)) (>= netstandard2.1)
-    Microsoft.Extensions.Logging (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Bcl.AsyncInterfaces (>= 10.0.8) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
-      Microsoft.Extensions.DependencyInjection (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Logging.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Options (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      System.Diagnostics.DiagnosticSource (>= 10.0.8) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.1)) (&& (>= netstandard2.0) (< netstandard2.1))
+    Microsoft.Extensions.Logging (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Bcl.AsyncInterfaces (>= 10.0.9) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
+      Microsoft.Extensions.DependencyInjection (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Logging.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Options (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      System.Diagnostics.DiagnosticSource (>= 10.0.9) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.1)) (&& (>= netstandard2.0) (< netstandard2.1))
       System.ValueTuple (>= 4.6.2) - restriction: >= net462
-    Microsoft.Extensions.Logging.Abstractions (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.Extensions.Logging.Abstractions (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
       System.Buffers (>= 4.6.1) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
-      System.Diagnostics.DiagnosticSource (>= 10.0.8) - restriction: || (&& (< net10.0) (>= net9.0)) (>= net462) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.0))
+      System.Diagnostics.DiagnosticSource (>= 10.0.9) - restriction: || (&& (< net10.0) (>= net9.0)) (>= net462) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.0))
       System.Memory (>= 4.6.3) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
-    Microsoft.Extensions.Logging.Configuration (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration.Binder (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Logging (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Logging.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Options (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Options.ConfigurationExtensions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.Extensions.Logging.Console (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Bcl.AsyncInterfaces (>= 10.0.8) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
-      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Logging (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Logging.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Logging.Configuration (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Options (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.Extensions.Logging.Configuration (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration.Binder (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Logging (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Logging.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Options (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Options.ConfigurationExtensions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.Extensions.Logging.Console (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Bcl.AsyncInterfaces (>= 10.0.9) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
+      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Logging (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Logging.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Logging.Configuration (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Options (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
       System.Buffers (>= 4.6.1) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
-      System.Text.Json (>= 10.0.8) - restriction: || (&& (< net10.0) (>= net9.0)) (>= net462) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.0))
-    Microsoft.Extensions.Logging.Debug (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Logging (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Logging.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.Extensions.Logging.EventLog (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Logging (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Logging.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Options (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      System.Diagnostics.EventLog (>= 10.0.8) - restriction: || (&& (< net462) (>= netstandard2.0)) (>= net8.0)
-    Microsoft.Extensions.Logging.EventSource (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Bcl.AsyncInterfaces (>= 10.0.8) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
-      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Logging (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Logging.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Options (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Primitives (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
+      System.Text.Json (>= 10.0.9) - restriction: || (&& (< net10.0) (>= net9.0)) (>= net462) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.0))
+    Microsoft.Extensions.Logging.Debug (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Logging (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Logging.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.Extensions.Logging.EventLog (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Logging (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Logging.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Options (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      System.Diagnostics.EventLog (>= 10.0.9) - restriction: || (&& (< net462) (>= netstandard2.0)) (>= net8.0)
+    Microsoft.Extensions.Logging.EventSource (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Bcl.AsyncInterfaces (>= 10.0.9) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
+      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Logging (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Logging.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Options (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Primitives (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
       System.Memory (>= 4.6.3) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
       System.Runtime.CompilerServices.Unsafe (>= 6.1.2) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
-      System.Text.Json (>= 10.0.8) - restriction: || (&& (< net10.0) (>= net9.0)) (>= net462) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.0))
-    Microsoft.Extensions.ObjectPool (10.0.8) - restriction: >= netstandard2.0
-    Microsoft.Extensions.Options (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Primitives (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
+      System.Text.Json (>= 10.0.9) - restriction: || (&& (< net10.0) (>= net9.0)) (>= net462) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.0))
+    Microsoft.Extensions.ObjectPool (10.0.9) - restriction: >= netstandard2.0
+    Microsoft.Extensions.Options (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Primitives (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
       System.ComponentModel.Annotations (>= 5.0) - restriction: || (&& (< net462) (>= netstandard2.0) (< netstandard2.1)) (&& (< net8.0) (>= netstandard2.1))
       System.ValueTuple (>= 4.6.2) - restriction: >= net462
-    Microsoft.Extensions.Options.ConfigurationExtensions (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Configuration.Binder (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Options (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Primitives (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.Extensions.Primitives (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.Extensions.WebEncoders (10.0.8) - restriction: >= netstandard2.0
-      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Extensions.Options (>= 10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      System.Text.Encodings.Web (>= 10.0.8) - restriction: || (&& (< net10.0) (>= netstandard2.0)) (>= net462)
-    Microsoft.IdentityModel.Abstractions (8.18) - restriction: >= net10.0
-    Microsoft.IdentityModel.JsonWebTokens (8.18) - restriction: >= net10.0
-      Microsoft.IdentityModel.Tokens (>= 8.18) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.IdentityModel.Logging (8.18) - restriction: >= net10.0
-      Microsoft.IdentityModel.Abstractions (>= 8.18) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.IdentityModel.Protocols (8.18) - restriction: >= net10.0
-      Microsoft.IdentityModel.Tokens (>= 8.18) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.IdentityModel.Protocols.OpenIdConnect (8.18) - restriction: >= net10.0
-      Microsoft.IdentityModel.Protocols (>= 8.18) - restriction: || (>= net462) (>= netstandard2.0)
-      System.IdentityModel.Tokens.Jwt (>= 8.18) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.IdentityModel.Tokens (8.18) - restriction: >= net10.0
+    Microsoft.Extensions.Options.ConfigurationExtensions (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Configuration.Binder (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Options (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Primitives (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.Extensions.Primitives (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.Extensions.WebEncoders (10.0.9) - restriction: >= netstandard2.0
+      Microsoft.Extensions.DependencyInjection.Abstractions (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Extensions.Options (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      System.Text.Encodings.Web (>= 10.0.9) - restriction: || (&& (< net10.0) (>= netstandard2.0)) (>= net462)
+    Microsoft.IdentityModel.Abstractions (8.19.1) - restriction: >= net10.0
+    Microsoft.IdentityModel.JsonWebTokens (8.19.1) - restriction: >= net10.0
+      Microsoft.IdentityModel.Tokens (>= 8.19.1) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.IdentityModel.Logging (8.19.1) - restriction: >= net10.0
+      Microsoft.IdentityModel.Abstractions (>= 8.19.1) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.IdentityModel.Protocols (8.19.1) - restriction: >= net10.0
+      Microsoft.IdentityModel.Tokens (>= 8.19.1) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.IdentityModel.Protocols.OpenIdConnect (8.19.1) - restriction: >= net10.0
+      Microsoft.IdentityModel.Protocols (>= 8.19.1) - restriction: || (>= net462) (>= netstandard2.0)
+      System.IdentityModel.Tokens.Jwt (>= 8.19.1) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.IdentityModel.Tokens (8.19.1) - restriction: >= net10.0
+      Microsoft.Bcl.Cryptography (>= 10.0.2) - restriction: || (>= net462) (>= netstandard2.0)
       Microsoft.Extensions.Logging.Abstractions (>= 8.0) - restriction: >= net8.0
-      Microsoft.IdentityModel.Logging (>= 8.18) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.IdentityModel.Logging (>= 8.19.1) - restriction: || (>= net462) (>= netstandard2.0)
     Microsoft.IO.RecyclableMemoryStream (3.0.1) - restriction: >= net10.0
     Microsoft.Net.Http.Headers (10.0.8)
       Microsoft.Extensions.Primitives (>= 10.0.8) - restriction: >= net10.0
     Microsoft.NETCore.Platforms (7.0.4) - restriction: || (&& (< monoandroid) (< net45) (< netstandard1.2) (>= netstandard1.5) (< win8)) (&& (< monoandroid) (< net45) (< netstandard1.3) (>= netstandard1.5) (< win8) (< wpa81)) (&& (< monoandroid) (>= net8.0) (< netcoreapp2.1) (< netstandard2.1) (< xamarintvos) (< xamarinwatchos)) (&& (< monotouch) (< net45) (>= netstandard1.5) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (>= net461) (>= netcoreapp2.0)) (&& (>= net461) (>= netcoreapp2.1)) (&& (>= netcoreapp2.0) (< netcoreapp2.1)) (&& (>= netcoreapp2.1) (< netcoreapp3.0))
     Microsoft.NETCore.Targets (5.0) - restriction: || (&& (< monoandroid) (< net45) (< netstandard1.2) (>= netstandard1.5) (< win8)) (&& (< monoandroid) (< net45) (< netstandard1.3) (>= netstandard1.5) (< win8) (< wpa81)) (&& (< monotouch) (< net45) (>= netstandard1.5) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos))
-    Microsoft.OpenApi (3.5.4) - restriction: >= net10.0
+    Microsoft.OpenApi (3.7) - restriction: >= net10.0
       System.Text.Json (>= 8.0.5) - restriction: >= netstandard2.0
     Microsoft.Owin (4.2.3) - restriction: >= net48
       Owin (>= 1.0) - restriction: >= net45
@@ -698,14 +699,14 @@ NUGET
       System.Configuration.ConfigurationManager (>= 8.0) - restriction: || (>= net462) (>= netstandard2.0)
       System.Security.Permissions (>= 8.0) - restriction: || (&& (< net462) (>= netstandard2.0)) (>= netstandard2.1)
       ZstdSharp.Port (>= 0.8.6) - restriction: || (>= net462) (>= netstandard2.0)
-    MySqlConnector (2.5)
+    MySqlConnector (2.6)
       Microsoft.Extensions.DependencyInjection.Abstractions (>= 8.0.2) - restriction: || (&& (>= net462) (< netstandard2.0)) (&& (< net462) (>= netstandard2.0)) (>= net471) (>= netstandard2.1)
       Microsoft.Extensions.Logging.Abstractions (>= 8.0.2) - restriction: || (&& (>= net462) (< netstandard2.0)) (&& (< net462) (>= netstandard2.0)) (>= net471) (>= netstandard2.1)
       System.Diagnostics.DiagnosticSource (>= 8.0.1) - restriction: || (&& (>= net462) (< netstandard2.0)) (&& (< net462) (>= netstandard2.0) (< netstandard2.1)) (>= net471) (&& (>= net6.0) (< net8.0)) (&& (< net6.0) (>= netstandard2.1))
-      System.Threading.Tasks.Extensions (>= 4.5.4) - restriction: || (&& (>= net462) (< netstandard2.0)) (&& (< net462) (>= netstandard2.0) (< netstandard2.1)) (>= net471)
+      System.Threading.Tasks.Extensions (>= 4.6.3) - restriction: || (&& (>= net462) (< netstandard2.0)) (&& (< net462) (>= netstandard2.0) (< netstandard2.1)) (>= net471)
     Newtonsoft.Json (13.0.4)
     Owin (1.0) - restriction: >= net48
-    Owin.Compression (1.0.51)
+    Owin.Compression (1.0.52)
       FSharp.Core (>= 8.0.301) - restriction: || (>= net48) (>= netstandard2.1)
       Microsoft.AspNetCore.Http.Abstractions (>= 2.3) - restriction: >= netstandard2.1
       Microsoft.AspNetCore.Http.Features (>= 5.0.17) - restriction: >= netstandard2.1
@@ -737,13 +738,13 @@ NUGET
       Serilog (>= 4.0) - restriction: || (&& (>= net462) (< netstandard2.0)) (&& (< net462) (>= netstandard2.0)) (>= net471) (>= net6.0)
     Serilog.Sinks.File (7.0)
       Serilog (>= 4.2) - restriction: || (&& (>= net462) (< netstandard2.0)) (&& (< net462) (>= netstandard2.0)) (>= net471) (>= net6.0)
-    SQLProvider.MySql (1.5.20)
+    SQLProvider.MySql (1.5.23)
       FSharp.Core (>= 8.0.301)
       MySql.Data (>= 6.10.9)
       Newtonsoft.Json (>= 13.0.1)
       System.Memory (>= 4.6.3)
       System.Runtime.Loader (>= 4.3)
-    SQLProvider.MySqlConnector (1.5.20)
+    SQLProvider.MySqlConnector (1.5.23)
       FSharp.Core (>= 8.0.301)
       MySqlConnector (>= 2.3.1)
       Newtonsoft.Json (>= 13.0.1)
@@ -754,23 +755,23 @@ NUGET
     System.Configuration.ConfigurationManager (10.0.8)
       System.Diagnostics.EventLog (>= 10.0.8) - restriction: >= net8.0
       System.Security.Cryptography.ProtectedData (>= 10.0.8) - restriction: || (&& (< net462) (>= netstandard2.0)) (>= net8.0)
-    System.Diagnostics.DiagnosticSource (10.0.8) - restriction: || (&& (< net10.0) (>= net9.0)) (&& (< net452) (>= netstandard2.0)) (&& (>= net46) (>= netstandard2.0)) (>= net462) (&& (>= net6.0) (< net8.0)) (&& (< net6.0) (>= netstandard2.0)) (&& (< net6.0) (>= netstandard2.1)) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.0)) (&& (< net8.0) (>= netstandard2.1)) (&& (>= netstandard2.0) (< netstandard2.1))
+    System.Diagnostics.DiagnosticSource (10.0.9) - restriction: || (&& (< net10.0) (>= net9.0)) (&& (< net452) (>= netstandard2.0)) (&& (>= net46) (>= netstandard2.0)) (>= net462) (&& (>= net6.0) (< net8.0)) (&& (< net6.0) (>= netstandard2.0)) (&& (< net6.0) (>= netstandard2.1)) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.0)) (&& (< net8.0) (>= netstandard2.1)) (&& (>= netstandard2.0) (< netstandard2.1))
       System.Memory (>= 4.6.3) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
       System.Runtime.CompilerServices.Unsafe (>= 6.1.2) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
-    System.Diagnostics.EventLog (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-    System.Formats.Asn1 (10.0.8) - restriction: || (&& (< net10.0) (>= net9.0)) (>= net462) (&& (>= net8.0) (< net9.0)) (&& (>= net8.0) (< netstandard2.1)) (&& (< net8.0) (>= netcoreapp3.0) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< net8.0) (>= netstandard2.1)) (&& (>= netcoreapp3.0) (< netstandard2.1) (< xamarintvos) (< xamarinwatchos)) (&& (>= netstandard2.0) (< netstandard2.1))
+    System.Diagnostics.EventLog (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+    System.Formats.Asn1 (10.0.9) - restriction: || (&& (< net10.0) (>= net9.0)) (>= net462) (&& (>= net8.0) (< net9.0)) (&& (>= net8.0) (< netstandard2.1)) (&& (< net8.0) (>= netcoreapp3.0) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< net8.0) (>= netstandard2.1)) (&& (>= netcoreapp3.0) (< netstandard2.1) (< xamarintvos) (< xamarinwatchos)) (&& (>= netstandard2.0) (< netstandard2.1))
       System.Memory (>= 4.6.3) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
       System.ValueTuple (>= 4.6.2) - restriction: >= net462
-    System.IdentityModel.Tokens.Jwt (8.18) - restriction: >= net10.0
-      Microsoft.IdentityModel.JsonWebTokens (>= 8.18) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.IdentityModel.Tokens (>= 8.18) - restriction: || (>= net462) (>= netstandard2.0)
+    System.IdentityModel.Tokens.Jwt (8.19.1) - restriction: >= net10.0
+      Microsoft.IdentityModel.JsonWebTokens (>= 8.19.1) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.IdentityModel.Tokens (>= 8.19.1) - restriction: || (>= net462) (>= netstandard2.0)
     System.IO (4.3) - restriction: || (&& (< monoandroid) (< net45) (< netstandard1.3) (>= netstandard1.5) (< win8) (< wpa81)) (&& (< monotouch) (< net45) (>= netstandard1.5) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monotouch) (< net462) (>= netstandard1.5) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos))
       Microsoft.NETCore.Platforms (>= 1.1) - restriction: || (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81)) (&& (< monoandroid) (< net45) (>= netstandard1.3) (< netstandard1.5) (< win8) (< wpa81)) (&& (< monotouch) (< net45) (>= netstandard1.5) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos))
       Microsoft.NETCore.Targets (>= 1.1) - restriction: || (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81)) (&& (< monoandroid) (< net45) (>= netstandard1.3) (< netstandard1.5) (< win8) (< wpa81)) (&& (< monotouch) (< net45) (>= netstandard1.5) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos))
       System.Runtime (>= 4.3) - restriction: || (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81)) (&& (< monoandroid) (< net45) (>= netstandard1.3) (< netstandard1.5) (< win8) (< wpa81)) (&& (< monotouch) (< net45) (>= netstandard1.5) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos))
       System.Text.Encoding (>= 4.3) - restriction: || (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81)) (&& (< monoandroid) (< net45) (>= netstandard1.3) (< netstandard1.5) (< win8) (< wpa81)) (&& (< monotouch) (< net45) (>= netstandard1.5) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos))
       System.Threading.Tasks (>= 4.3) - restriction: || (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81)) (&& (< monoandroid) (< net45) (>= netstandard1.3) (< netstandard1.5) (< win8) (< wpa81)) (&& (< monotouch) (< net45) (>= netstandard1.5) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos))
-    System.IO.Pipelines (10.0.8) - restriction: || (&& (< net10.0) (>= net9.0)) (&& (< net10.0) (>= netstandard2.1)) (>= net462) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= net9.0)) (>= netstandard2.0)
+    System.IO.Pipelines (10.0.9) - restriction: || (&& (< net10.0) (>= net9.0)) (&& (< net10.0) (>= netstandard2.1)) (>= net462) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= net9.0)) (>= netstandard2.0)
       System.Buffers (>= 4.6.1) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
       System.Memory (>= 4.6.3) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
       System.Threading.Tasks.Extensions (>= 4.6.3) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
@@ -813,23 +814,23 @@ NUGET
     System.Security.Cryptography.Cng (5.0) - restriction: || (&& (< net462) (>= netstandard2.0) (< netstandard2.1)) (&& (>= net8.0) (< netstandard2.1)) (&& (< net8.0) (>= netstandard2.1))
       Microsoft.NETCore.Platforms (>= 5.0) - restriction: && (< monoandroid) (>= netcoreapp2.0) (< netcoreapp2.1) (< netstandard2.1) (< xamarintvos) (< xamarinwatchos)
       System.Formats.Asn1 (>= 5.0) - restriction: && (>= netcoreapp3.0) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)
-    System.Security.Cryptography.Pkcs (10.0.8) - restriction: || (&& (< net462) (>= netstandard2.0)) (>= net8.0)
-      Microsoft.Bcl.Cryptography (>= 10.0.8) - restriction: || (&& (< net10.0) (>= net9.0)) (>= net462) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.1)) (&& (>= netstandard2.0) (< netstandard2.1))
+    System.Security.Cryptography.Pkcs (10.0.9) - restriction: || (&& (< net462) (>= netstandard2.0)) (>= net8.0)
+      Microsoft.Bcl.Cryptography (>= 10.0.9) - restriction: || (&& (< net10.0) (>= net9.0)) (>= net462) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.1)) (&& (>= netstandard2.0) (< netstandard2.1))
       System.Buffers (>= 4.6.1) - restriction: && (< net462) (>= netstandard2.0) (< netstandard2.1)
-      System.Formats.Asn1 (>= 10.0.8) - restriction: || (&& (< net10.0) (>= net9.0)) (&& (< net462) (>= netstandard2.0) (< netstandard2.1)) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.1))
+      System.Formats.Asn1 (>= 10.0.9) - restriction: || (&& (< net10.0) (>= net9.0)) (&& (< net462) (>= netstandard2.0) (< netstandard2.1)) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.1))
       System.Memory (>= 4.6.3) - restriction: && (< net462) (>= netstandard2.0) (< netstandard2.1)
       System.Runtime.CompilerServices.Unsafe (>= 6.1.2) - restriction: || (&& (< net462) (>= netstandard2.0) (< netstandard2.1)) (&& (< net8.0) (>= netstandard2.1))
       System.Security.Cryptography.Cng (>= 5.0) - restriction: || (&& (< net462) (>= netstandard2.0) (< netstandard2.1)) (&& (< net8.0) (>= netstandard2.1))
-    System.Security.Cryptography.ProtectedData (10.0.8) - restriction: || (&& (< net462) (>= netstandard2.0)) (>= net8.0)
+    System.Security.Cryptography.ProtectedData (10.0.9) - restriction: || (&& (< net462) (>= netstandard2.0)) (>= net8.0)
       System.Memory (>= 4.6.3) - restriction: && (< net462) (< net8.0) (>= netstandard2.0)
     System.Security.Cryptography.Xml (10.0.8)
       Microsoft.Bcl.Cryptography (>= 10.0.8) - restriction: || (>= net462) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.0))
       System.Memory (>= 4.6.3) - restriction: && (< net462) (< net8.0) (>= netstandard2.0)
       System.Security.AccessControl (>= 6.0) - restriction: && (< net462) (< net8.0) (>= netstandard2.0)
       System.Security.Cryptography.Pkcs (>= 10.0.8) - restriction: || (&& (< net462) (>= netstandard2.0)) (>= net8.0)
-    System.Security.Permissions (10.0.8) - restriction: || (&& (< net462) (>= netstandard2.0)) (>= netstandard2.1)
+    System.Security.Permissions (10.0.9) - restriction: || (&& (< net462) (>= netstandard2.0)) (>= netstandard2.1)
       System.Security.AccessControl (>= 6.0) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
-      System.Windows.Extensions (>= 10.0.8) - restriction: >= net8.0
+      System.Windows.Extensions (>= 10.0.9) - restriction: >= net8.0
     System.Security.Principal.Windows (5.0) - restriction: || (&& (>= monoandroid) (< netstandard1.3) (>= netstandard2.0)) (&& (< monoandroid) (< net10.0) (>= netcoreapp2.0)) (&& (>= monotouch) (>= netstandard2.0)) (&& (< net10.0) (< net462) (>= netstandard2.0)) (&& (< net10.0) (>= netcoreapp2.1)) (&& (< net46) (< netcoreapp2.0) (>= netstandard2.0)) (&& (>= net461) (>= netstandard2.0)) (&& (>= net462) (>= netcoreapp2.0)) (&& (>= net462) (>= netcoreapp2.1)) (&& (>= net462) (>= netstandard2.0)) (&& (< net462) (< net6.0) (>= netstandard2.0)) (&& (>= netstandard2.0) (>= uap10.1)) (&& (>= netstandard2.0) (>= xamarintvos)) (&& (>= netstandard2.0) (>= xamarinwatchos)) (>= xamarinios) (>= xamarinmac)
       Microsoft.NETCore.Platforms (>= 5.0) - restriction: || (&& (>= netcoreapp2.0) (< netcoreapp2.1)) (&& (>= netcoreapp2.1) (< netcoreapp3.0))
     System.ServiceProcess.ServiceController (10.0.8)
@@ -838,21 +839,21 @@ NUGET
       Microsoft.NETCore.Platforms (>= 1.1) - restriction: || (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.3) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81))
       Microsoft.NETCore.Targets (>= 1.1) - restriction: || (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.3) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81))
       System.Runtime (>= 4.3) - restriction: || (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.3) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81))
-    System.Text.Encodings.Web (10.0.8) - restriction: || (&& (< net10.0) (>= net9.0)) (&& (>= net462) (>= net8.0)) (&& (>= net462) (>= net9.0)) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= net9.0)) (>= netstandard2.0)
+    System.Text.Encodings.Web (10.0.9) - restriction: || (&& (< net10.0) (>= net9.0)) (&& (>= net462) (>= net8.0)) (&& (>= net462) (>= net9.0)) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= net9.0)) (>= netstandard2.0)
       System.Buffers (>= 4.6.1) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
       System.Memory (>= 4.6.3) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
       System.Runtime.CompilerServices.Unsafe (>= 6.1.2) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
-    System.Text.Json (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Bcl.AsyncInterfaces (>= 10.0.8) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
+    System.Text.Json (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Bcl.AsyncInterfaces (>= 10.0.9) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
       System.Buffers (>= 4.6.1) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
-      System.IO.Pipelines (>= 10.0.8) - restriction: || (&& (< net10.0) (>= net9.0)) (>= net462) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.0))
+      System.IO.Pipelines (>= 10.0.9) - restriction: || (&& (< net10.0) (>= net9.0)) (>= net462) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.0))
       System.Memory (>= 4.6.3) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
       System.Runtime.CompilerServices.Unsafe (>= 6.1.2) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
-      System.Text.Encodings.Web (>= 10.0.8) - restriction: || (&& (< net10.0) (>= net9.0)) (>= net462) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.0))
+      System.Text.Encodings.Web (>= 10.0.9) - restriction: || (&& (< net10.0) (>= net9.0)) (>= net462) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.0))
       System.Threading.Tasks.Extensions (>= 4.6.3) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
       System.ValueTuple (>= 4.6.2) - restriction: >= net462
-    System.Threading.Channels (10.0.8) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Bcl.AsyncInterfaces (>= 10.0.8) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
+    System.Threading.Channels (10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Bcl.AsyncInterfaces (>= 10.0.9) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
       System.Threading.Tasks.Extensions (>= 4.6.3) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
     System.Threading.Tasks (4.3) - restriction: || (&& (< monoandroid) (< net45) (< netstandard1.3) (>= netstandard1.5) (< win8) (< wpa81)) (&& (< monotouch) (< net45) (>= netstandard1.5) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos))
       Microsoft.NETCore.Platforms (>= 1.1) - restriction: || (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.3) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81))
@@ -861,7 +862,7 @@ NUGET
     System.Threading.Tasks.Extensions (4.6.3) - restriction: || (>= net462) (&& (< net6.0) (>= netstandard2.0)) (&& (< net8.0) (>= net9.0)) (&& (< net8.0) (>= netstandard2.0)) (&& (>= netstandard2.0) (< netstandard2.1))
       System.Runtime.CompilerServices.Unsafe (>= 6.1.2) - restriction: || (>= net462) (&& (< netcoreapp2.1) (>= netstandard2.0) (< netstandard2.1))
     System.ValueTuple (4.6.2) - restriction: >= net462
-    System.Windows.Extensions (10.0.8) - restriction: >= net8.0
+    System.Windows.Extensions (10.0.9) - restriction: >= net8.0
     TypeShape (10.0) - restriction: >= net10.0
       FSharp.Core (>= 4.5.4) - restriction: >= netstandard2.0
     ZstdSharp.Port (0.8.8) - restriction: || (>= net462) (>= netstandard2.0)
