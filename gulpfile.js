@@ -44,7 +44,7 @@ var includeReact =  isRelease? 'paket-files/clientside/unpkg.com/react.productio
 var files = {
     targetPath: 'frontend/dist',
     typescripts: ['frontend/scripts/*.ts', 'frontend/scripts/*.tsx'],
-    jslibs: ['paket-files/clientside/ajax.aspnetcdn.com/jquery.min.js',
+    jslibs: ['paket-files/clientside/code.jquery.com/jquery.min.js',
              'paket-files/clientside/cdn.jsdelivr.net/lodash.min.js',
              'paket-files/clientside/cdnjs.cloudflare.com/modernizr.min.js',
               includeReact,

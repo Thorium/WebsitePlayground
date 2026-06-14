@@ -31,7 +31,7 @@ body {
     font-family: Bebas Neue;
     background-color:#e0d0e5;
 }
-.panel{
+.callout{
     background-color: #fbf2ff;
 }
 
@@ -73,7 +73,7 @@ body {
     display: block;
 }
 
-.reveal-modal {
+.reveal {
     overflow: auto;
     max-height: 80vh;
 }
@@ -158,9 +158,25 @@ li {
 	background-color:@brand-primary;
 	position: absolute;
 	z-index: 1000;
+	// Foundation 6 shim: F6 dropped the F5 ".icon-bar" component, so lay out the
+	// dropdown menu items here instead of relying on the framework.
+	display: flex;
+	width: 100%;
+	left: 0;
+	.item {
+		flex: 1 1 0;
+		text-align: center;
+		padding: 12px 4px;
+		color: #fff;
+		p { margin: 4px 0 0; font-size: 0.9rem; }
+	}
 }
 
 .desktop-navbar {
+	// Foundation 6 shim: F6 dropped the F5 ".tab-bar" component. Lay out the
+	// navbar (hamburger | title | user-info) with flexbox instead.
+	display: flex;
+	align-items: center;
     .mainTitle{
         line-height: 50px;
     }
@@ -171,6 +187,16 @@ li {
 	border-bottom:1px;
     padding-left: 25px;
     padding-right: 10px;
+	> section { display: flex; align-items: center; }
+	.middle { flex: 1 1 auto; }
+	.right { margin-left: auto; }
+}
+
+// Foundation 6 ships its own ".menu-icon" hamburger (drawn via ::after); the
+// element already carries that class, so we only add a little spacing here.
+// (An earlier shim drew a second overlapping burger - removed.)
+#hamburger {
+	margin-right: 14px;
 }
 
 .navbar-user-info {
