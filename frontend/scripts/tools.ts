@@ -76,32 +76,23 @@ export function getTraditionalUrlParameterByName(name) {
     return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
 }
 
-var formCache = {};
 export function validateFormWithInvalid(jqForm, callback, invalidcallback) {
-    function onValid(){ callback(); }
-    function onInvalid(){ invalidcallback(); }
     $(document).foundation();
-    if(jqForm.selector === undefined || !formCache[document.location.href + "_" + jqForm.selector]){
-        jqForm
-            .on('invalid.fndtn.abide', function () { onInvalid(); })
-            .on('valid.fndtn.abide', function () { onValid(); })
-            .on('invalid', function () { onInvalid(); })
-            .on('valid', function () { onValid(); })
-            .on('submit', Foundation.utils.debounce(function(e){
-                jqForm.off('submit');
-                formCache[document.location.href + "_" + jqForm.selector] = false;
-                return false;
-            }, 300, true));
-        formCache[document.location.href + "_" + jqForm.selector] = true;
-    }
-    jqForm.submit();
+    const $form = $(jqForm);
+    // Foundation 6 Abide: bind the result handlers, then run validateForm().
+    // (Foundation 5's valid/invalid.fndtn.abide events and Foundation.utils.debounce were removed
+    //  in F6, and jQuery 3 removed the .selector property the old form-cache relied on.)
+    $form.off('formvalid.zf.abide forminvalid.zf.abide')
+        .on('formvalid.zf.abide', function (e) { e.preventDefault(); callback(); })
+        .on('forminvalid.zf.abide', function (e) { e.preventDefault(); invalidcallback(); });
+    $form.foundation('validateForm');
     return false;
 }
 
 const warning = "Please correct invalid fields!";
 export function validateForm(jqForm, callback) {
     const invalidcallback = function () {
-        const invalid_fields = jqForm.find('[data-invalid]');
+        const invalid_fields = jqForm.find('.is-invalid-input');
         const fieldnames = _.reduce(invalid_fields, (acc, f:any) => {
             return  f === null || f.id === null ? acc : acc + ", " + f.id;
         });
@@ -112,7 +103,7 @@ export function validateForm(jqForm, callback) {
 
 export function validateFormWithMsg(jqForm, callback) {
     const invalidcallback = function (){
-        const invalid_fields = jqForm.find('[data-invalid]');
+        const invalid_fields = jqForm.find('.is-invalid-input');
         const fieldnames = _.reduce(invalid_fields, (acc, f:any) => {
             return  f === null || f.id === null ? acc : acc + ", " + f.id;
         });

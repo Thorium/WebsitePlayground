@@ -129,7 +129,7 @@ class AvailableCompany extends React.Component<CompanyProps, any> {
                          </span>);
         }
         return (
-              <div key="resultPanel" className="panel searchresultItem">
+              <div key="resultPanel" className="callout searchresultItem">
                   {logoImage}
                   <div>
 	                  <div className="darkgreen desktop-company-name"><h3>{company.CompanyName}</h3>
