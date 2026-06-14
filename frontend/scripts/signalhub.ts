@@ -43,7 +43,7 @@ $(document).ready(function () {
 	signalHub.client.notifyDeal = function (data) {
             if($("#infoDialog").length){
                 $("#actionDetails").text(data);
-                $("#infoDialog").foundation('reveal', 'open');
+                $("#infoDialog").foundation('open');
             } else {
                 alert(data);
             }

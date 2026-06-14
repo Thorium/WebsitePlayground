@@ -36,10 +36,10 @@ nuget System.Runtime.InteropServices.RuntimeInformation
 // Client side, Javascript: (Please use minified, save some build time)
 group Clientside
   source https://api.nuget.org/v3/index.json
-  github zurb/bower-foundation css/foundation.css
-  github zurb/bower-foundation css/foundation.min.css
-  github zurb/bower-foundation css/normalize.css
-  github zurb/bower-foundation js/foundation.min.js
+  // Foundation 6 (float grid keeps the existing .row/.columns markup). normalize is bundled into F6 css.
+  http https://cdn.jsdelivr.net/npm/foundation-sites@6.9.0/dist/css/foundation-float.css foundation.css
+  http https://cdn.jsdelivr.net/npm/foundation-sites@6.9.0/dist/css/foundation-float.min.css foundation.min.css
+  http https://cdn.jsdelivr.net/npm/foundation-sites@6.9.0/dist/js/foundation.min.js foundation.min.js
   //github SignalR/bower-signalr jquery.signalR.js
   //github SignalR/bower-signalr jquery.signalR.min.js
   github aFarkas/html5shiv dist/html5shiv.min.js
@@ -56,10 +56,10 @@ group Clientside
 
   http https://cdn.jsdelivr.net/npm/signalr@2.4.3/jquery.signalR.js jquery.signalR.js
   http https://cdn.jsdelivr.net/npm/signalr@2.4.3/jquery.signalR.min.js jquery.signalR.min.js
-  http https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.4.min.js jquery.min.js
-  http https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.4.min.map jquery.min.map
-  http https://code.jquery.com/ui/1.12.1/jquery-ui.min.js
-  http https://code.jquery.com/ui/1.12.1/themes/sunny/jquery-ui.min.css
+  http https://code.jquery.com/jquery-3.7.1.min.js jquery.min.js
+  http https://code.jquery.com/jquery-3.7.1.min.map jquery.min.map
+  http https://code.jquery.com/ui/1.13.3/jquery-ui.min.js
+  http https://code.jquery.com/ui/1.13.3/themes/sunny/jquery-ui.min.css
   http https://unpkg.com/tether@1.2.4/dist/js/tether.min.js
   http https://ajax.aspnetcdn.com/ajax/bootstrap/4.6.0/css/bootstrap.min.css
   http https://ajax.aspnetcdn.com/ajax/bootstrap/4.6.0/bootstrap.min.js
