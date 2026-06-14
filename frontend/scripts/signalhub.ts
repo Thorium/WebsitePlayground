@@ -47,7 +47,7 @@ export function refreshResultList() {
     connection.on("NotifyDeal", (data) => {
         if($("#infoDialog").length){
             $("#actionDetails").text(data);
-            $("#infoDialog").foundation('reveal', 'open');
+            $("#infoDialog").foundation('open');
         } else {
             alert(data);
         }

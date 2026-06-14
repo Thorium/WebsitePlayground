@@ -18,7 +18,7 @@
 
 		<div id="companyListDiv">
 			<span id="profileInfo2" class="desktop-bold-medium" style="padding-left: 3px;">List of companies</span>
-			<div class="panel formScreen">
+			<div class="callout formScreen">
 				<div id="companyList"></div>
 				<ul id="pager" class="pagination"></ul>
 			</div>
@@ -26,7 +26,7 @@
 
 		<span id="profileInfo" class="desktop-bold-medium" style="padding-left: 3px;"></span>
 
-		<div class="panel formScreen">
+		<div class="callout formScreen">
 			<form id="companyform" method="post" data-abide="ajax">
 				<div class="row">
 					<div class="medium-3 columns">
@@ -93,10 +93,10 @@
 		</div>
 		<div id="footer"></div>
 
-		<div id="infoDialog" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+		<div id="infoDialog" class="reveal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
             <h2 id="actionDetails">New event happened!</h2>
 			<span>Thanks for your support.</span>
-            <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+            <button class="close-button" data-close aria-label="Close" type="button"><span aria-hidden="true">&#215;</span></button>
         </div>
 	</div>
 	</body>

@@ -261,12 +261,17 @@ NUGET
 
 GROUP Clientside
 
+HTTP
+  remote: https://cdn.jsdelivr.net
+    foundation.css (/npm/foundation-sites@6.9.0/dist/css/foundation-float.css)
+    foundation.min.css (/npm/foundation-sites@6.9.0/dist/css/foundation-float.min.css)
+    foundation.min.js (/npm/foundation-sites@6.9.0/dist/js/foundation.min.js)
+    jquery.signalR.js (/npm/signalr@2.4.3/jquery.signalR.js)
+    jquery.signalR.min.js (/npm/signalr@2.4.3/jquery.signalR.min.js)
+    lodash.min.js (/npm/lodash@4.17.21/lodash.min.js)
+    signalr.js (/npm/@microsoft/signalr@7.0.12/dist/browser/signalr.js)
+    signalr.min.js (/npm/@microsoft/signalr@7.0.12/dist/browser/signalr.min.js)
 GITHUB
-  remote: zurb/bower-foundation
-    css/foundation.css (15d98294916c50ce8e6838bc035f4f136d4dc704)
-    css/foundation.min.css (15d98294916c50ce8e6838bc035f4f136d4dc704)
-    css/normalize.css (15d98294916c50ce8e6838bc035f4f136d4dc704)
-    js/foundation.min.js (15d98294916c50ce8e6838bc035f4f136d4dc704)
   remote: aFarkas/html5shiv
     dist/html5shiv.min.js (daa5fd1169cf8c1b63b0659754b4d13b037c0e54)
   remote: FortAwesome/Font-Awesome
@@ -281,25 +286,19 @@ GITHUB
   remote: furf/jquery-ui-touch-punch
     jquery.ui.touch-punch.min.js (4bc009145202d9c7483ba85f3a236a8f3470354d)
 HTTP
-  remote: https://cdn.jsdelivr.net
-    jquery.signalR.js (/npm/signalr@2.4.3/jquery.signalR.js)
-    jquery.signalR.min.js (/npm/signalr@2.4.3/jquery.signalR.min.js)
-    lodash.min.js (/npm/lodash@4.17.21/lodash.min.js)
-    signalr.js (/npm/@microsoft/signalr@7.0.12/dist/browser/signalr.js)
-    signalr.min.js (/npm/@microsoft/signalr@7.0.12/dist/browser/signalr.min.js)
-  remote: https://ajax.aspnetcdn.com
-    bootstrap.min.css (/ajax/bootstrap/5.2.3/css/bootstrap.min.css)
-    bootstrap.min.js (/ajax/bootstrap/5.2.3/bootstrap.min.js)
-    jquery.min.js (/ajax/jQuery/jquery-2.2.4.min.js)
-    jquery.min.map (/ajax/jQuery/jquery-2.2.4.min.map)
   remote: https://code.jquery.com
-    jquery-ui.min.css (/ui/1.12.1/themes/sunny/jquery-ui.min.css)
-    jquery-ui.min.js (/ui/1.12.1/jquery-ui.min.js)
+    jquery-ui.min.css (/ui/1.13.3/themes/sunny/jquery-ui.min.css)
+    jquery-ui.min.js (/ui/1.13.3/jquery-ui.min.js)
+    jquery.min.js (/jquery-3.7.1.min.js)
+    jquery.min.map (/jquery-3.7.1.min.map)
   remote: https://unpkg.com
     react-dom.production.min.js (/react-dom@17/umd/react-dom.production.min.js)
     react.development.js (/react@17/umd/react.development.js)
     react.production.min.js (/react@17/umd/react.production.min.js)
     tether.min.js (/tether@1.2.4/dist/js/tether.min.js)
+  remote: https://ajax.aspnetcdn.com
+    bootstrap.min.css (/ajax/bootstrap/5.2.3/css/bootstrap.min.css)
+    bootstrap.min.js (/ajax/bootstrap/5.2.3/bootstrap.min.js)
   remote: https://cdnjs.cloudflare.com
     modernizr.min.js (/ajax/libs/modernizr/2.8.3/modernizr.min.js)
 GROUP Server
