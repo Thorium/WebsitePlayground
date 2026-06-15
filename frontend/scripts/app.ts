@@ -51,7 +51,10 @@ $(function() {
         $(document).foundation();
     }
 
+    let pageInited = false;
     function finishInit() {
+        if (pageInited) { return; } // run once - hub done/fail and the fallback timer both call this
+        pageInited = true;
         // window.onunload = undefined;
         // window.onbeforeunload = undefined;
         // const nav:any = navigator;
@@ -89,10 +92,11 @@ $(function() {
         .configureLogging(signalR.LogLevel.Information)
         .build();
 
-    connection.start().then(function () {
-        finishInit();
-    }).catch(function (error) {
+    connection.start().then(finishInit).catch(function (error) {
         console.log("SignalHub connection failed:", error);
         finishInit();
     });
+    // Never hold the whole UI hostage to the realtime hub; reveal on a fallback
+    // timer too in case start() somehow neither resolves nor rejects.
+    setTimeout(finishInit, 2000);
 });
