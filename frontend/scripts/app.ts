@@ -51,7 +51,10 @@ $(function() {
         $(document).foundation();
     }
 
+    let pageInited = false;
     function finishInit() {
+        if (pageInited) { return; } // run once - hub done/fail and the fallback timer both call this
+        pageInited = true;
         // window.onunload = undefined;
         // window.onbeforeunload = undefined;
         // const nav:any = navigator;
@@ -77,9 +80,14 @@ $(function() {
         });
     }
 
-    signalhub.hubConnector.done(function () {
-        finishInit();
-    }).fail(function() {
-        finishInit();
-    });
+    // Reveal the page once the realtime hub settles - but never hold the whole
+    // UI hostage to it. If SignalR negotiation stalls (or hubConnector isn't
+    // ready yet), the fallback timer still reveals the page; the hub keeps
+    // connecting in the background.
+    try {
+        signalhub.hubConnector.done(finishInit).fail(finishInit);
+    } catch (e) {
+        console.log(e);
+    }
+    setTimeout(finishInit, 2000);
 });
