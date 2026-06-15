@@ -3,21 +3,21 @@
   "isRoot": true,
   "tools": {
     "paket": {
-      "version": "9.0.2",
+      "version": "10.3.1",
       "commands": [
         "paket"
       ],
       "rollForward": false
     },
     "dotnet-fsharplint": {
-      "version": "0.26.0",
+      "version": "0.27.0",
       "commands": [
         "dotnet-fsharplint"
       ],
       "rollForward": false
     },
     "fake-cli": {
-      "version": "6.1.3",
+      "version": "6.1.4",
       "commands": [
         "fake"
       ],

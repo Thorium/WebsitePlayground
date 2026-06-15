@@ -1,4 +1,5 @@
 FSharp.Core
+System.Diagnostics.DiagnosticSource
 group Test
 coverlet.collector
 Microsoft.NET.Test.Sdk

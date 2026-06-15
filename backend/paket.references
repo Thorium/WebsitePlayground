@@ -20,3 +20,4 @@ Owin.Compression
 Owin.Security.AesDataProtectorProvider
 SQLProvider.MySqlConnector
 SQLProvider.MySql
+System.Diagnostics.DiagnosticSource
