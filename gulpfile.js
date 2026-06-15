@@ -39,6 +39,10 @@ var excludeReact = isRelease? "!paket-files/clientside/unpkg.com/react.developme
 var excludeFoundation = isRelease? "!paket-files/**/foundation.css" : "!paket-files/**/foundation.min.css"
 var excludeSignalR = isRelease? "!paket-files/**/jquery.signalR.js" : "!paket-files/**/jquery.signalR.min.js";
 var excludePaketGithubBinaries = "!paket-files/github.com/**/*.*"
+// The old Foundation 5 (github zurb/bower-foundation) was replaced by Foundation 6
+// from the CDN. A stale copy can linger in paket-files; it must NOT be bundled - its
+// jQuery-2 era $(window).load(fn) throws "indexOf is not a function" under jQuery 3.
+var excludeOldFoundation = "!paket-files/clientside/zurb/**/*.js"
 
 var includeReact =  isRelease? 'paket-files/clientside/unpkg.com/react.production.min.js':'paket-files/clientside/unpkg.com/react.development.js';
 var files = {
@@ -50,7 +54,7 @@ var files = {
               includeReact,
              'paket-files/clientside/unpkg.com/tether.min.js',
              'paket-files/clientside/**/*.js',
-              excludeReact, excludeSignalR, excludePaketGithubBinaries], // Gulp is intelligent enough to not include same twice
+              excludeReact, excludeSignalR, excludePaketGithubBinaries, excludeOldFoundation], // Gulp is intelligent enough to not include same twice
 
     lessstyles: ['frontend/styles/*.less'],
     //sassstyles: ['frontend/styles/*.scss'],
