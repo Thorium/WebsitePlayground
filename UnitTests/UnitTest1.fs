@@ -74,7 +74,7 @@ type ``Program logic tests fixture``() =
             use mockContext = new MockDatabaseContext(test_data)
 
             let searchTest = { FoundedAfter = DateTime(1980,01,01); FoundedBefore = DateTime(2005,01,01); CompanyName  = "Test"; CEOName = None}
-            let! foundItems = Logics.executeSearch (mockContext.ReadDataContext) searchTest
+            let! foundItems = Logics.executeSearch mockContext.ReadDataContext searchTest
 
             mockContext.Dispose()
 

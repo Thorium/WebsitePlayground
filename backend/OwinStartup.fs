@@ -49,7 +49,7 @@ let origins =
 
 
 let errorHandler (ctx: Microsoft.AspNetCore.Http.HttpContext) (next: Microsoft.AspNetCore.Http.RequestDelegate) =
-    let writeError (ex) =
+    let writeError ex =
 
         let err =
             "Api error 400 {uri} {ex} \r\n\r\n {stack}" |> Logari.Message.eventError
@@ -60,7 +60,7 @@ let errorHandler (ctx: Microsoft.AspNetCore.Http.HttpContext) (next: Microsoft.A
 
     task {
         try
-            return! next.Invoke(ctx)
+            return! next.Invoke ctx
         with
         | :? ModelBindException
         | :? RouteParseException as ex ->
@@ -164,8 +164,7 @@ let registerHandler : EndpointHandler =
             let! response =
                 writeWithDbContext <| fun (dbContext:WriteDataContext) ->
                     task {
-                        let! result = Logics.``register user`` dbContext normalizedRequest
-                        match result with
+                        match! Logics.``register user`` dbContext normalizedRequest with
                         | RegistrationSuccess ->
                             Message.eventInfo "User registered: {email}"
                             |> Message.setField "email" normalizedRequest.Email
@@ -207,8 +206,7 @@ let loginHandler : EndpointHandler =
             let! response =
                 writeWithDbContext <| fun (dbContext:WriteDataContext) ->
                     task {
-                        let! result = Logics.``authenticate user`` dbContext normalizedRequest
-                        match result with
+                        match! Logics.``authenticate user`` dbContext normalizedRequest with
                         | Success (userId, email) ->
                             let claims = [
                                 Claim(ClaimTypes.NameIdentifier, userId.ToString())
@@ -275,7 +273,7 @@ let logoutHandler : EndpointHandler =
                 | null -> "unknown"
                 | user when user.Identity.IsAuthenticated -> user.Identity.Name
                 | _ -> "unknown"
-            do! ctx.SignOutAsync(authCookieScheme)
+            do! ctx.SignOutAsync authCookieScheme
             Message.eventInfo "User logged out: {email}"
             |> Message.setField "email" email
             |> writeLog
@@ -435,7 +433,7 @@ let configureApp (app: IApplicationBuilder) =
        //.UseStaticFiles(new StaticFileOptions(FileProvider =
        //     new Microsoft.Extensions.FileProviders.PhysicalFileProvider(Util.serverPath)
        //   ))
-       .Run(notFoundHandler)
+       .Run notFoundHandler
     let app =
       //if isTestEnv then
       //  app
