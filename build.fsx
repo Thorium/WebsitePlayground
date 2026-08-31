@@ -77,7 +77,7 @@ let npmPath, npmCmd =
         else
         // Try parsing path
         let paths =
-            System.Environment.GetEnvironmentVariable("PATH").Split(';')
+            System.Environment.GetEnvironmentVariable("PATH").Split ';'
             |> Seq.map(fun p ->
                 if p.EndsWith System.IO.Path.DirectorySeparatorChar then p
                 else p + System.IO.Path.DirectorySeparatorChar.ToString())
@@ -115,11 +115,11 @@ let idx (x:DotNet.BuildOptions) =
 let runShell = fun (command, args) ->
     try
         let P = Process.Start(command, (args : string));
-        if (P = null) then (
+        if (isNull P) then (
             printf "\r\n\r\nFailed: %s\r\n" command
         )
         P.WaitForExit();
-        if P.ExitCode <> 0 then failwith ("Command failed, try running manually: " + command + " " + args)
+        if P.ExitCode <> 0 then failwith ($"Command failed, try running manually: {command} {args}")
     with
     | :? System.ComponentModel.Win32Exception ->
         printf "\r\n\r\nFailed: %s\r\n" command
@@ -157,7 +157,7 @@ Target.create "gulp" (fun _ ->
                 npmPath + "gulp"
             | _ -> failwith "Gulp not found."
 
-        if snd(buildMode)="Release" || snd(buildMode)="release" then
+        if snd buildMode="Release" || snd buildMode="release" then
              runShell(gulpCmd,"deploy --release ok")
         else runShell(gulpCmd,"deploy")
     with
@@ -204,7 +204,7 @@ Target.create "database" (fun _ ->
     let dacpac = !!(dacpacpath @@ "*.dacpac") |> Seq.head
     let profile =
         let profileName = Environment.environVarOrDefault "PublishProfile" "False"
-        sprintf "database/%s.publish.xml" profileName
+        $"database/%s{profileName}.publish.xml"
 
     let deployData =
         let demodata = bool.Parse (Environment.environVarOrDefault "CreateDemoData" "False")
@@ -271,7 +271,7 @@ Target.create "clean" (fun _ ->
 )
 
 Target.create "release" (fun _ ->
-    runShell("build", sprintf "package Configuration=Release -o \"%s\"" deployPath)
+    runShell("build", $"package Configuration=Release -o \"%s{deployPath}\"")
 )
 
 Target.create "" (fun _ -> ())

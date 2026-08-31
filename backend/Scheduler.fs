@@ -44,7 +44,7 @@ let cancelAction id =
     scheduleAgent.TryScan((fun (aId, source) ->
         let action =
             async {
-                source.Cancel()
+                do! source.CancelAsync() |> Async.AwaitTask
                 return id
             }
         if (id = aId) then

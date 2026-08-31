@@ -79,7 +79,9 @@ module Logics
 
     // --- Authentication logic -----------------------------
 
+    [<Literal>]
     let private maxFailedAttempts = 5
+    [<Literal>]
     let private lockoutMinutes = 15
 
     let ``register user`` (dbContext:WriteDataContext) (request:RegisterRequest) =

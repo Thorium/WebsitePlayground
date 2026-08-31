@@ -84,6 +84,6 @@ let logger = Logary.Logging.getCurrentLogger ()
 try
     MyApp.main [||] |> ignore
 with
-    | e -> Logary.Message.eventError (e.Message) |> writeLog
+    | e -> Logary.Message.eventError e.Message |> writeLog
 
 #endif

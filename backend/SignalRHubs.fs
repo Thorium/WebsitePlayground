@@ -9,7 +9,8 @@ open Microsoft.AspNetCore.SignalR
 open Microsoft.AspNetCore.SignalR
 open System.Threading.Tasks
 
-type IMessageToClient =  // Server can push data to single or all clients
+/// Server can push data to single or all clients
+type IMessageToClient =
     abstract NotifyDeal : string -> Task
     //abstract ListCompanies : seq<CompanySearchResult> -> Task
 

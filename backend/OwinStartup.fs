@@ -19,7 +19,7 @@ open Microsoft.AspNetCore.Http
 open Microsoft.AspNetCore.Authentication
 open Newtonsoft.Json
 open Logari
-let displayErrors = ConfigurationManager.AppSettings.["WebServerDebug"].ToString().ToLower() = "true"
+let displayErrors = String.Equals(ConfigurationManager.AppSettings.["WebServerDebug"].ToString(), "true", StringComparison.OrdinalIgnoreCase)
 let hubConfig = Microsoft.AspNetCore.SignalR.HubOptions(EnableDetailedErrors = Nullable(displayErrors))
 
 let serverPath =
