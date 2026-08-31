@@ -32,7 +32,7 @@ let startServer() =
         withLogaryManager "WebsitePlayground" (
             withTargets [
                 // See Logary examples for advanced logging.
-                LiterateConsole.create (LiterateConsole.empty) "console"
+                LiterateConsole.create LiterateConsole.empty "console"
             ] >> withRules [
                 Rule.createForTarget "console" |> Rule.setLevel fetchLogLevel
             ] >> withMiddleware (fun next msg ->
@@ -44,7 +44,7 @@ let startServer() =
     let options = Microsoft.Owin.Hosting.StartOptions()
 
     let addPorts protocol addr (ports:string) =
-        ports.Split(',')
+        ports.Split ','
         |> Array.filter(fun p -> p<>"")
         |> Array.map(fun port -> protocol + "://" + addr + ":" + port)
         |> Array.iter(fun url ->
@@ -58,7 +58,7 @@ let startServer() =
     // You probably need adnmin rights to start a web server:
     server <- Microsoft.Owin.Hosting.WebApp.Start<MyWebStartup> options
 
-    Message.eventInfo ("Server started.") |> Logging.writeLog
+    Message.eventInfo "Server started." |> Logging.writeLog
 
 let stopServer() =
     if server <> Unchecked.defaultof<IDisposable> then
@@ -75,14 +75,14 @@ type WinService() =
     inherit ServiceBase(ServiceName = "companyweb")
     override x.OnStart(args) =
         Logary.Message.eventInfo "Starting server" |> Logging.writeLog
-        startServer(); base.OnStart(args)
+        startServer(); base.OnStart args
     override x.OnStop() =
         Logary.Message.eventInfo "Stopping server" |> Logging.writeLog
         stopServer(); base.OnStop()
     override x.Dispose(disposing) =
         Logary.Message.eventInfo "Disposing server" |> Logging.writeLog
         if disposing then stopServer()
-        base.Dispose(true)
+        base.Dispose true
 
 [<System.ComponentModel.RunInstaller(true)>]
 type public FSharpServiceInstaller() =

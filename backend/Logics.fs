@@ -12,7 +12,7 @@ module Logics
         let ceoFilter =
             match searchparams.CEOName with
             | None -> ""
-            | Some(ceo) -> ceo
+            | Some ceo -> ceo
 
         task {
             let! companies =

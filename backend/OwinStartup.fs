@@ -19,7 +19,7 @@ open System.IO
 open Newtonsoft.Json
 open Newtonsoft.Json.Linq
 open Logari
-let displayErrors = ConfigurationManager.AppSettings.["WebServerDebug"].ToString().ToLower() = "true"
+let displayErrors = String.Equals(ConfigurationManager.AppSettings.["WebServerDebug"].ToString(), "true", StringComparison.OrdinalIgnoreCase)
 let hubConfig = Microsoft.AspNet.SignalR.HubConfiguration(EnableDetailedErrors = displayErrors, EnableJavaScriptProxies = true)
 
 let domainForwarding =
@@ -72,7 +72,7 @@ type LogExceptionAttribute() =
         |> writeLog
     override __.OnException(context:HttpActionExecutedContext) =
         writeErr context
-        base.OnException(context)
+        base.OnException context
     override __.OnExceptionAsync(context:HttpActionExecutedContext, token) =
         writeErr context
         base.OnExceptionAsync(context, token)
@@ -120,7 +120,7 @@ type LoggingPipelineModule() =
             base.OnIncomingError(exceptionContext, invokerContext)
 
         override __.OnBeforeIncoming context =
-            let msg =Logari.Message.eventDebug("=> Invoking " + context.MethodDescriptor.Hub.Name + "." + context.MethodDescriptor.Name)
+            let msg =Logari.Message.eventDebug($"=> Invoking {context.MethodDescriptor.Hub.Name}.{context.MethodDescriptor.Name}")
             if not(isNull context.Hub || isNull context.Hub.Context || isNull context.Hub.Context.ConnectionId) then
                 msg |> Logari.Message.setField "clientId" context.Hub.Context.ConnectionId |> writeLog
             else
@@ -128,7 +128,7 @@ type LoggingPipelineModule() =
             base.OnBeforeIncoming context
 
         override __.OnBeforeOutgoing context =
-            Logari.Message.eventDebug("<= Invoking " + context.Invocation.Hub + "." + context.Invocation.Method) |> writeLog
+            Logari.Message.eventDebug($"<= Invoking {context.Invocation.Hub}.{context.Invocation.Method}") |> writeLog
             base.OnBeforeOutgoing context
 
 /// Direct linking url-routing,
@@ -202,8 +202,7 @@ type AuthController() as this =
                 let! response =
                     writeWithDbContext <| fun (dbContext:WriteDataContext) ->
                         task {
-                            let! result = Logics.``register user`` dbContext normalizedRequest
-                            match result with
+                            match! Logics.``register user`` dbContext normalizedRequest with
                             | RegistrationSuccess ->
                                 Logari.Message.eventInfo "User registered: {email}"
                                 |> Logari.Message.setField "email" normalizedRequest.Email
@@ -236,8 +235,7 @@ type AuthController() as this =
                 let! response =
                     writeWithDbContext <| fun (dbContext:WriteDataContext) ->
                         task {
-                            let! result = Logics.``authenticate user`` dbContext normalizedRequest
-                            match result with
+                            match! Logics.``authenticate user`` dbContext normalizedRequest with
                             | Success (userId, email) ->
                                 let identity = ClaimsIdentity(authenticationType:string)
                                 identity.AddClaim(Claim(ClaimTypes.NameIdentifier, userId.ToString()))
@@ -278,7 +276,7 @@ type AuthController() as this =
             else
                 this.User.Identity.Name
         let owinContext = getOwinContext()
-        owinContext.Authentication.SignOut(authenticationType)
+        owinContext.Authentication.SignOut authenticationType
         Logari.Message.eventInfo "User logged out: {email}"
         |> Logari.Message.setField "email" email
         |> writeLog
@@ -373,7 +371,7 @@ type MyWebStartup() =
            with ex ->
                ()
 
-        Microsoft.AspNet.SignalR.GlobalHost.HubPipeline.AddModule(new LoggingPipelineModule()) |> ignore
+        Microsoft.AspNet.SignalR.GlobalHost.HubPipeline.AddModule(LoggingPipelineModule()) |> ignore
 
         // SECURITY (#1): the auth-cookie encryption key must NOT be hard-coded. A key committed to
         // source control lets anyone forge a valid auth cookie for any user (full auth bypass).
@@ -387,8 +385,8 @@ type MyWebStartup() =
                 Logari.Message.eventWarn "No AuthCookieEncryptionKey configured; auth cookies use an ephemeral key (won't survive restart)."
                 |> writeLog
                 Guid.NewGuid().ToString("N") + Guid.NewGuid().ToString("N")
-        ap.UseAesDataProtectorProvider(authCookieEncryptionKey)
-        ap.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType)
+        ap.UseAesDataProtectorProvider authCookieEncryptionKey
+        ap.SetDefaultSignInAsAuthenticationType CookieAuthenticationDefaults.AuthenticationType
         ap.UseCookieAuthentication(
             CookieAuthenticationOptions(
                 AuthenticationType = CookieAuthenticationDefaults.AuthenticationType,
@@ -401,14 +399,14 @@ type MyWebStartup() =
         |> ignore
 
         //OWIN Component registrations here...
-        ap.UseErrorPage(new ErrorPageOptions(ShowExceptionDetails = displayErrors))
+        ap.UseErrorPage(ErrorPageOptions(ShowExceptionDetails = displayErrors))
         |> fun app -> app.UseCompressionModule(
                         { OwinCompression.DefaultCompressionSettings with
                             CacheExpireTime = ValueSome (DateTimeOffset.Now.AddSeconds 30.) })
 
         //Allow cross domain
         |> fun app ->
-            app.UseCors(restrictedCorsOptions) // SECURITY (#2): was CorsOptions.AllowAll; see restrictedCorsOptions above.
+            app.UseCors restrictedCorsOptions // SECURITY (#2): was CorsOptions.AllowAll; see restrictedCorsOptions above.
 
 
         //SignalR:
