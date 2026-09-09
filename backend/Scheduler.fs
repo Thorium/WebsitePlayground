@@ -48,7 +48,7 @@ let cancelAction id =
                 return id
             }
         if (id = aId) then
-            Some(action)
+            Some action
         else
             None), 3000) // timeout: if queue is empty, wait 3000ms to get a cancelation request.
     |> Async.RunSynchronously

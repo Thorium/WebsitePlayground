@@ -18,7 +18,8 @@ do setupLogariSql()
 
 let startServer() =
     Logging.setupLogging()
-    System.Net.ServicePointManager.SecurityProtocol <- System.Net.SecurityProtocolType.Tls12 ||| System.Net.SecurityProtocolType.Tls11
+    // Pinning the set would also forbid TLS 1.3, and TLS 1.1 is deprecated (RFC 8996); .NET 4.7+ lets the OS negotiate the strongest protocol.
+    //System.Net.ServicePointManager.SecurityProtocol <- System.Net.SecurityProtocolType.Tls12 ||| System.Net.SecurityProtocolType.Tls11
 
     let fetchLogLevel =
         match System.Configuration.ConfigurationManager.AppSettings.["LogLevel"].ToString().ToLower() with
@@ -32,7 +33,7 @@ let startServer() =
         withLogaryManager "WebsitePlayground" (
             withTargets [
                 // See Logary examples for advanced logging.
-                LiterateConsole.create (LiterateConsole.empty) "console"
+                LiterateConsole.create LiterateConsole.empty "console"
             ] >> withRules [
                 Rule.createForTarget "console" |> Rule.setLevel fetchLogLevel
             ] >> withMiddleware (fun next msg ->
@@ -58,7 +59,7 @@ let startServer() =
     // You probably need adnmin rights to start a web server:
     server <- Microsoft.Owin.Hosting.WebApp.Start<MyWebStartup> options
 
-    Message.eventInfo ("Server started.") |> Logging.writeLog
+    Message.eventInfo "Server started." |> Logging.writeLog
 
 let stopServer() =
     if server <> Unchecked.defaultof<IDisposable> then

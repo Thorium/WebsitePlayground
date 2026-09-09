@@ -52,20 +52,20 @@ let internal createDbReadContext() =
         with
         // If you use MySqlConnector
         | :? MySqlConnector.MySqlException as ex when x < 3 ->
-            writeLogSimple (logger.Force()) (Message.eventWarn ("Error connecting SQL, retrying... {msg}") |> Message.setField "msg" ex.Message)
+            writeLogSimple (logger.Force()) (Message.eventWarn "Error connecting SQL, retrying... {msg}" |> Message.setField "msg" ex.Message)
             System.Threading.Thread.Sleep 50
             createCon (x+1)
         | :? MySqlConnector.MySqlException as ex when x < 5 ->
-            writeLogSimple (logger.Force()) (Message.eventWarn ("Error connecting SQL, retrying... {msg}") |> Message.setField "msg" ex.Message)
+            writeLogSimple (logger.Force()) (Message.eventWarn "Error connecting SQL, retrying... {msg}" |> Message.setField "msg" ex.Message)
             System.Threading.Thread.Sleep 1500
             createCon (x+1)
         // If you use MySql.Data
         | :? MySql.Data.MySqlClient.MySqlException as ex when x < 3 ->
-            writeLogSimple (logger.Force()) (Message.eventWarn ("Error connecting SQL, retrying... {msg}") |> Message.setField "msg" ex.Message)
+            writeLogSimple (logger.Force()) (Message.eventWarn "Error connecting SQL, retrying... {msg}" |> Message.setField "msg" ex.Message)
             System.Threading.Thread.Sleep 50
             createCon (x+1)
         | :? MySql.Data.MySqlClient.MySqlException as ex when x < 5 ->
-            writeLogSimple (logger.Force()) (Message.eventWarn ("Error connecting SQL, retrying... {msg}") |> Message.setField "msg" ex.Message)
+            writeLogSimple (logger.Force()) (Message.eventWarn "Error connecting SQL, retrying... {msg}" |> Message.setField "msg" ex.Message)
             System.Threading.Thread.Sleep 1500
             createCon (x+1)
     createCon 0
@@ -83,12 +83,12 @@ let mutable internal contextHolder = Unchecked.defaultof<Lazy<ReadDataContext>>
 /// If you want to do read-only operation inside transaction, use existing connection with .AsReadOnly() instead.
 /// This context doesn't have access to Stored Procedures.
 let dbReadContext() =
-    if isNull contextHolder || not (contextHolder.IsValueCreated) then
+    if isNull contextHolder || not contextHolder.IsValueCreated then
         try
             let itm = lazy(createDbReadContext())
             contextHolder <- itm
         with
-        | e -> writeLogSimple (logger.Force()) (Message.eventError ("SQL connection failed: {msg}") |> Message.setField "msg" e.Message)
+        | e -> writeLogSimple (logger.Force()) (Message.eventError "SQL connection failed: {msg}" |> Message.setField "msg" e.Message)
     contextHolder.Force()
 
 let writeLog x = writeLogSimple (logger.Force()) x
@@ -168,7 +168,7 @@ let setupLogariSql() =
         try 
             "Executed SQL: {sql}" |> Message.eventDebug |> Message.setField "sql" ( e.ToString()) |> writeLog //Even better would be: e.ToRawSqlWithParamInfo
         with r -> // If logging fails, not a lot we can do
-            printfn $"Executed SQL: {e.ToString()}"
+            printfn $"Executed SQL: {e}"
             printfn $"Logari fail {r.Message}"
     )
 
@@ -181,8 +181,7 @@ let DateTimeNow() =
 
 let asyncErrorHandling<'a> (a:Async<'a>) =
     async {
-        let! res = a |> Async.Catch
-        match res with
+        match! a |> Async.Catch with
         | Choice1Of2 x -> return x
         | Choice2Of2 e ->
             Message.eventError "Async error: {err} \r\n\r\n stacktrace: {stack}"
@@ -215,8 +214,7 @@ type Data.Common.DbDataReader with
     member reader.CollectItems(collectfunc) =
         let rec readitems acc =
             async {
-                let! moreitems = reader.ReadAsync() |> Async.AwaitTask
-                match moreitems with
+                match! reader.ReadAsync() |> Async.AwaitTask with
                 | true -> return! readitems (collectfunc(reader)::acc)
                 | false -> return acc
             }
@@ -249,8 +247,7 @@ type TypeProviderConnection.dataContext with
     async {
         let sqlList = System.Collections.Concurrent.ConcurrentBag<FSharp.Data.Sql.Common.QueryEvents.SqlEventData>()
         use o = FSharp.Data.Sql.Common.QueryEvents.SqlQueryEvent |> Observable.subscribe sqlList.Add
-        let! res = x.SubmitUpdatesAsync() |> Async.AwaitTask |> Async.Catch
-        match res with
+        match! x.SubmitUpdatesAsync() |> Async.AwaitTask |> Async.Catch with
         | Choice1Of2 _ -> ()
         | Choice2Of2 e ->
             let errormsg = (e.ToString() + "\r\n\r\n"+ System.Diagnostics.StackTrace(1, true).ToString())
@@ -419,7 +416,7 @@ let asyncScheduleErrorHandling res =
         r |> function
             | Choice1Of2 x -> x
             | Choice2Of2 ex ->
-                Message.eventError("Scheduler error {err}, stack {stack}")
+                Message.eventError "Scheduler error {err}, stack {stack}"
                 |> Message.setField "err" (ex.ToString())
                 |> Message.setField "stack" (System.Diagnostics.StackTrace(1, true).ToString())
                 |> writeLog
