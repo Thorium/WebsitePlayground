@@ -44,11 +44,11 @@ let cancelAction id =
     scheduleAgent.TryScan((fun (aId, source) ->
         let action =
             async {
-                source.Cancel()
+                do! source.CancelAsync() |> Async.AwaitTask
                 return id
             }
         if (id = aId) then
-            Some(action)
+            Some action
         else
             None), 3000) // timeout: if queue is empty, wait 3000ms to get a cancelation request.
     |> Async.RunSynchronously

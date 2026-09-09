@@ -1,89 +1,113 @@
-﻿// You can execute this in the F#-iteractive or run from the command line: fsi Program.fsx
-// Or on Mono, fsharpi Program.fsx but note: on Mono SignalR is not working from interactive!
+﻿// You can execute this in the F# interactive, or run from the command line:  dotnet fsi Program.fsx
+// Build the project first: this script references what the build resolved (backend/bin).
+// Known limit: this typechecks cleanly (so editors and fsharp-refactor read it), but
+// running it end to end under dotnet fsi still trips over Microsoft.Extensions.* being
+// present both in the ASP.NET Core shared framework and in the packages (FS0193).
 
 #if INTERACTIVE
-#r @"./../packages/FSharp.Data/lib/net45/FSharp.Data.dll"
-#r @"./../packages/SQLProvider/lib/net451/FSharp.Data.SqlProvider.dll"
-#r @"./../packages/MySql.Data/lib/net40/MySql.Data.dll"
 
-// OWIN and SignalR-packages:
-#I @"./../packages/Microsoft.AspNet.SignalR.Core/lib/net45"
-#r @"./../packages/Microsoft.AspNet.SignalR.Core/lib/net45/Microsoft.AspNet.SignalR.Core.dll"
-#I @"./../packages/Microsoft.Owin/lib/net451"
-#r @"./../packages/Microsoft.Owin/lib/net451/Microsoft.Owin.dll"
-#I @"./../packages/Microsoft.Owin.Security/lib/net451"
-#r @"./../packages/Microsoft.Owin.Security/lib/net451/Microsoft.Owin.Security.dll"
-#I @"./../packages/Owin.Security.AesDataProtectorProvider/lib/net45"
-#r @"./../packages/Owin.Security.AesDataProtectorProvider/lib/net45/Owin.Security.AesDataProtectorProvider.dll"
-#r @"./../packages/Microsoft.AspNet.WebApi.Core/lib/net45/System.Web.Http.dll"
-#r @"./../packages/Microsoft.AspNet.WebApi.Owin/lib/net45/System.Web.Http.Owin.dll"
-#r @"./../packages/Microsoft.Net.Http/lib/net40/System.Net.Http.dll"
-#I @"./../packages/Microsoft.Owin.Security.Cookies/lib/net451"
-#r @"./../packages/Microsoft.Owin.Security.Cookies/lib/net451/Microsoft.Owin.Security.Cookies.dll"
-#I @"./../packages/Microsoft.Owin.Security.Facebook/lib/net451"
-#r @"./../packages/Microsoft.Owin.Security.Facebook/lib/net451/Microsoft.Owin.Security.Facebook.dll"
-#I @"./../packages/Microsoft.Owin.Security.Google/lib/net451"
-#r @"./../packages/Microsoft.Owin.Security.Google/lib/net451/Microsoft.Owin.Security.Google.dll"
-#I @"./../packages/Microsoft.Owin.Hosting/lib/net451"
-#r @"./../packages/Microsoft.Owin.Hosting/lib/net451/Microsoft.Owin.Hosting.dll"
-#I @"./../packages/Microsoft.Owin.Host.HttpListener/lib/net451"
-#r @"./../packages/Microsoft.Owin.Host.HttpListener/lib/net451/Microsoft.Owin.Host.HttpListener.dll"
-#I @"./../packages/Microsoft.Owin.StaticFiles/lib/net451"
-#r @"./../packages/Microsoft.Owin.StaticFiles/lib/net451/Microsoft.Owin.StaticFiles.dll"
-#I @"./../packages/Microsoft.Owin.FileSystems/lib/net451"
-#r @"./../packages/Microsoft.Owin.FileSystems/lib/net451/Microsoft.Owin.FileSystems.dll"
-#I @"./../packages/Microsoft.Owin.Cors/lib/net451"
-#r @"./../packages/Microsoft.Owin.Cors/lib/net451/Microsoft.Owin.Cors.dll"
-#I @"./../packages/Microsoft.Owin.Diagnostics/lib/net451/"
-#r @"./../packages/Microsoft.Owin.Diagnostics/lib/net451/Microsoft.Owin.Diagnostics.dll"
-#r @"./../packages/Microsoft.AspNet.WebApi.Client/lib/net45/System.Net.Http.Formatting.dll"
-#I @"./../packages/Microsoft.AspNet.Cors/lib/net45"
-#I @"./../packages/Newtonsoft.Json/lib/net45"
-#r @"./../packages/Newtonsoft.Json/lib/net45/Newtonsoft.Json.dll"
-#I @"./../packages/Owin/lib/net40"
-#r @"./../packages/Owin/lib/net40/Owin.dll"
-#I @"./../packages/Logary/lib/net452"
-#r @"./../packages/Logary/lib/net452/Logary.dll"
-#I @"./../packages/NodaTime/lib/portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1+XamariniOS1"
-#r @"./../packages/NodaTime/lib/portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1+XamariniOS1/NodaTime.dll"
-#I @"./../packages/Hopac/lib/net45"
-#r @"./../packages/Hopac/lib/net45/Hopac.Core.dll"
-#r @"./../packages/Hopac/lib/net45/Hopac.dll"
-#I @"./../packages/Owin.Compression/lib/net452"
-#r @"./../packages/Owin.Compression/lib/net452/Owin.Compression.dll"
-#I @"./../packages/Kentor.OwinCookieSaver/lib/net452"
-#r @"./../packages/Kentor.OwinCookieSaver/lib/net452/Kentor.OwinCookieSaver.dll"
+// Packages, in the versions paket.lock pins. The type providers in particular have to come
+// from their packages and not from bin: SqlDataProvider is loaded from the design-time
+// assembly beside the package's lib folder, which the build does not copy to the output.
+// Microsoft.Extensions.Hosting brings the whole Microsoft.Extensions.* set the app compiles
+// against; taking those from the shared framework instead makes fsi refuse to load the
+// second copy at run time.
+#r "nuget: Microsoft.Extensions.Hosting, 10.0.9"
+#r "nuget: SQLProvider.MySqlConnector, 1.5.24"
+#r "nuget: FSharp.Data, 8.1.14"
+#r "nuget: FSharp.Data.JsonProvider.Serializer, 1.0.8"
 
-#r @"System.Configuration.dll"
-#r @"System.Configuration.Install.dll"
-#r @"System.ServiceProcess.dll"
-#r @"System.Transactions.dll"
-#r "System.Xml.Linq.dll"
+// dotnet fsi references the Microsoft.NETCore.App framework only, so everything this app gets
+// from the Microsoft.AspNetCore.App shared framework has to be pointed at by hand.
+// This is deliberately NOT paket's generated load script (.paket/load/...): the Server group
+// also resolves package copies of assemblies the shared framework already carries - some of
+// them still the ASP.NET Core 2.x ones - and two copies of HttpContext or ILogger are enough
+// to make Oxpecker's extension members (ctx.Write, ctx.GetLogger) unresolvable.
+// If the version below no longer exists, take the current one from `dotnet --list-runtimes`.
+#I @"C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\10.0.10"
+#r "Microsoft.AspNetCore.dll"
+#r "Microsoft.AspNetCore.Antiforgery.dll"
+#r "Microsoft.AspNetCore.Authentication.dll"
+#r "Microsoft.AspNetCore.Authentication.Abstractions.dll"
+#r "Microsoft.AspNetCore.Authentication.Cookies.dll"
+#r "Microsoft.AspNetCore.Authentication.Core.dll"
+#r "Microsoft.AspNetCore.Authorization.dll"
+#r "Microsoft.AspNetCore.Authorization.Policy.dll"
+#r "Microsoft.AspNetCore.Connections.Abstractions.dll"
+#r "Microsoft.AspNetCore.Cors.dll"
+#r "Microsoft.AspNetCore.Cryptography.Internal.dll"
+#r "Microsoft.AspNetCore.DataProtection.dll"
+#r "Microsoft.AspNetCore.DataProtection.Abstractions.dll"
+#r "Microsoft.AspNetCore.Diagnostics.dll"
+#r "Microsoft.AspNetCore.Diagnostics.Abstractions.dll"
+#r "Microsoft.AspNetCore.Hosting.dll"
+#r "Microsoft.AspNetCore.Hosting.Abstractions.dll"
+#r "Microsoft.AspNetCore.Hosting.Server.Abstractions.dll"
+#r "Microsoft.AspNetCore.Http.dll"
+#r "Microsoft.AspNetCore.Http.Abstractions.dll"
+#r "Microsoft.AspNetCore.Http.Connections.dll"
+#r "Microsoft.AspNetCore.Http.Connections.Common.dll"
+#r "Microsoft.AspNetCore.Http.Extensions.dll"
+#r "Microsoft.AspNetCore.Http.Features.dll"
+#r "Microsoft.AspNetCore.Http.Results.dll"
+#r "Microsoft.AspNetCore.HttpsPolicy.dll"
+#r "Microsoft.AspNetCore.Metadata.dll"
+#r "Microsoft.AspNetCore.ResponseCompression.dll"
+#r "Microsoft.AspNetCore.Rewrite.dll"
+#r "Microsoft.AspNetCore.Routing.dll"
+#r "Microsoft.AspNetCore.Routing.Abstractions.dll"
+#r "Microsoft.AspNetCore.Server.Kestrel.Core.dll"
+#r "Microsoft.AspNetCore.SignalR.dll"
+#r "Microsoft.AspNetCore.SignalR.Common.dll"
+#r "Microsoft.AspNetCore.SignalR.Core.dll"
+#r "Microsoft.AspNetCore.SignalR.Protocols.Json.dll"
+#r "Microsoft.AspNetCore.StaticFiles.dll"
+#r "Microsoft.AspNetCore.WebSockets.dll"
+#r "Microsoft.AspNetCore.WebUtilities.dll"
+#r "Microsoft.AspNetCore.Server.Kestrel.dll"
+#r "Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.dll"
 
-open System
-open System.Configuration
-open System.Configuration.Install
-open System.Linq
-open FSharp.Data
-open FSharp.Data.Sql
-open System.Data.SqlClient
-open System.Threading.Tasks
-open MySql.Data.MySqlClient
-open System.Security.Claims
-open Microsoft.AspNet.SignalR
-open Microsoft.AspNet.SignalR.Hubs
-open System.Threading.Tasks
-open Logary
+// Everything else the project depends on, in the versions the build resolved.
+#I @"./bin"
+#r "Logari.dll"
+#r "Destructurama.FSharp.dll"
+#r "Serilog.dll"
+#r "Serilog.Extensions.Logging.dll"
+#r "Serilog.Sinks.ApplicationInsights.dll"
+#r "Serilog.Sinks.Console.dll"
+#r "Serilog.Sinks.File.dll"
+#r "Owin.Compression.dll"
+#r "Oxpecker.dll"
+#r "Oxpecker.ViewEngine.dll"
+#r "Oxpecker.OpenApi.dll"
+#r "MySql.Data.dll"
+#r "Microsoft.AspNetCore.OpenApi.dll"
+#r "Microsoft.AspNetCore.Authentication.JwtBearer.dll"
+#r "Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson.dll"
+#r "Microsoft.Extensions.Hosting.WindowsServices.dll"
+#r "System.Configuration.ConfigurationManager.dll"
+#r "System.ServiceProcess.ServiceController.dll"
 
+// Same order as the <Compile> items in WebsitePlayground.fsproj.
 #load "Domain.fs"
+#load "Logics.fs"
 #load "Scheduler.fs"
 #load "SignalRHubs.fs"
 #load "OwinStartup.fs"
 #load "Program.fs"
-let logger = Logary.Logging.getCurrentLogger ()
+
+// Opens for poking around interactively once everything is loaded.
+open System
+open System.Linq
+open System.Threading.Tasks
+open System.Security.Claims
+open FSharp.Data
+open FSharp.Data.Sql
+open Logari
+
 try
     MyApp.main [||] |> ignore
-with
-    | e -> Logary.Message.eventError (e.Message) |> writeLog
+with e ->
+    Message.eventError e.Message |> writeLog
 
 #endif

@@ -9,7 +9,8 @@ open Microsoft.AspNetCore.SignalR
 open Microsoft.AspNetCore.SignalR
 open System.Threading.Tasks
 
-type IMessageToClient =  // Server can push data to single or all clients
+/// Server can push data to single or all clients
+type IMessageToClient =
     abstract NotifyDeal : string -> Task
     //abstract ListCompanies : seq<CompanySearchResult> -> Task
 
@@ -61,7 +62,7 @@ type CompanyHub() =
             |> Seq.map (
                 fun (key, valu) ->  // Convert some fields
                     match key with
-                    | "LogoUrl" -> "LogoUrl", match valu.ToString().StartsWith("http") with true -> valu | false -> "http://" + valu.ToString() |> box
+                    | "LogoUrl" -> "LogoUrl", if valu.ToString().StartsWith "http" then valu else "http://" + valu.ToString() |> box
                     | "Founded" -> let fdate = valu.ToString() |> DateTime.Parse
                                    "Founded", fdate.ToString("yyyy-MM-dd") |> box
                     | _ -> key,valu)

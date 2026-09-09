@@ -12,7 +12,7 @@ module Logics
         let ceoFilter =
             match searchparams.CEOName with
             | None -> ""
-            | Some(ceo) -> ceo
+            | Some ceo -> ceo
 
         task {
             let! companies =
@@ -59,7 +59,7 @@ module Logics
 
     open FSharp.Data.JsonProvider
 
-    type SampleJson = FSharp.Data.JsonProvider<"""[
+    type SampleJson = JsonProvider<"""[
         { "name" : "Tuomas", "age" : 30 },
         { "name" : "Seppo" },
         { "error" : "no name "}
@@ -79,7 +79,9 @@ module Logics
 
     // --- Authentication logic -----------------------------
 
+    [<Literal>]
     let private maxFailedAttempts = 5
+    [<Literal>]
     let private lockoutMinutes = 15
 
     let private openConnection() =
@@ -126,13 +128,13 @@ module Logics
             if not hasUser then
                 return InvalidCredentials
             else
-                let userId = reader.GetInt32(0)
-                let email = reader.GetString(1)
-                let passwordHash = reader.GetString(2)
-                let isActive = reader.GetBoolean(3)
-                let failedAttempts = reader.GetInt32(4)
+                let userId = reader.GetInt32 0
+                let email = reader.GetString 1
+                let passwordHash = reader.GetString 2
+                let isActive = reader.GetBoolean 3
+                let failedAttempts = reader.GetInt32 4
                 let lockedUntil =
-                    if reader.IsDBNull(5) then ValueNone else ValueSome (reader.GetDateTime(5))
+                    if reader.IsDBNull 5 then ValueNone else ValueSome (reader.GetDateTime 5)
                 do! reader.CloseAsync()
 
                 if not isActive then

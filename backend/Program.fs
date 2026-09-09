@@ -56,7 +56,7 @@ let setupLogging isLive isService =
             //)
           .CreateLogger();
 
-    let fact = lazy (new LoggerFactory()).AddSerilog(serilogLogger).CreateLogger("CompanyWeb")
+    let fact = lazy (new LoggerFactory()).AddSerilog(serilogLogger).CreateLogger "CompanyWeb"
 
     let forced = fact.Force()
     Logari.logger <- fact

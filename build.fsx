@@ -77,7 +77,7 @@ let npmPath, npmCmd =
         else
         // Try parsing path
         let paths =
-            System.Environment.GetEnvironmentVariable("PATH").Split(';')
+            System.Environment.GetEnvironmentVariable("PATH").Split ';'
             |> Seq.map(fun p ->
                 if p.EndsWith System.IO.Path.DirectorySeparatorChar then p
                 else p + System.IO.Path.DirectorySeparatorChar.ToString())
@@ -114,11 +114,11 @@ let idx (x:DotNet.BuildOptions) =
 let runShell = fun (command, args) ->
     try
         let P = Process.Start(command, (args : string))
-        if (P = null) then (
+        if (isNull P) then (
             printf "\r\n\r\nFailed: %s\r\n" command
         )
         P.WaitForExit();
-        if P.ExitCode <> 0 then failwith ("Command failed, try running manually: " + command + " " + args)
+        if P.ExitCode <> 0 then failwith $"Command failed, try running manually: {command} {args}"
     with
     | :? System.ComponentModel.Win32Exception ->
         printf "\r\n\r\nFailed: %s\r\n" command
@@ -156,7 +156,7 @@ Target.create "gulp" (fun _ ->
                 npmPath + "gulp"
             | _ -> failwith "Gulp not found."
 
-        if snd(buildMode)="Release" || snd(buildMode)="release" then
+        if snd buildMode="Release" || snd buildMode="release" then
              runShell(gulpCmd,"deploy --release ok")
         else runShell(gulpCmd,"deploy")
     with
@@ -238,7 +238,7 @@ Target.create "package" ( fun _ ->
     let generateZip source target =
         if not(Directory.Exists source) then failwith ("Directory not exists: " + source)
         if File.Exists target then File.Delete target
-        System.IO.Compression.ZipFile.CreateFromDirectory(source, target, CompressionLevel.Optimal, false)
+        ZipFile.CreateFromDirectory(source, target, CompressionLevel.Optimal, false)
 
     (resolvePath2 "frontend" "dist", resolvePath2 "release" "wwwroot.zip") ||> generateZip
     (resolvePath2 "backend" "bin", resolvePath2 "release" "server.zip") ||> generateZip
@@ -266,7 +266,7 @@ Target.create "clean" (fun _ ->
 )
 
 Target.create "release" (fun _ ->
-    runShell("build", sprintf "package Configuration=Release -o \"%s\"" deployPath)
+    runShell("build", $"package Configuration=Release -o \"%s{deployPath}\"")
 )
 
 Target.create "" (fun _ -> ())
