@@ -59,7 +59,7 @@ module Logics
 
     open FSharp.Data.JsonProvider
 
-    type SampleJson = FSharp.Data.JsonProvider<"""[
+    type SampleJson = JsonProvider<"""[
         { "name" : "Tuomas", "age" : 30 },
         { "name" : "Seppo" },
         { "error" : "no name "}
@@ -75,7 +75,9 @@ module Logics
 
         [| item; item2 |]
 
+    [<Literal>]
     let private maxFailedAttempts = 5
+    [<Literal>]
     let private lockoutMinutes = 15
 
     let ``register user`` (dbContext:WriteDataContext) (request:RegisterRequest) =
@@ -147,9 +149,10 @@ module Logics
                         else
                             ``increment failed attempts`` user
                             do! dbContext.SubmitUpdates2()
-                            match user.LockedUntil with
-                            | ValueSome lockedUntil -> return AccountLocked lockedUntil
-                            | ValueNone -> return InvalidCredentials
+                            return
+                                match user.LockedUntil with
+                                | ValueSome lockedUntil -> AccountLocked lockedUntil
+                                | ValueNone -> InvalidCredentials
         }
 
     let ``get user by id`` (dbContext:ReadDataContext) (userId:int) =

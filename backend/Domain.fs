@@ -39,11 +39,11 @@ let internal createDbReadContext() =
             if isNull cstr then TypeProviderConnection.GetReadOnlyDataContext()
             else TypeProviderConnection.GetReadOnlyDataContext cstr
         with
-        | :? System.Data.SqlClient.SqlException as ex when x < 3 ->
+        | :? SqlException as ex when x < 3 ->
             writeLogSimple (logger.Force()) (Message.eventWarn "Error connecting SQL, retrying... {msg}" |> Message.setField "msg" ex.Message)
             System.Threading.Thread.Sleep 50
             createCon (x+1)
-        | :? System.Data.SqlClient.SqlException as ex when x < 5 ->
+        | :? SqlException as ex when x < 5 ->
             writeLogSimple (logger.Force()) (Message.eventWarn "Error connecting SQL, retrying... {msg}" |> Message.setField "msg" ex.Message)
             System.Threading.Thread.Sleep 1500
             createCon (x+1)
@@ -156,7 +156,7 @@ let DateTimeString (dt:DateTime) =
     dt.ToString "yyyy-MM-dd HH\:mm\:ss" //temp .NET fix as MySQL.Data.dll is broken: fails without .ToString(...)
 
 let DateTimeNow() =
-    DateTimeString System.DateTime.UtcNow
+    DateTimeString DateTime.UtcNow
 
 let asyncErrorHandling<'a> (a:Async<'a>) =
     async {
@@ -185,6 +185,7 @@ let doubleUrlEncode = System.Net.WebUtility.UrlEncode >> System.Net.WebUtility.U
 let doubleUrlDecode = System.Net.WebUtility.UrlDecode >> System.Net.WebUtility.UrlDecode
 
 open System.IO
+open System.Security.Cryptography
 let getRootedPath (path:string) =
     if Path.IsPathRooted path then
         path
@@ -306,7 +307,7 @@ module Async =
 
 let ``calculate SHA256 hash`` : string -> string =
     System.Text.Encoding.UTF8.GetBytes
-    >> System.Security.Cryptography.SHA256.Create().ComputeHash
+    >> SHA256.Create().ComputeHash
     >> Convert.ToBase64String
 
 let ``compare urlSafe hash`` clear hash =
@@ -315,11 +316,11 @@ let ``compare urlSafe hash`` clear hash =
     hash1 = hash2
 
 let ``hash password`` (password:string) =
-    use rfc2898 = new System.Security.Cryptography.Rfc2898DeriveBytes(
+    use rfc2898 = new Rfc2898DeriveBytes(
         password,
         32,
         100000,
-        System.Security.Cryptography.HashAlgorithmName.SHA256)
+        HashAlgorithmName.SHA256)
     let salt = rfc2898.Salt
     let hash = rfc2898.GetBytes 32
     let hashBytes = Array.concat [salt; hash]
@@ -333,11 +334,11 @@ let ``verify password`` (password:string) (storedHash:string) =
         else
             let salt = Array.sub hashBytes 0 32
             let storedPasswordHash = Array.sub hashBytes 32 32
-            use rfc2898 = new System.Security.Cryptography.Rfc2898DeriveBytes(
+            use rfc2898 = new Rfc2898DeriveBytes(
                 password,
                 salt,
                 100000,
-                System.Security.Cryptography.HashAlgorithmName.SHA256)
+                HashAlgorithmName.SHA256)
             let computedHash = rfc2898.GetBytes 32
             computedHash
             |> Array.zip storedPasswordHash

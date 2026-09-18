@@ -74,13 +74,13 @@ open System.ServiceProcess
 type WinService() =
     inherit ServiceBase(ServiceName = "companyweb")
     override x.OnStart(args) =
-        Logary.Message.eventInfo "Starting server" |> Logging.writeLog
+        Message.eventInfo "Starting server" |> Logging.writeLog
         startServer(); base.OnStart args
     override x.OnStop() =
-        Logary.Message.eventInfo "Stopping server" |> Logging.writeLog
+        Message.eventInfo "Stopping server" |> Logging.writeLog
         stopServer(); base.OnStop()
     override x.Dispose(disposing) =
-        Logary.Message.eventInfo "Disposing server" |> Logging.writeLog
+        Message.eventInfo "Disposing server" |> Logging.writeLog
         if disposing then stopServer()
         base.Dispose true
 
@@ -107,8 +107,8 @@ let main args =
         else
             ServiceBase.Run [| new WinService() :> ServiceBase |];
     with
-    | e -> Logary.Message.eventError "Error with webserver {err}"
-            |> Logary.Message.setField "err" (e.ToString())
+    | e -> Message.eventError "Error with webserver {err}"
+            |> Message.setField "err" (e.ToString())
             |> Logging.writeLog
            Console.WriteLine (e.GetBaseException().Message)
     0

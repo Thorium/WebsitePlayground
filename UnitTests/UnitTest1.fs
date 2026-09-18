@@ -54,8 +54,8 @@ type ``Program logic tests fixture``() =
     [<Test>]
     member  this.``Test company search LINQ logic`` () =
         task {
-            let uid1 = System.Guid.NewGuid()
-            let uid2 = System.Guid.NewGuid()
+            let uid1 = Guid.NewGuid()
+            let uid2 = Guid.NewGuid()
             let today = DateTime.Today
 
             // Mock database

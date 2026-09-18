@@ -23,10 +23,10 @@ let displayErrors = String.Equals(ConfigurationManager.AppSettings.["WebServerDe
 let hubConfig = Microsoft.AspNet.SignalR.HubConfiguration(EnableDetailedErrors = displayErrors, EnableJavaScriptProxies = true)
 
 let domainForwarding =
-    if String.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings.["DomainForwarding"]) ||
-       String.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings.["ServerAddress"]) then None
-    else Some(System.Configuration.ConfigurationManager.AppSettings.["DomainForwarding"].ToString().
-                Replace("http:", "https:"), System.Configuration.ConfigurationManager.AppSettings.["DomainForwarding"].ToString().ToLower())
+    if String.IsNullOrEmpty(ConfigurationManager.AppSettings.["DomainForwarding"]) ||
+       String.IsNullOrEmpty(ConfigurationManager.AppSettings.["ServerAddress"]) then None
+    else Some(ConfigurationManager.AppSettings.["DomainForwarding"].ToString().
+                Replace("http:", "https:"), ConfigurationManager.AppSettings.["DomainForwarding"].ToString().ToLower())
  
 let serverPath =
     let path = ConfigurationManager.AppSettings.["WebServerFolder"].ToString() |> getRootedPath
@@ -86,7 +86,7 @@ type MyController() as this =
 
     // This would be a HTTP GET to http://localhost:7050/webapi/my
     member __.Get () =
-        this.Request.CreateResponse(System.Net.HttpStatusCode.OK,"Node found.")
+        this.Request.CreateResponse(HttpStatusCode.OK,"Node found.")
 
 
     // This would be a HTTP POST to http://localhost:7050/webapi/my/asdfasdfasdf
@@ -95,7 +95,7 @@ type MyController() as this =
             // maybe some validity checking of parameters. Remember this is public endpoint now.
             // Also good idea could be logging the calls to somewhere like to a non-full-recovery-model database
             if param1 = "" then
-                return this.Request.CreateResponse(System.Net.HttpStatusCode.Forbidden, "No permission.")
+                return this.Request.CreateResponse(HttpStatusCode.Forbidden, "No permission.")
             else
             let someResponse =
                 Logics.getData()
@@ -103,7 +103,7 @@ type MyController() as this =
                     FSharp.Data.JsonProvider.Serializer.Serialize i.JsonValue)
 
             return
-                this.Request.CreateResponse(System.Net.HttpStatusCode.OK,
+                this.Request.CreateResponse(HttpStatusCode.OK,
                     Content =
                         new StringContent(
                             "[" + (String.concat "," someResponse) + "]",
@@ -120,7 +120,7 @@ type LoggingPipelineModule() =
             base.OnIncomingError(exceptionContext, invokerContext)
 
         override __.OnBeforeIncoming context =
-            let msg =Logari.Message.eventDebug($"=> Invoking {context.MethodDescriptor.Hub.Name}.{context.MethodDescriptor.Name}")
+            let msg =Logari.Message.eventDebug $"=> Invoking {context.MethodDescriptor.Hub.Name}.{context.MethodDescriptor.Name}"
             if not(isNull context.Hub || isNull context.Hub.Context || isNull context.Hub.Context.ConnectionId) then
                 msg |> Logari.Message.setField "clientId" context.Hub.Context.ConnectionId |> writeLog
             else
@@ -128,7 +128,7 @@ type LoggingPipelineModule() =
             base.OnBeforeIncoming context
 
         override __.OnBeforeOutgoing context =
-            Logari.Message.eventDebug($"<= Invoking {context.Invocation.Hub}.{context.Invocation.Method}") |> writeLog
+            Logari.Message.eventDebug $"<= Invoking {context.Invocation.Hub}.{context.Invocation.Method}" |> writeLog
             base.OnBeforeOutgoing context
 
 /// Direct linking url-routing,
@@ -136,7 +136,7 @@ type LoggingPipelineModule() =
 type RedirectRoutingController() as this =
     inherit ApiController() 
     let createRedirectResponse uri =
-        let response = this.Request.CreateResponse System.Net.HttpStatusCode.Redirect
+        let response = this.Request.CreateResponse HttpStatusCode.Redirect
         response.Headers.Location <- Uri(this.Request.RequestUri.GetLeftPart(UriPartial.Authority) + "/" + uri)
         response
     [<Route("company"); HttpGet; System.Web.Http.Description.ApiExplorerSettings(IgnoreApi = true)>] member __.RedirectToCompany() = createRedirectResponse "company.html"
@@ -167,10 +167,11 @@ type AuthController() as this =
     member private __.ReadJsonObject() : Task<JObject> =
         task {
             let! body = this.Request.Content.ReadAsStringAsync()
-            if String.IsNullOrWhiteSpace body then
-                return null
-            else
-                return JsonConvert.DeserializeObject<JObject>(body)
+            return
+                if String.IsNullOrWhiteSpace body then
+                    null
+                else
+                    JsonConvert.DeserializeObject<JObject>(body)
         }
 
     member private __.ReadAuthRequest() : Task<RegisterRequest> =
@@ -241,8 +242,10 @@ type AuthController() as this =
                                 identity.AddClaim(Claim(ClaimTypes.NameIdentifier, userId.ToString()))
                                 identity.AddClaim(Claim(ClaimTypes.Name, email))
                                 identity.AddClaim(Claim(ClaimTypes.Role, "AuthenticatedUser"))
-                                let properties = AuthenticationProperties(IsPersistent = true)
-                                properties.ExpiresUtc <- Nullable(DateTimeOffset.UtcNow.AddHours(8.0))
+                                let properties =
+                                    AuthenticationProperties(IsPersistent = true,
+                                        ExpiresUtc = (Nullable(DateTimeOffset.UtcNow.AddHours(8.0)))
+                                    )
                                 let owinContext = getOwinContext()
                                 owinContext.Authentication.SignIn(properties, identity)
                                 Logari.Message.eventInfo "User logged in: {email}"
@@ -331,7 +334,7 @@ let private restrictedCorsOptions =
 
 type MyWebStartup() =
 
-    member __.Configuration(ap:Owin.IAppBuilder) =
+    member __.Configuration(ap:IAppBuilder) =
     
 //#if !DEBUG
 //        // Force SSL
