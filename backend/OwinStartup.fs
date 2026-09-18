@@ -38,17 +38,17 @@ let origins =
             #if DEBUG
             "http://localhost"
             "ws*://localhost"
-            "http://localhost:" + System.Configuration.ConfigurationManager.AppSettings["WebServerPorts"]
-            "https://localhost:" + System.Configuration.ConfigurationManager.AppSettings["WebServerPortsSSL"]
-            "ws*://localhost:" + System.Configuration.ConfigurationManager.AppSettings["WebServerPortsSSL"]
+            "http://localhost:" + ConfigurationManager.AppSettings["WebServerPorts"]
+            "https://localhost:" + ConfigurationManager.AppSettings["WebServerPortsSSL"]
+            "ws*://localhost:" + ConfigurationManager.AppSettings["WebServerPortsSSL"]
             #endif
         |]
-    if not(String.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings.["ServerAddress"])) then
-        Array.append allowedOrigins [| System.Configuration.ConfigurationManager.AppSettings.["ServerAddress"] |]
+    if not(String.IsNullOrEmpty(ConfigurationManager.AppSettings.["ServerAddress"])) then
+        Array.append allowedOrigins [| ConfigurationManager.AppSettings.["ServerAddress"] |]
     else allowedOrigins
 
 
-let errorHandler (ctx: Microsoft.AspNetCore.Http.HttpContext) (next: Microsoft.AspNetCore.Http.RequestDelegate) =
+let errorHandler (ctx: HttpContext) (next: RequestDelegate) =
     let writeError ex =
 
         let err =
@@ -87,7 +87,7 @@ let errorHandler (ctx: Microsoft.AspNetCore.Http.HttpContext) (next: Microsoft.A
     }
     :> Task
 
-let notFoundHandler (ctx: Microsoft.AspNetCore.Http.HttpContext) =
+let notFoundHandler (ctx: HttpContext) =
     try
         let logger = ctx.GetLogger()
         logger.LogInformation("Unhandled 404 error: " + ctx.Request.Path)
@@ -98,7 +98,7 @@ let notFoundHandler (ctx: Microsoft.AspNetCore.Http.HttpContext) =
         detail = "Resource was not found")
     ctx.Write result
 
-let appconfig = fun (app : Microsoft.AspNetCore.Builder.IApplicationBuilder) ->
+let appconfig = fun (app : IApplicationBuilder) ->
 
     //let opts = Microsoft.AspNetCore.Rewrite.RewriteOptionsExtensions.AddRedirect
     //        (Microsoft.AspNetCore.Rewrite.RewriteOptions())
@@ -107,25 +107,25 @@ let appconfig = fun (app : Microsoft.AspNetCore.Builder.IApplicationBuilder) ->
     
 
 let serviceConfigSignalR services =
-    Microsoft.Extensions.DependencyInjection.NewtonsoftJsonProtocolDependencyInjectionExtensions.AddNewtonsoftJsonProtocol(
-        Microsoft.Extensions.DependencyInjection.SignalRDependencyInjectionExtensions.AddSignalR(services, fun hubOpts ->
+    NewtonsoftJsonProtocolDependencyInjectionExtensions.AddNewtonsoftJsonProtocol(
+        SignalRDependencyInjectionExtensions.AddSignalR(services, fun hubOpts ->
             hubOpts.EnableDetailedErrors <- Nullable(true)
         ), fun jsonOpts -> ()) |> ignore
     services
 
 let appConfigSignalR app =
-    app |> Microsoft.AspNetCore.Builder.EndpointRoutingApplicationBuilderExtensions.UseRouting
-    |> fun ap -> Microsoft.AspNetCore.Builder.EndpointRoutingApplicationBuilderExtensions.UseEndpoints(ap, fun endpoint ->
-        Microsoft.AspNetCore.Builder.HubEndpointRouteBuilderExtensions.MapHub<SignalRHubs.SignalHub>(endpoint, "/signalhub", fun opts ->
+    app |> EndpointRoutingApplicationBuilderExtensions.UseRouting
+    |> fun ap -> EndpointRoutingApplicationBuilderExtensions.UseEndpoints(ap, fun endpoint ->
+        HubEndpointRouteBuilderExtensions.MapHub<SignalRHubs.SignalHub>(endpoint, "/signalhub", fun opts ->
                 ()
             ) |> ignore
-        Microsoft.AspNetCore.Builder.HubEndpointRouteBuilderExtensions.MapHub<SignalRHubs.CompanyHub>(endpoint, "/companyhub", fun opts ->
+        HubEndpointRouteBuilderExtensions.MapHub<SignalRHubs.CompanyHub>(endpoint, "/companyhub", fun opts ->
                 ()
             ) |> ignore
     )
 
 let myEndpointHandler (param1:string) : EndpointHandler =
-    fun (ctx: Microsoft.AspNetCore.Http.HttpContext) ->
+    fun (ctx: HttpContext) ->
         task {
             // maybe some validity checking of parameters. Remember this is public endpoint now.
             // Also good idea could be logging the calls to somewhere like to a non-full-recovery-model database
@@ -335,11 +335,11 @@ let configureServices (builder: WebApplicationBuilder) logger =
             opts.Cookie.Name <- "WebsitePlayground.Auth"
             opts.Cookie.HttpOnly <- true
 #if DEBUG
-            opts.Cookie.SecurePolicy <- Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest
+            opts.Cookie.SecurePolicy <- CookieSecurePolicy.SameAsRequest
 #else
-            opts.Cookie.SecurePolicy <- Microsoft.AspNetCore.Http.CookieSecurePolicy.Always
+            opts.Cookie.SecurePolicy <- CookieSecurePolicy.Always
 #endif
-            opts.Cookie.SameSite <- Microsoft.AspNetCore.Http.SameSiteMode.Strict
+            opts.Cookie.SameSite <- SameSiteMode.Strict
             opts.ExpireTimeSpan <- TimeSpan.FromHours(8.0)
             opts.SlidingExpiration <- true
             opts.LoginPath <- "/login.html"

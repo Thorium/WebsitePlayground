@@ -97,7 +97,9 @@ let codeAnalysis = "RunCodeAnalysis","false"
 let buildMode = "Configuration", Environment.environVarOrDefault "Configuration" "Debug"
 //let buildType = match snd(buildMode) with | "Release" -> "Rebuild" | _ -> "Build"
 let mono = (Environment.environVarOrDefault "MONO" "0") = "1"
+[<Literal>]
 let ``database connection string`` = "Data Source=localhost; Initial Catalog=Companyweb; Integrated Security=True;"
+[<Literal>]
 let sqlpackagePath = "packages/build/Microsoft.Data.Tools.MsBuild/lib/net46/sqlpackage.exe"
 let deployPath = Path.Combine [| __SOURCE_DIRECTORY__; "release" |]
 let idx (x:DotNet.BuildOptions) =
@@ -119,7 +121,7 @@ let runShell = fun (command, args) ->
             printf "\r\n\r\nFailed: %s\r\n" command
         )
         P.WaitForExit();
-        if P.ExitCode <> 0 then failwith ($"Command failed, try running manually: {command} {args}")
+        if P.ExitCode <> 0 then failwith $"Command failed, try running manually: {command} {args}"
     with
     | :? System.ComponentModel.Win32Exception ->
         printf "\r\n\r\nFailed: %s\r\n" command
@@ -241,7 +243,7 @@ Target.create "package" ( fun _ ->
     let generateZip source target =
         if not(Directory.Exists source) then failwith ("Directory not exists: " + source)
         if File.Exists target then File.Delete target
-        System.IO.Compression.ZipFile.CreateFromDirectory(source, target, CompressionLevel.Optimal, false)
+        ZipFile.CreateFromDirectory(source, target, CompressionLevel.Optimal, false)
 
     File.Copy(resolvePath2 "database\bin" "database.dacpac", resolvePath2 "backend/bin" "database.dacpac", true)
 
