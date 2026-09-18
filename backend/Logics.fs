@@ -166,7 +166,8 @@ module Logics
                             | ValueSome lockedAt -> failCommand.Parameters.AddWithValue("@lockedUntil", lockedAt) |> ignore
                             | ValueNone -> failCommand.Parameters.AddWithValue("@lockedUntil", DBNull.Value) |> ignore
                             let! _ = failCommand.ExecuteNonQueryAsync()
-                            match lockExpiresAt with
-                            | ValueSome lockedAt -> return AccountLocked lockedAt
-                            | ValueNone -> return InvalidCredentials
+                            return
+                                match lockExpiresAt with
+                                | ValueSome lockedAt -> AccountLocked lockedAt
+                                | ValueNone -> InvalidCredentials
         }
