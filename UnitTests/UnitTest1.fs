@@ -54,8 +54,8 @@ type ``Program logic tests fixture``() =
     [<Test>]
     member  this.``Test company search LINQ logic`` () =
         task {
-            let uid1 = System.Guid.NewGuid()
-            let uid2 = System.Guid.NewGuid()
+            let uid1 = Guid.NewGuid()
+            let uid2 = Guid.NewGuid()
             let today = DateTime.Today
 
             // Mock database
@@ -74,7 +74,7 @@ type ``Program logic tests fixture``() =
             use mockContext = new MockDatabaseContext(test_data)
 
             let searchTest = { FoundedAfter = DateTime(1980,01,01); FoundedBefore = DateTime(2005,01,01); CompanyName  = "Test"; CEOName = None}
-            let! foundItems = Logics.executeSearch (mockContext.ReadDataContext) searchTest
+            let! foundItems = Logics.executeSearch mockContext.ReadDataContext searchTest
 
             mockContext.Dispose()
 

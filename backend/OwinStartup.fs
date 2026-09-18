@@ -18,14 +18,14 @@ open System.Security.Principal
 open System.IO
 open Newtonsoft.Json
 open Newtonsoft.Json.Linq
-let displayErrors = ConfigurationManager.AppSettings.["WebServerDebug"].ToString().ToLower() = "true"
+let displayErrors = String.Equals(ConfigurationManager.AppSettings.["WebServerDebug"].ToString(), "true", StringComparison.OrdinalIgnoreCase)
 let hubConfig = Microsoft.AspNet.SignalR.HubConfiguration(EnableDetailedErrors = displayErrors, EnableJavaScriptProxies = true)
 
 let domainForwarding =
-    if String.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings.["DomainForwarding"]) ||
-       String.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings.["ServerAddress"]) then None
-    else Some(System.Configuration.ConfigurationManager.AppSettings.["DomainForwarding"].ToString().
-                Replace("http:", "https:"), System.Configuration.ConfigurationManager.AppSettings.["DomainForwarding"].ToString().ToLower())
+    if String.IsNullOrEmpty(ConfigurationManager.AppSettings.["DomainForwarding"]) ||
+       String.IsNullOrEmpty(ConfigurationManager.AppSettings.["ServerAddress"]) then None
+    else Some(ConfigurationManager.AppSettings.["DomainForwarding"].ToString().
+                Replace("http:", "https:"), ConfigurationManager.AppSettings.["DomainForwarding"].ToString().ToLower())
  
 let serverPath =
     let path = ConfigurationManager.AppSettings.["WebServerFolder"].ToString() |> getRootedPath
@@ -71,7 +71,7 @@ type LogExceptionAttribute() =
         |> writeLog
     override __.OnException(context:HttpActionExecutedContext) =
         writeErr context
-        base.OnException(context)
+        base.OnException context
     override __.OnExceptionAsync(context:HttpActionExecutedContext, token) =
         writeErr context
         base.OnExceptionAsync(context, token)
@@ -85,7 +85,7 @@ type MyController() as this =
 
     // This would be a HTTP GET to http://localhost:7050/webapi/my
     member __.Get () =
-        this.Request.CreateResponse(System.Net.HttpStatusCode.OK,"Node found.")
+        this.Request.CreateResponse(HttpStatusCode.OK,"Node found.")
 
 
     // This would be a HTTP POST to http://localhost:7050/webapi/my/asdfasdfasdf
@@ -94,7 +94,7 @@ type MyController() as this =
             // maybe some validity checking of parameters. Remember this is public endpoint now.
             // Also good idea could be logging the calls to somewhere like to a non-full-recovery-model database
             if param1 = "" then
-                return this.Request.CreateResponse(System.Net.HttpStatusCode.Forbidden, "No permission.")
+                return this.Request.CreateResponse(HttpStatusCode.Forbidden, "No permission.")
             else
             let someResponse =
                 Logics.getData()
@@ -102,7 +102,7 @@ type MyController() as this =
                     FSharp.Data.JsonProvider.Serializer.Serialize i.JsonValue)
 
             return
-                this.Request.CreateResponse(System.Net.HttpStatusCode.OK,
+                this.Request.CreateResponse(HttpStatusCode.OK,
                     Content =
                         new StringContent(
                             "[" + (String.concat "," someResponse) + "]",
@@ -119,7 +119,7 @@ type LoggingPipelineModule() =
             base.OnIncomingError(exceptionContext, invokerContext)
 
         override __.OnBeforeIncoming context =
-            let msg =Logari.Message.eventDebug("=> Invoking " + context.MethodDescriptor.Hub.Name + "." + context.MethodDescriptor.Name)
+            let msg =Logari.Message.eventDebug $"=> Invoking {context.MethodDescriptor.Hub.Name}.{context.MethodDescriptor.Name}"
             if not(isNull context.Hub || isNull context.Hub.Context || isNull context.Hub.Context.ConnectionId) then
                 msg |> Logari.Message.setField "clientId" context.Hub.Context.ConnectionId |> writeLog
             else
@@ -127,7 +127,7 @@ type LoggingPipelineModule() =
             base.OnBeforeIncoming context
 
         override __.OnBeforeOutgoing context =
-            Logari.Message.eventDebug("<= Invoking " + context.Invocation.Hub + "." + context.Invocation.Method) |> writeLog
+            Logari.Message.eventDebug $"<= Invoking {context.Invocation.Hub}.{context.Invocation.Method}" |> writeLog
             base.OnBeforeOutgoing context
 
 /// Direct linking url-routing,
@@ -135,7 +135,7 @@ type LoggingPipelineModule() =
 type RedirectRoutingController() as this =
     inherit ApiController() 
     let createRedirectResponse uri =
-        let response = this.Request.CreateResponse System.Net.HttpStatusCode.Redirect
+        let response = this.Request.CreateResponse HttpStatusCode.Redirect
         response.Headers.Location <- Uri(this.Request.RequestUri.GetLeftPart(UriPartial.Authority) + "/" + uri)
         response
     [<Route("company"); HttpGet; System.Web.Http.Description.ApiExplorerSettings(IgnoreApi = true)>] member __.RedirectToCompany() = createRedirectResponse "company.html"
@@ -166,10 +166,11 @@ type AuthController() as this =
     member private __.ReadJsonObject() : Task<JObject> =
         task {
             let! body = this.Request.Content.ReadAsStringAsync()
-            if String.IsNullOrWhiteSpace body then
-                return null
-            else
-                return JsonConvert.DeserializeObject<JObject>(body)
+            return
+                if String.IsNullOrWhiteSpace body then
+                    null
+                else
+                    JsonConvert.DeserializeObject<JObject>(body)
         }
 
     member private __.ReadAuthRequest() : Task<RegisterRequest> =
@@ -232,35 +233,38 @@ type AuthController() as this =
                 let! result = Logics.``authenticate user`` normalizedRequest
                 let! response =
                     task {
-                        match result with
-                        | Success (userId, email) ->
-                            let identity = ClaimsIdentity(authenticationType:string)
-                            identity.AddClaim(Claim(ClaimTypes.NameIdentifier, userId.ToString()))
-                            identity.AddClaim(Claim(ClaimTypes.Name, email))
-                            identity.AddClaim(Claim(ClaimTypes.Role, "AuthenticatedUser"))
-                            let properties = AuthenticationProperties(IsPersistent = true)
-                            properties.ExpiresUtc <- Nullable(DateTimeOffset.UtcNow.AddHours(8.0))
-                            let owinContext = getOwinContext()
-                            owinContext.Authentication.SignIn(properties, identity)
-                            Logari.Message.eventInfo "User logged in: {email}"
-                            |> Logari.Message.setField "email" email
-                            |> writeLog
-                            return loginResponse true "" "" (Nullable())
-                        | InvalidCredentials ->
-                            Logari.Message.eventWarn "Failed login attempt: {email}"
-                            |> Logari.Message.setField "email" normalizedRequest.Email
-                            |> writeLog
-                            return loginResponse false "InvalidCredentials" "Invalid email or password" (Nullable())
-                        | AccountLocked lockedUntil ->
-                            Logari.Message.eventWarn "Login attempt on locked account: {email}"
-                            |> Logari.Message.setField "email" normalizedRequest.Email
-                            |> writeLog
-                            return loginResponse false "AccountLocked" "Account is locked due to too many failed attempts." (Nullable lockedUntil)
-                        | AccountInactive ->
-                            Logari.Message.eventWarn "Login attempt on inactive account: {email}"
-                            |> Logari.Message.setField "email" normalizedRequest.Email
-                            |> writeLog
-                            return loginResponse false "AccountInactive" "Account is inactive. Please contact support." (Nullable())
+                        return
+                            match result with
+                            | Success (userId, email) ->
+                                let identity = ClaimsIdentity(authenticationType:string)
+                                identity.AddClaim(Claim(ClaimTypes.NameIdentifier, userId.ToString()))
+                                identity.AddClaim(Claim(ClaimTypes.Name, email))
+                                identity.AddClaim(Claim(ClaimTypes.Role, "AuthenticatedUser"))
+                                let properties =
+                                    AuthenticationProperties(IsPersistent = true,
+                                        ExpiresUtc = (Nullable(DateTimeOffset.UtcNow.AddHours(8.0)))
+                                    )
+                                let owinContext = getOwinContext()
+                                owinContext.Authentication.SignIn(properties, identity)
+                                Logari.Message.eventInfo "User logged in: {email}"
+                                |> Logari.Message.setField "email" email
+                                |> writeLog
+                                loginResponse true "" "" (Nullable())
+                            | InvalidCredentials ->
+                                Logari.Message.eventWarn "Failed login attempt: {email}"
+                                |> Logari.Message.setField "email" normalizedRequest.Email
+                                |> writeLog
+                                loginResponse false "InvalidCredentials" "Invalid email or password" (Nullable())
+                            | AccountLocked lockedUntil ->
+                                Logari.Message.eventWarn "Login attempt on locked account: {email}"
+                                |> Logari.Message.setField "email" normalizedRequest.Email
+                                |> writeLog
+                                loginResponse false "AccountLocked" "Account is locked due to too many failed attempts." (Nullable lockedUntil)
+                            | AccountInactive ->
+                                Logari.Message.eventWarn "Login attempt on inactive account: {email}"
+                                |> Logari.Message.setField "email" normalizedRequest.Email
+                                |> writeLog
+                                loginResponse false "AccountInactive" "Account is inactive. Please contact support." (Nullable())
                     }
                 return this.Request.CreateResponse(HttpStatusCode.OK, response)
         }
@@ -273,7 +277,7 @@ type AuthController() as this =
             else
                 this.User.Identity.Name
         let owinContext = getOwinContext()
-        owinContext.Authentication.SignOut(authenticationType)
+        owinContext.Authentication.SignOut authenticationType
         Logari.Message.eventInfo "User logged out: {email}"
         |> Logari.Message.setField "email" email
         |> writeLog
@@ -328,7 +332,7 @@ let private restrictedCorsOptions =
 
 type MyWebStartup() =
 
-    member __.Configuration(ap:Owin.IAppBuilder) =
+    member __.Configuration(ap:IAppBuilder) =
     
 //#if !DEBUG
 //        // Force SSL
@@ -368,7 +372,7 @@ type MyWebStartup() =
            with ex ->
                ()
 
-        Microsoft.AspNet.SignalR.GlobalHost.HubPipeline.AddModule(new LoggingPipelineModule()) |> ignore
+        Microsoft.AspNet.SignalR.GlobalHost.HubPipeline.AddModule(LoggingPipelineModule()) |> ignore
 
         // SECURITY (#1): the auth-cookie encryption key must NOT be hard-coded. A key committed to
         // source control lets anyone forge a valid auth cookie for any user (full auth bypass).
@@ -382,8 +386,8 @@ type MyWebStartup() =
                 Logari.Message.eventWarn "No AuthCookieEncryptionKey configured; auth cookies use an ephemeral key (won't survive restart)."
                 |> writeLog
                 Guid.NewGuid().ToString("N") + Guid.NewGuid().ToString("N")
-        ap.UseAesDataProtectorProvider(authCookieEncryptionKey)
-        ap.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType)
+        ap.UseAesDataProtectorProvider authCookieEncryptionKey
+        ap.SetDefaultSignInAsAuthenticationType CookieAuthenticationDefaults.AuthenticationType
         ap.UseCookieAuthentication(
             CookieAuthenticationOptions(
                 AuthenticationType = CookieAuthenticationDefaults.AuthenticationType,
@@ -396,14 +400,14 @@ type MyWebStartup() =
         |> ignore
 
         //OWIN Component registrations here...
-        ap.UseErrorPage(new ErrorPageOptions(ShowExceptionDetails = displayErrors))
+        ap.UseErrorPage(ErrorPageOptions(ShowExceptionDetails = displayErrors))
         |> fun app -> app.UseCompressionModule(
                         { OwinCompression.DefaultCompressionSettings with
                             CacheExpireTime = ValueSome (DateTimeOffset.Now.AddSeconds 30.) })
 
         //Allow cross domain
         |> fun app ->
-            app.UseCors(restrictedCorsOptions) // SECURITY (#2): was CorsOptions.AllowAll; see restrictedCorsOptions above.
+            app.UseCors restrictedCorsOptions // SECURITY (#2): was CorsOptions.AllowAll; see restrictedCorsOptions above.
 
 
         //SignalR:

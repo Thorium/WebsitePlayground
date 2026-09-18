@@ -174,10 +174,10 @@ let setupLogariSql() =
 
 
 let DateTimeString (dt:DateTime) =
-    dt.ToString("yyyy-MM-dd HH\:mm\:ss") //temp .NET fix as MySQL.Data.dll is broken: fails without .ToString(...)
+    dt.ToString "yyyy-MM-dd HH\:mm\:ss" //temp .NET fix as MySQL.Data.dll is broken: fails without .ToString(...)
 
 let DateTimeNow() =
-    DateTimeString System.DateTime.UtcNow
+    DateTimeString DateTime.UtcNow
 
 let asyncErrorHandling<'a> (a:Async<'a>) =
     async {
@@ -225,6 +225,7 @@ let doubleUrlEncode = System.Net.WebUtility.UrlEncode >> System.Net.WebUtility.U
 let doubleUrlDecode = System.Net.WebUtility.UrlDecode >> System.Net.WebUtility.UrlDecode
 
 open System.IO
+open System.Security.Cryptography
 let getRootedPath (path:string) =
     if Path.IsPathRooted path then
         path
@@ -254,7 +255,7 @@ type TypeProviderConnection.dataContext with
             let entities = x.GetUpdates() |> List.map (fun entity ->
                 let fields = String.Join("\r\n  ", entity.ColumnValues |> Seq.map(fun (c,v) -> match v with null -> c | _ -> c + " " + v.ToString()) |> Seq.toArray)
                 "Item: \r\n" + fields) |> Seq.toArray
-            let ex = new InvalidOperationException(errormsg + "\r\n\r\nDatabase commit failed for entities: " + String.Join("\r\n", entities) + "\r\n", e)
+            let ex = InvalidOperationException(errormsg + "\r\n\r\nDatabase commit failed for entities: " + String.Join("\r\n", entities) + "\r\n", e)
             Message.eventError "SubmitUpdates2 error {err}"
             |> Message.setField "err" errormsg
             |> writeLog
@@ -346,7 +347,7 @@ module Async =
 
 let ``calculate SHA256 hash`` : string -> string =
     System.Text.Encoding.UTF8.GetBytes
-    >> System.Security.Cryptography.SHA256.Create().ComputeHash
+    >> SHA256.Create().ComputeHash
     >> Convert.ToBase64String
 
 let ``compare urlSafe hash`` clear hash =
@@ -355,13 +356,13 @@ let ``compare urlSafe hash`` clear hash =
     hash1 = hash2
 
 let ``hash password`` (password:string) =
-    use rfc2898 = new System.Security.Cryptography.Rfc2898DeriveBytes(
+    use rfc2898 = new Rfc2898DeriveBytes(
         password,
         32,
         100000,
-        System.Security.Cryptography.HashAlgorithmName.SHA256)
+        HashAlgorithmName.SHA256)
     let salt = rfc2898.Salt
-    let hash = rfc2898.GetBytes(32)
+    let hash = rfc2898.GetBytes 32
     let hashBytes = Array.concat [salt; hash]
     Convert.ToBase64String(hashBytes)
 
@@ -373,12 +374,12 @@ let ``verify password`` (password:string) (storedHash:string) =
         else
             let salt = Array.sub hashBytes 0 32
             let storedPasswordHash = Array.sub hashBytes 32 32
-            use rfc2898 = new System.Security.Cryptography.Rfc2898DeriveBytes(
+            use rfc2898 = new Rfc2898DeriveBytes(
                 password,
                 salt,
                 100000,
-                System.Security.Cryptography.HashAlgorithmName.SHA256)
-            let computedHash = rfc2898.GetBytes(32)
+                HashAlgorithmName.SHA256)
+            let computedHash = rfc2898.GetBytes 32
             computedHash
             |> Array.zip storedPasswordHash
             |> Array.forall (fun (a, b) -> a = b)

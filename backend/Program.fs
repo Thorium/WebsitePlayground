@@ -45,7 +45,7 @@ let startServer() =
     let options = Microsoft.Owin.Hosting.StartOptions()
 
     let addPorts protocol addr (ports:string) =
-        ports.Split(',')
+        ports.Split ','
         |> Array.filter(fun p -> p<>"")
         |> Array.map(fun port -> protocol + "://" + addr + ":" + port)
         |> Array.iter(fun url ->
@@ -75,15 +75,15 @@ open System.ServiceProcess
 type WinService() =
     inherit ServiceBase(ServiceName = "companyweb")
     override x.OnStart(args) =
-        Logary.Message.eventInfo "Starting server" |> Logging.writeLog
-        startServer(); base.OnStart(args)
+        Message.eventInfo "Starting server" |> Logging.writeLog
+        startServer(); base.OnStart args
     override x.OnStop() =
-        Logary.Message.eventInfo "Stopping server" |> Logging.writeLog
+        Message.eventInfo "Stopping server" |> Logging.writeLog
         stopServer(); base.OnStop()
     override x.Dispose(disposing) =
-        Logary.Message.eventInfo "Disposing server" |> Logging.writeLog
+        Message.eventInfo "Disposing server" |> Logging.writeLog
         if disposing then stopServer()
-        base.Dispose(true)
+        base.Dispose true
 
 [<System.ComponentModel.RunInstaller(true)>]
 type public FSharpServiceInstaller() =
@@ -108,8 +108,8 @@ let main args =
         else
             ServiceBase.Run [| new WinService() :> ServiceBase |];
     with
-    | e -> Logary.Message.eventError "Error with webserver {err}"
-            |> Logary.Message.setField "err" (e.ToString())
+    | e -> Message.eventError "Error with webserver {err}"
+            |> Message.setField "err" (e.ToString())
             |> Logging.writeLog
            Console.WriteLine (e.GetBaseException().Message)
     0
