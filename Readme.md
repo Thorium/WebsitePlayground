@@ -4,9 +4,9 @@
 
 This repository has 4 different git-branches as templates to choose from:
 
-- [Dotnet 8.0 with Microsoft SQL Server + SSDT (dacpac)](https://github.com/Thorium/WebsitePlayground/tree/dotnet-ssdt)
+- [Dotnet 10.0 with Microsoft SQL Server + SSDT (dacpac)](https://github.com/Thorium/WebsitePlayground/tree/dotnet-ssdt)
 - [.Net Framework 4.8.1 with Microsoft SQL Server + SSDT (dacpac)](https://github.com/Thorium/WebsitePlayground/tree/net48-ssdt)
-- [Dotnet 8.0 with MySQL (MariaDB)](https://github.com/Thorium/WebsitePlayground/tree/dotnet-mysql)
+- [Dotnet 10.0 with MySQL (MariaDB)](https://github.com/Thorium/WebsitePlayground/tree/dotnet-mysql)
 - [.Net Framework 4.8.1 with MySQL (MariaDB)](https://github.com/Thorium/WebsitePlayground/tree/net48-mysql)
 
 ## Overview ##
@@ -24,7 +24,7 @@ Technology-stack:
 
 - General: Git, Markdown
 - SQL-Server: [SQLProvider](https://github.com/fsprojects/SQLProvider) supports any: MS-SQL/Postgres/Oracle/MySql/MariaDB/SQLite/MS-Access. Instructions for MariaDB are included; MySql should work as well. Also, some for SQLite database and MS-SQL scripts if you want to use those.
-- Backend: .NET 8, F# (FSharp), Paket, TypeProviders, Oxpecker, SignalR (WebSockets/Long-Polling), Serilog
+- Backend: .NET 10, F# (FSharp), Paket, TypeProviders, Oxpecker, SignalR (WebSockets/Long-Polling), Serilog
 - Frontend: Gulp, React.js, Less/Sass, Bootstrap or Foundation.css, FontAwesome, Lodash, jQuery / jQuery-UI, TypeScript / ES6. The demo site is Foundation, but infra supports Bootstrap notation as well.
 - Maybe in the future: Crossroads.js, Rx/Rx.Js, FsUnit.xUnit, Canopy 
 
