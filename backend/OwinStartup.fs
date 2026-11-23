@@ -299,14 +299,60 @@ let currentUserHandler : EndpointHandler =
                 })
         }
 
+/// Tells the login page which sign-in the site uses: Local, Cognito, Auth0 or Oidc
+let authOptionsHandler : EndpointHandler =
+    fun (ctx: HttpContext) ->
+        ctx.Write (TypedResults.Ok {| Provider = Authentication.providerName Authentication.authMode |})
+
+/// Sends the browser to the provider's sign-in page; it comes back to a local returnUrl
+let externalLoginHandler : EndpointHandler =
+    fun (ctx: HttpContext) ->
+        let returnUrl =
+            match ctx.Request.Query["returnUrl"].ToString() with
+            // Only paths on this site: "//host" and "/\host" would leave it
+            | url when url.StartsWith "/" && not (url.StartsWith "//") && not (url.StartsWith "/\\") -> url
+            | _ -> "/index.html"
+        ctx.ChallengeAsync(Authentication.externalScheme, AuthenticationProperties(RedirectUri = returnUrl))
+
+/// Ends the local cookie and the provider's session; the provider then returns the browser to the login page
+let externalLogoutHandler : EndpointHandler =
+    fun (ctx: HttpContext) ->
+        task {
+            let email =
+                match ctx.User with
+                | null -> "unknown"
+                | user when user.Identity.IsAuthenticated -> user.Identity.Name
+                | _ -> "unknown"
+            do! ctx.SignOutAsync authCookieScheme
+            Message.eventInfo "User logged out: {email}"
+            |> Message.setField "email" email
+            |> writeLog
+            do! ctx.SignOutAsync(Authentication.externalScheme, AuthenticationProperties(RedirectUri = Authentication.signedOutPath))
+        }
+
+/// The local email and password routes exist only with AuthProvider Local, so the users table can't bypass a provider
+let authRoutes =
+    match Authentication.authMode with
+    | Authentication.Local -> [
+            route "/auth/register" registerHandler
+            route "/auth/login" loginHandler
+            route "/auth/logout" logoutHandler
+        ]
+    | Authentication.External _ -> [
+            route "/auth/external/logout" externalLogoutHandler
+        ]
+
+let externalAuthRoutes =
+    match Authentication.authMode with
+    | Authentication.Local -> []
+    | Authentication.External _ -> [ route "/auth/external/login" externalLoginHandler ]
+
 // WebAPI example: Some map to do Oxpecker routing
 let endpoints = [
         subRoute "/webapi" [
             POST [
                 routef "/my/{%O:alpha}" <| (fun (param1: string) -> myEndpointHandler param1)
-                route "/auth/register" registerHandler
-                route "/auth/login" loginHandler
-                route "/auth/logout" logoutHandler
+                yield! authRoutes
             ]
             // NOTE: the /auth/* routes above must stay anonymous (they ARE the login flow).
             // To require authentication for your own business endpoints, group them separately and
@@ -318,6 +364,8 @@ let endpoints = [
             GET [ // This would be a HTTP GET to http://localhost:7050/webapi/my
                 routef "/my" <| (text "Node Found.")
                 route "/auth/me" currentUserHandler
+                route "/auth/options" authOptionsHandler
+                yield! externalAuthRoutes
             ]
         ]
     ]
@@ -326,7 +374,9 @@ let configureServices (builder: WebApplicationBuilder) logger =
 
     let services = builder.Services
 
-    services
+    // Configure cookie authentication; with an external provider, its sign-in ends in the same cookie
+    let authentication =
+      services
         .AddAuthentication(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme)
         .AddCookie(fun opts ->
             opts.Cookie.Name <- "WebsitePlayground.Auth"
@@ -336,13 +386,21 @@ let configureServices (builder: WebApplicationBuilder) logger =
 #else
             opts.Cookie.SecurePolicy <- CookieSecurePolicy.Always
 #endif
-            opts.Cookie.SameSite <- SameSiteMode.Strict
+            // The redirect back from an external provider is a cross-site navigation, which a Strict cookie would miss
+            opts.Cookie.SameSite <-
+                match Authentication.authMode with
+                | Authentication.Local -> SameSiteMode.Strict
+                | Authentication.External _ -> SameSiteMode.Lax
             opts.ExpireTimeSpan <- TimeSpan.FromHours(8.0)
             opts.SlidingExpiration <- true
             opts.LoginPath <- "/login.html"
             opts.LogoutPath <- "/logout"
             opts.AccessDeniedPath <- "/login.html"
-        ) |> ignore
+        )
+
+    match Authentication.authMode with
+    | Authentication.External settings -> Authentication.addExternal authentication settings
+    | Authentication.Local -> ()
 
     builder
         .Services

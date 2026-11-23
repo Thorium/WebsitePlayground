@@ -393,6 +393,8 @@ NUGET
       Microsoft.AspNetCore.Http.Extensions (>= 2.3.10) - restriction: >= netstandard2.0
     Microsoft.AspNetCore.Authentication.JwtBearer (10.0.8)
       Microsoft.IdentityModel.Protocols.OpenIdConnect (>= 8.0.1) - restriction: >= net10.0
+    Microsoft.AspNetCore.Authentication.OpenIdConnect (10.0.8)
+      Microsoft.IdentityModel.Protocols.OpenIdConnect (>= 8.0.1) - restriction: >= net10.0
     Microsoft.AspNetCore.Authorization (10.0.9) - restriction: >= netstandard2.0
       Microsoft.AspNetCore.Metadata (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
       Microsoft.Extensions.Diagnostics (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
@@ -737,14 +739,14 @@ NUGET
       Serilog (>= 4.0) - restriction: || (&& (>= net462) (< netstandard2.0)) (&& (< net462) (>= netstandard2.0)) (>= net471) (>= net6.0)
     Serilog.Sinks.File (7.0)
       Serilog (>= 4.2) - restriction: || (&& (>= net462) (< netstandard2.0)) (&& (< net462) (>= netstandard2.0)) (>= net471) (>= net6.0)
-    SQLProvider.MySql (1.5.24)
-      FSharp.Core (>= 8.0.301)
+    SQLProvider.MySql (1.5.35)
+      FSharp.Core (>= 10.0.109)
       MySql.Data (>= 6.10.9)
       Newtonsoft.Json (>= 13.0.1)
       System.Memory (>= 4.6.3)
       System.Runtime.Loader (>= 4.3)
-    SQLProvider.MySqlConnector (1.5.24)
-      FSharp.Core (>= 8.0.301)
+    SQLProvider.MySqlConnector (1.5.35)
+      FSharp.Core (>= 10.0.109)
       MySqlConnector (>= 2.3.1)
       Newtonsoft.Json (>= 13.0.1)
       System.Memory (>= 4.6.3)

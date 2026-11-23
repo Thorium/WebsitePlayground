@@ -20,6 +20,7 @@ group Server
     nuget System.Configuration.ConfigurationManager 10.0.8
     nuget Microsoft.AspNetCore.WebUtilities 10.0.8
     nuget System.ServiceProcess.ServiceController 10.0.8
+    nuget Microsoft.AspNetCore.Authentication.OpenIdConnect 10.0.8
     nuget System.Security.Cryptography.Xml 10.0.8
 
     nuget Oxpecker
