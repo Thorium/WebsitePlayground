@@ -17,7 +17,15 @@
         <div id="navbar"></div>
         
         <div class="row login-page-row">
-            <div class="callout">
+            <div class="callout auth-loading">
+                <div id="externalLogin" class="external-login">
+                    <h2>Login</h2>
+                    <p>You sign in on your organisation's sign-in page and come back here.</p>
+                    <a id="externalLoginButton" class="btn button primary radius" href="/webapi/auth/external/login?returnUrl=%2Findex.html">
+                        <span class="fa fa-sign-in"></span> Sign in
+                    </a>
+                </div>
+
                 <div class="login-tab-header">
                     <button type="button" class="login-tab-button active" data-auth-tab="login">Login</button>
                     <button type="button" class="login-tab-button" data-auth-tab="register">Register</button>

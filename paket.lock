@@ -346,6 +346,8 @@ NUGET
       Microsoft.AspNetCore.Authentication.Abstractions (>= 2.3.10) - restriction: >= netstandard2.0
       Microsoft.AspNetCore.Http (>= 2.3.10) - restriction: >= netstandard2.0
       Microsoft.AspNetCore.Http.Extensions (>= 2.3.10) - restriction: >= netstandard2.0
+    Microsoft.AspNetCore.Authentication.OpenIdConnect (10.0.9)
+      Microsoft.IdentityModel.Protocols.OpenIdConnect (>= 8.0.1) - restriction: >= net10.0
     Microsoft.AspNetCore.Authorization (10.0.9) - restriction: >= netstandard2.0
       Microsoft.AspNetCore.Metadata (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
       Microsoft.Extensions.Diagnostics (>= 10.0.9) - restriction: || (>= net462) (>= netstandard2.0)
@@ -668,12 +670,11 @@ NUGET
       Microsoft.IdentityModel.Tokens (>= 8.19.1) - restriction: || (>= net462) (>= netstandard2.0)
     Microsoft.IdentityModel.Logging (8.19.1) - restriction: || (>= net462) (>= netstandard2.0)
       Microsoft.IdentityModel.Abstractions (>= 8.19.1) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.IdentityModel.Protocols (8.19.1) - restriction: || (>= net462) (>= netstandard2.0)
+    Microsoft.IdentityModel.Protocols (8.19.1) - restriction: >= net10.0
       Microsoft.IdentityModel.Tokens (>= 8.19.1) - restriction: || (>= net462) (>= netstandard2.0)
     Microsoft.IdentityModel.Protocols.OpenIdConnect (8.19.1) - restriction: || (>= net462) (>= netstandard2.0)
       Microsoft.IdentityModel.Protocols (>= 8.19.1) - restriction: || (>= net462) (>= netstandard2.0)
       System.IdentityModel.Tokens.Jwt (>= 8.19.1) - restriction: || (>= net462) (>= netstandard2.0)
-      System.Text.Json (>= 8.0.5) - restriction: || (>= net462) (&& (< net6.0) (>= netstandard2.0))
     Microsoft.IdentityModel.Tokens (8.19.1) - restriction: || (>= net462) (>= netstandard2.0)
       Microsoft.Bcl.Cryptography (>= 10.0.2) - restriction: || (>= net462) (>= netstandard2.0)
       Microsoft.Bcl.TimeProvider (>= 8.0.1) - restriction: || (>= net462) (&& (>= net6.0) (< net8.0)) (&& (< net6.0) (>= netstandard2.0))
@@ -741,8 +742,8 @@ NUGET
       Serilog (>= 4.0) - restriction: || (&& (>= net462) (< netstandard2.0)) (&& (< net462) (>= netstandard2.0)) (>= net471) (>= net6.0)
     Serilog.Sinks.File (7.0)
       Serilog (>= 4.2) - restriction: || (&& (>= net462) (< netstandard2.0)) (&& (< net462) (>= netstandard2.0)) (>= net471) (>= net6.0)
-    SQLProvider.MsSql (1.5.24)
-      FSharp.Core (>= 8.0.301)
+    SQLProvider.MsSql (1.5.35)
+      FSharp.Core (>= 10.0.109)
       Microsoft.Data.SqlClient (>= 5.2.2)
       Newtonsoft.Json (>= 13.0.1)
       System.Data.SqlClient (>= 4.9)
@@ -764,7 +765,7 @@ NUGET
     System.Formats.Asn1 (10.0.9) - restriction: || (&& (< net10.0) (>= net9.0)) (>= net462) (&& (>= net8.0) (< net9.0)) (&& (>= net8.0) (< netstandard2.1)) (&& (< net8.0) (>= netcoreapp3.0) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< net8.0) (>= netstandard2.1)) (&& (>= netcoreapp3.0) (< netstandard2.1) (< xamarintvos) (< xamarinwatchos)) (&& (>= netstandard2.0) (< netstandard2.1))
       System.Memory (>= 4.6.3) - restriction: || (>= net462) (&& (< net8.0) (>= netstandard2.0))
       System.ValueTuple (>= 4.6.2) - restriction: >= net462
-    System.IdentityModel.Tokens.Jwt (8.19.1) - restriction: || (>= net462) (>= netstandard2.0)
+    System.IdentityModel.Tokens.Jwt (8.19.1) - restriction: >= net10.0
       Microsoft.IdentityModel.JsonWebTokens (>= 8.19.1) - restriction: || (>= net462) (>= netstandard2.0)
       Microsoft.IdentityModel.Tokens (>= 8.19.1) - restriction: || (>= net462) (>= netstandard2.0)
     System.IO.Pipelines (10.0.9) - restriction: || (&& (< net10.0) (>= net9.0)) (&& (< net10.0) (>= netstandard2.1)) (>= net462) (>= netstandard2.0)
@@ -782,7 +783,7 @@ NUGET
       System.Numerics.Vectors (>= 4.6.1) - restriction: || (>= net462) (&& (< net6.0) (>= netstandard2.0))
       System.Runtime.CompilerServices.Unsafe (>= 6.1.2) - restriction: || (>= net462) (&& (< net6.0) (>= netstandard2.0))
       System.Threading.Tasks.Extensions (>= 4.6.3) - restriction: || (>= net462) (&& (< net6.0) (>= netstandard2.0))
-    System.Numerics.Vectors (4.6.1) - restriction: || (>= net462) (&& (< net6.0) (>= netstandard2.0))
+    System.Numerics.Vectors (4.6.1) - restriction: || (>= net462) (&& (< net6.0) (>= netstandard2.0)) (&& (< netcoreapp2.1) (>= netstandard2.0) (< netstandard2.1))
     System.Reflection.Emit (4.7) - restriction: >= netstandard2.0
       System.Reflection.Emit.ILGeneration (>= 4.7) - restriction: || (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.1) (< netstandard2.0) (< win8) (< wpa81) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (< netcoreapp2.0) (>= netstandard2.0) (< netstandard2.1) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< netstandard1.1) (>= portable-net45+win8+wpa81) (< win8)) (&& (< netstandard1.1) (>= win8)) (&& (< netstandard2.0) (>= wpa81)) (>= uap10.1)
     System.Reflection.Emit.ILGeneration (4.7) - restriction: || (&& (< monoandroid) (< net45) (< netcoreapp2.0) (>= netstandard2.0) (< netstandard2.1) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< netstandard1.1) (>= netstandard2.0) (< win8)) (&& (< netstandard1.1) (>= netstandard2.0) (>= win8)) (&& (>= netstandard2.0) (>= uap10.1))

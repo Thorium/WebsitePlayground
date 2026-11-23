@@ -38,4 +38,16 @@ Documentation:
 
 There are two screens: 1) You can search for companies. 2) CRUD-operations for companies.
 
+Sign-in is chosen with the `AuthProvider` setting in `backend/app.config`:
+
+- `Local`: email and password in the users table, with registration (the default).
+- `Cognito`: an Amazon Cognito user pool with a Hosted UI domain. Set `AuthCognitoUserPoolId` and `AuthClientId`.
+- `Auth0`: an Auth0 tenant. Set `AuthDomain` and `AuthClientId`, and `AuthAudience` when the site calls an API.
+- `Oidc`: any other OpenID Connect provider, such as Entra ID or Keycloak. Set `AuthAuthority` and `AuthClientId`.
+
+External providers sign in with the authorization code flow and PKCE, and need `AuthClientSecret` unless the
+app client is public. Register `https://<site>/signin-oidc` as a callback URL and `https://<site>/login.html` as
+a sign-out URL. With an external provider the email and password routes are off, and sign-out also ends the
+provider's session.
+
 ![](specifications/ui.jpg)

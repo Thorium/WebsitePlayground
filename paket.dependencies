@@ -13,6 +13,7 @@ group Server
     nuget Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson
     nuget Microsoft.AspNetCore.Authentication.Cookies
     nuget Microsoft.AspNetCore.Authentication.Abstractions
+    nuget Microsoft.AspNetCore.Authentication.OpenIdConnect
     nuget System.Security.Cryptography.Xml 10.0.8
     // nuget SQLProvider
     nuget Oxpecker

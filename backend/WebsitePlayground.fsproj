@@ -50,6 +50,7 @@
     <Compile Include="Logics.fs" />
     <Compile Include="Scheduler.fs" />
     <Compile Include="SignalRHubs.fs" />
+    <Compile Include="Authentication.fs" />
     <Compile Include="OwinStartup.fs" />
     <Compile Include="Program.fs" />
     <None Include="Program.fsx" />
