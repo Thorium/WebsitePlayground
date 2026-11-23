@@ -11,6 +11,7 @@ nuget Microsoft.AspNet.Identity.Owin framework: >= 4.0
 nuget Microsoft.Net.Http
 nuget Microsoft.Owin.Cors framework: >= 4.0
 nuget Microsoft.Owin.Security.Cookies framework: >= 4.0
+nuget Microsoft.Owin.Security.OpenIdConnect framework: >= 4.0
 nuget Microsoft.Owin.StaticFiles framework: >= 4.0
 nuget Microsoft.Owin.Diagnostics framework: >= 4.0
 nuget Microsoft.Owin.Host.SystemWeb framework: >= 4.0

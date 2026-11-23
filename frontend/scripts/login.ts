@@ -30,6 +30,18 @@ function postJson(url: string, payload: any): Promise<AuthResponse> {
     });
 }
 
+let authProvider: Promise<string> | undefined;
+
+/** The site's sign-in: "Local" (email and password), or an external provider such as "Cognito" or "Auth0" */
+export function getAuthProvider(): Promise<string> {
+    if (!authProvider) {
+        authProvider = getJson("/webapi/auth/options")
+            .then((result) => getResponseValue(result, "Provider", "provider") || "Local")
+            .catch(() => "Local");
+    }
+    return authProvider;
+}
+
 export function getJson(url: string): Promise<any> {
     return fetch(url, {
         method: "GET",
@@ -254,16 +266,32 @@ export function initLoginPage(locale: string): void {
         activateTab(tabName || "login");
     });
 
-    $("#email").focus();
-
     $("#loginError").hide();
     $("#loginSuccess").hide();
     $("#registerError").hide();
     $("#registerSuccess").hide();
+
+    getAuthProvider().then((provider) => {
+        if (provider === "Local") {
+            $("#email").focus();
+        } else {
+            // An external provider owns passwords and registration
+            $(".login-tab-header, #loginTab, #registerTab").hide();
+            $("#externalLogin").show();
+        }
+        $(".auth-loading").removeClass("auth-loading");
+    });
 }
 
 export function logout(): Promise<void> {
-    return postJson("/webapi/auth/logout", {}).then(() => {
-        window.location.href = "/login.html";
+    return getAuthProvider().then((provider) => {
+        if (provider === "Local") {
+            return postJson("/webapi/auth/logout", {}).then(() => {
+                window.location.href = "/login.html";
+            });
+        }
+        // Ending the provider's session too takes a full-page navigation through its sign-out page
+        $("<form>").attr({ method: "post", action: "/webapi/auth/external/logout" }).appendTo("body").trigger("submit");
+        return undefined;
     });
 }
