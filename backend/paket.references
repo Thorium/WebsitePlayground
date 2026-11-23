@@ -12,6 +12,7 @@ Microsoft.Owin.StaticFiles
 Microsoft.Owin.Diagnostics
 Microsoft.Owin.Host.SystemWeb
 Microsoft.Owin.Security.Cookies
+Microsoft.Owin.Security.OpenIdConnect
 Microsoft.Owin.Security.Facebook
 Microsoft.Owin.Security.Google
 MySqlConnector

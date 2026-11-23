@@ -148,6 +148,18 @@ type AuthController() as this =
 
     let getOwinContext() = this.Request.GetOwinContext()
 
+    /// The email and password routes exist only with AuthProvider Local, so the users table can't bypass a provider
+    let localSignIn =
+        match Authentication.authMode with
+        | Authentication.Local -> true
+        | Authentication.External _ -> false
+
+    let signedInEmail () =
+        if isNull this.User || isNull this.User.Identity || not this.User.Identity.IsAuthenticated then
+            "unknown"
+        else
+            this.User.Identity.Name
+
     let registerResponse success errorCode errorMessage =
         {
             Success = success
@@ -193,7 +205,9 @@ type AuthController() as this =
     member __.Register() : Task<HttpResponseMessage> =
         task {
             let! request = this.ReadAuthRequest()
-            if isNull (box request) then
+            if not localSignIn then
+                return this.Request.CreateResponse HttpStatusCode.NotFound
+            elif isNull (box request) then
                 return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid registration request")
             elif String.IsNullOrWhiteSpace request.Email || String.IsNullOrWhiteSpace request.Password then
                 return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Email and password are required")
@@ -224,7 +238,9 @@ type AuthController() as this =
     member __.Login() : Task<HttpResponseMessage> =
         task {
             let! request = this.ReadAuthRequest()
-            if isNull (box request) then
+            if not localSignIn then
+                return this.Request.CreateResponse HttpStatusCode.NotFound
+            elif isNull (box request) then
                 return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid login request")
             elif String.IsNullOrWhiteSpace request.Email || String.IsNullOrWhiteSpace request.Password then
                 return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Email and password are required")
@@ -282,6 +298,35 @@ type AuthController() as this =
         |> Logari.Message.setField "email" email
         |> writeLog
         this.Request.CreateResponse(HttpStatusCode.OK, box {| Success = true |})
+
+    /// Tells the login page which sign-in the site uses: Local, Cognito, Auth0 or Oidc
+    [<Route("webapi/auth/options"); HttpGet>]
+    member __.AuthOptions() : HttpResponseMessage =
+        this.Request.CreateResponse(HttpStatusCode.OK, box {| Provider = Authentication.providerName Authentication.authMode |})
+
+    /// Sends the browser to the provider's sign-in page; it comes back to a local returnUrl
+    [<Route("webapi/auth/external/login"); HttpGet>]
+    member __.ExternalLogin(returnUrl: string) : HttpResponseMessage =
+        if localSignIn then
+            this.Request.CreateResponse HttpStatusCode.NotFound
+        else
+            let properties = AuthenticationProperties(RedirectUri = Authentication.localPath returnUrl)
+            getOwinContext().Authentication.Challenge(properties, Authentication.externalScheme)
+            this.Request.CreateResponse HttpStatusCode.Unauthorized
+
+    /// Ends the local cookie and the provider's session; the provider then returns the browser to the login page
+    [<Route("webapi/auth/external/logout"); HttpPost>]
+    member __.ExternalLogout() : HttpResponseMessage =
+        if localSignIn then
+            this.Request.CreateResponse HttpStatusCode.NotFound
+        else
+            let email = signedInEmail ()
+            let properties = AuthenticationProperties(RedirectUri = Authentication.signedOutPath)
+            getOwinContext().Authentication.SignOut(properties, authenticationType, Authentication.externalScheme)
+            Logari.Message.eventInfo "User logged out: {email}"
+            |> Logari.Message.setField "email" email
+            |> writeLog
+            this.Request.CreateResponse HttpStatusCode.OK
 
     [<Route("webapi/auth/me"); HttpGet>]
     member __.CurrentUser() : HttpResponseMessage =
@@ -399,6 +444,11 @@ type MyWebStartup() =
             ))
         |> ignore
 
+        // With an external provider, its sign-in ends in the same cookie
+        match Authentication.authMode with
+        | Authentication.External settings -> Authentication.useExternal ap settings
+        | Authentication.Local -> ()
+
         //OWIN Component registrations here...
         ap.UseErrorPage(ErrorPageOptions(ShowExceptionDetails = displayErrors))
         |> fun app -> app.UseCompressionModule(
@@ -416,6 +466,8 @@ type MyWebStartup() =
         use httpConfig = new HttpConfiguration()
         httpConfig.Filters.Add(LogExceptionAttribute())
         httpConfig.MapHttpAttributeRoutes()
+        // F# records are [<Serializable>]: without this, Json.NET writes their backing fields ("Success@")
+        httpConfig.Formatters.JsonFormatter.SerializerSettings.ContractResolver <- Newtonsoft.Json.Serialization.DefaultContractResolver(IgnoreSerializableAttribute = true)
 
         // REST Web Api if needed:
         // Note: If parameter name is "param" as here, then it's referenced with only value in uri: /value/
